@@ -4,13 +4,13 @@
 Powered by **[Tikal Knowledge](http://www.tikalk.com)** and the community.
 <hr/>
 
-## TPL_advancedSlackNotification
+## tpl_advancedSlackNotification
 
 ***Send a well-formatted Slack notification***
 
 #### Task usage
 
-TPL_advancedSlackNotification(arguments)
+tpl_advancedSlackNotification(arguments)
 
 Arguments:
 
@@ -21,15 +21,15 @@ Arguments:
 | String additionalMessageText| Additional text to the notification message| empty text|
 
 #### Example
-TPL_advancedSlackNotification ("SUCCESS","test-channel","@here")
+tpl_advancedSlackNotification ("SUCCESS","test-channel","@here")
 
-## TPL_echo
+## tpl_echo
 
 ***Echo text with time-stamp***
 
 #### Task usage
 
-TPL_echo(arguments)
+tpl_echo(arguments)
 
 Arguments:
 
@@ -38,26 +38,26 @@ Arguments:
 | String text| Text to display| N/A|
 
 #### Example
-TPL_echo ("Hello TPL!")
+tpl_echo ("Hello TPL!")
 
 #### Output
 [20170715-05:40:11.393] Hello TPL!
 
-## TPL_getBuildUserId
+## tpl_getBuildUserId
 
 ***Get job acticator user-id***
 
 #### Task usage example
 
-def userId = TPL_getBuildUserId()
+def userId = tpl_getBuildUserId()
 
-## TPL_setStatusByLogText
+## tpl_setStatusByLogText
 
 ***set the build status based on searched text in the build log file***
 
 #### Task usage
 
-TPL_setStatusByLogText(Arguments)
+tpl_setStatusByLogText(Arguments)
 
 Arguments:
 
@@ -66,7 +66,7 @@ Arguments:
 | String searchText| Text to search| N/A|
 
 #### Example
-TPL_setStatusByLogText ("ERROR")
+tpl_setStatusByLogText ("ERROR")
 
 #### Output
 Found 'ERROR' in build log

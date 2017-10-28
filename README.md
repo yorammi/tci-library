@@ -14,17 +14,17 @@ Anyone who wants to contribute to this library - please follow the instructions 
 
 ## [Available tasks](vars/README.md)
 
-* TPL_advancedSlackNotification
-* TPL_echo
-* TPL_getBuildUserId
-* TPL_setStatusByLogText
+* tpl_advancedSlackNotification
+* tpl_echo
+* tpl_getBuildUserId
+* tpl_setStatusByLogText
 
 ## Adding an item to tikal-pipelib
 
 For adding a new task, please follow those steps.
 
 1. Create a branch or a fork from the master branch.
-2. Write the groovy file for the task in the [/vars](/vars) folder - the file name **MUST** start with **TPL_** prefix.
+2. Write the groovy file for the task in the [/vars](/vars) folder - the file name **MUST** start with **tpl_** prefix.
 4. Write a markdown section for describing the added task in [/vars/README.md](/vars/README.md) file.
 5. commit and push your branch.
 6. Submit a pull request.
