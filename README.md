@@ -29,5 +29,6 @@ For adding a new task, please follow those steps.
 5. commit and push your branch.
 6. Submit a pull request.
 
-Please notice that only the following of all those following the above steps will be accepted.
+Please notice that only the following of these instructions will be accepted.
+
 Tikal reserve the right to accept or reject pull requests.
