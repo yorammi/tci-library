@@ -12,6 +12,8 @@ The Library is a collection of tasks and advanced flows that can be used inside 
 
 Anyone who wants to contribute to this library - please follow the instructions below in the page.
 
+For tests of this repository and Jenkins pipeline examples, see: [tikal-pipelib-touchstone](https://github.com/tikalk/tikal-pipelib-touchstone).
+
 ## [Available tasks](vars/README.md)
 
 * tpl_advancedSlackNotification
