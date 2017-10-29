@@ -19,6 +19,12 @@ Anyone who wants to contribute to this library - please follow the instructions 
 * tpl_getBuildUserId
 * tpl_setStatusByLogText
 
+## [Available flows](src/tpl/ci)
+
+* [tpl_BaseCiPipeline](src/tpl/ci/tpl_BaseCiPipeline.groovy)
+  * [tpl_GradleCiPipeline](src/tpl/ci/gradle/tpl_GradleCiPipeline.groovy)
+  * [tpl_ArtifactoryCiPipeline](src/tpl/ci/maven/tpl_ArtifactoryCiPipeline.groovy)
+
 ## Adding an item to tikal-pipelib
 
 For adding a new task, please follow those steps.
