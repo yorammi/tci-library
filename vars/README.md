@@ -70,3 +70,12 @@ tpl_setStatusByLogText ("ERROR")
 
 #### Output
 Found 'ERROR' in build log
+
+## tpl_keepBuildForever
+
+***set the current build to be kept forever and not be deleted by any rule except for manual deletion***
+
+#### Task usage
+
+tpl_keepBuildForever()
+

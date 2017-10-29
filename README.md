@@ -18,6 +18,7 @@ Anyone who wants to contribute to this library - please follow the instructions 
 * tpl_echo
 * tpl_getBuildUserId
 * tpl_setStatusByLogText
+* tpl_keepBuildForever
 
 ## [Available flows](src/tpl/ci)
 
