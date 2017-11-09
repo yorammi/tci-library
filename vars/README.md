@@ -4,13 +4,13 @@
 Powered by **[Tikal Knowledge](http://www.tikalk.com)** and the community.
 <hr/>
 
-## tpl_advancedSlackNotification
+## tplAdvancedSlackNotification
 
 ***Send a well-formatted Slack notification***
 
 #### Task usage
 
-tpl_advancedSlackNotification(arguments)
+tplAdvancedSlackNotification(arguments)
 
 Arguments:
 
@@ -21,15 +21,15 @@ Arguments:
 | String additionalMessageText| Additional text to the notification message| empty text|
 
 #### Example
-tpl_advancedSlackNotification ("SUCCESS","test-channel","@here")
+tplAdvancedSlackNotification ("SUCCESS","test-channel","@here")
 
-## tpl_echo
+## tplEcho
 
 ***Echo text with time-stamp***
 
 #### Task usage
 
-tpl_echo(arguments)
+tplEcho(arguments)
 
 Arguments:
 
@@ -38,26 +38,26 @@ Arguments:
 | String text| Text to display| N/A|
 
 #### Example
-tpl_echo ("Hello TPL!")
+tplEcho ("Hello TPL!")
 
 #### Output
 [20170715-05:40:11.393] Hello TPL!
 
-## tpl_getBuildUserId
+## tplGetBuildUserId
 
 ***Get job acticator user-id***
 
 #### Task usage example
 
-def userId = tpl_getBuildUserId()
+def userId = tplGetBuildUserId()
 
-## tpl_setStatusByLogText
+## tplSetStatusByLogText
 
 ***set the build status based on searched text in the build log file***
 
 #### Task usage
 
-tpl_setStatusByLogText(Arguments)
+tplSetStatusByLogText(Arguments)
 
 Arguments:
 
@@ -66,16 +66,16 @@ Arguments:
 | String searchText| Text to search| N/A|
 
 #### Example
-tpl_setStatusByLogText ("ERROR")
+tplSetStatusByLogText ("ERROR")
 
 #### Output
 Found 'ERROR' in build log
 
-## tpl_keepBuildForever
+## tplKeepBuildForever
 
 ***set the current build to be kept forever and not be deleted by any rule except for manual deletion***
 
 #### Task usage
 
-tpl_keepBuildForever()
+tplKeepBuildForever()
 

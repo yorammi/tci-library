@@ -1,13 +1,13 @@
 package tpl.ci.maven
 
-import tpl.ci.tpl_BaseCiPipeline
+import tpl.ci.tplBaseCiPipeline
 import org.jfrog.hudson.pipeline.dsl.ArtifactoryPipelineGlobal
 import org.jfrog.hudson.pipeline.types.MavenDescriptor
 
 /**
  * Created by ccohen on 7/6/17.
  */
-class tpl_ArtifactoryCiPipeline extends tpl_BaseCiPipeline {
+class tplArtifactoryCiPipeline extends tplBaseCiPipeline {
 
     ArtifactoryPipelineGlobal artifactory
 //    MavenModuleSet moduleSet
@@ -30,7 +30,7 @@ class tpl_ArtifactoryCiPipeline extends tpl_BaseCiPipeline {
     String releaseVersion
     String developmentVersion
 
-    tpl_ArtifactoryCiPipeline(script) {
+    tplArtifactoryCiPipeline(script) {
         super(script)
         artifactory = new ArtifactoryPipelineGlobal(script)
 

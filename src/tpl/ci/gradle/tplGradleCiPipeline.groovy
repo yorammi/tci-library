@@ -1,8 +1,8 @@
 package tpl.ci.gradle;
 
-import tpl.ci.tpl_BaseCiPipeline
+import tpl.ci.tplBaseCiPipeline
 
-class tpl_GradleCiPipeline extends tpl_BaseCiPipeline {
+class tplGradleCiPipeline extends tplBaseCiPipeline {
     boolean debugMode
     int waitForInputTimeout
     def buildTarget
@@ -11,7 +11,7 @@ class tpl_GradleCiPipeline extends tpl_BaseCiPipeline {
     def certUrl
 
 
-    tpl_GradleCiPipeline(script) {
+    tplGradleCiPipeline(script) {
         super(script)
     }
 

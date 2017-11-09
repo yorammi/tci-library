@@ -2,7 +2,7 @@ package tpl.python
 
 import com.cloudbees.groovy.cps.NonCPS
 
-abstract class tpl_baseGenericPythonRunner implements Serializable {
+abstract class tplBaseGenericPythonRunner implements Serializable {
 
     def script
     def gitBranch
@@ -12,7 +12,7 @@ abstract class tpl_baseGenericPythonRunner implements Serializable {
     def pythonScript
     def groovySetupScript
 
-    tpl_baseGenericPythonRunner(script) {
+    tplBaseGenericPythonRunner(script) {
         this.script = script
     }
 
