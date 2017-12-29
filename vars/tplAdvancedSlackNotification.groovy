@@ -40,5 +40,6 @@ def call(String buildStatus, String channel, String additionalMessageText = "") 
     }
 
     def summary = "${icon}*BUILD ${buildStatus}*\n\n[Job] *${env.JOB_NAME} #${env.BUILD_NUMBER}*\n[Name] *${currentBuild.displayName}*\n[Console] ${env.BUILD_URL}/consoleFull\n${additionalMessageText}"
+    echo summary
     slackSend (color: colorCode, message: summary, channel: "#${channel}" )
 }
