@@ -46,7 +46,7 @@ def call(String buildStatus, String channel, String additionalMessageText = "")
     }
     catch(error)
     {
-        echo error.message
+        echo "**** ${error.message}"
     }
 
 }
