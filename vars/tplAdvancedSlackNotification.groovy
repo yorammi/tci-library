@@ -8,7 +8,7 @@ def call(String buildStatus, String channel, String additionalMessageText = "")
         // Default values
         def colorName = 'RED'
         def colorCode = '#FF0000'
-        def icon = ':tired_face: '
+        def icon = ':jenkins_red: '
 
         // Override default values based on build status
         if (buildStatus == 'STARTED')
@@ -21,25 +21,25 @@ def call(String buildStatus, String channel, String additionalMessageText = "")
         {
             color = 'YELLOW'
             colorCode = '#FFFF00'
-            icon = ':jenkins-yellow: '
+            icon = ':jenkins_yellow: '
         }
         else if (buildStatus == 'SUCCESS')
         {
             color = 'GREEN'
             colorCode = '#00CF00'
-            icon = ':jenkins-blue: '
+            icon = ':jenkins_blue: '
         }
         else if (buildStatus == 'FAILURE')
         {
             color = 'RED'
             colorCode = '#FF0000'
-            icon = ':jenkins-red: '
+            icon = ':jenkins_red: '
         }
         else if (buildStatus == 'ABORTED')
         {
             color = 'GRAY'
             colorCode = '#AAAAAA'
-            icon = ':jenkins-aborted: '
+            icon = ':jenkins_aborted: '
         }
         else
         {
