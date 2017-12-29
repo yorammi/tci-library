@@ -2,6 +2,7 @@ def call(String buildStatus, String channel, String additionalMessageText = "")
 {
     try
     {
+        echo "start"
         buildStatus = buildStatus ?: 'SUCCESS'
 
         // Default values
@@ -41,6 +42,7 @@ def call(String buildStatus, String channel, String additionalMessageText = "")
             icon = ''
         }
 
+        echo "before Slack"
         def summary = "${icon}*BUILD ${buildStatus}*\n\n[Job] *${env.JOB_NAME} #${env.BUILD_NUMBER}*\n[Name] *${currentBuild.displayName}*\n[Console] ${env.BUILD_URL}/consoleFull\n${additionalMessageText}"
         slackSend (color: colorCode, message: summary, channel: "#${channel}" )
     }
