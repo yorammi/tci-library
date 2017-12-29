@@ -25,6 +25,7 @@ def call() {
                 randomStatus = "SUCCESS"
                 break;
         }
+        echo "randomStatus=${randomStatus}"
         currentBuild.result = randomStatus
     }
     catch(error)
