@@ -13,33 +13,39 @@ def call(String buildStatus, String channel, String additionalMessageText = "")
         // Override default values based on build status
         if (buildStatus == 'STARTED')
         {
+            color = 'LIGHTGREEN'
+            colorCode = '#7CFC00'
+            icon = ':start: '
+        }
+        else if (buildStatus == 'UNSTABLE')
+        {
             color = 'YELLOW'
             colorCode = '#FFFF00'
-            icon = ''
+            icon = ':jenkins-yellow: '
         }
         else if (buildStatus == 'SUCCESS')
         {
             color = 'GREEN'
             colorCode = '#00CF00'
-            icon = ':+1: '
+            icon = ':jenkins-blue: '
         }
         else if (buildStatus == 'FAILURE')
         {
             color = 'RED'
             colorCode = '#FF0000'
-            icon = ':scream: '
+            icon = ':jenkins-red: '
         }
         else if (buildStatus == 'ABORTED')
         {
             color = 'GRAY'
             colorCode = '#AAAAAA'
-            icon = ''
+            icon = ':jenkins-aborted: '
         }
         else
         {
             color = 'PINK'
             colorCode = '#FFCCCC'
-            icon = ''
+            icon = ':jenkins_red: '
         }
 
         echo "before Slack"
