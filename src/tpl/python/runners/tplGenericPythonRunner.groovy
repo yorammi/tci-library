@@ -1,6 +1,6 @@
 package tpl.python.runners;
 
-import tpl.python.baseGenericPythonRunner
+import tpl.python.tplBaseGenericPythonRunner
 
 class tplGenericPythonRunner extends tplBaseGenericPythonRunner {
 
