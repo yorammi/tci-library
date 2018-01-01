@@ -54,7 +54,7 @@ abstract class tplBaseGenericPythonRunner implements Serializable {
     }
 
     void populateBuildDisplayName() {
-        def userId = script.getBuildUserId()
+        def userId = script.tplGetBuildUserId()
         def scriptName = pythonScript.tokenize('/')[-1]
         script.currentBuild.displayName = "${script.currentBuild.displayName} | ${userId} | ${scriptName}"
     }
