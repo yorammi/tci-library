@@ -10,13 +10,19 @@ def call() {
         def failed = testResultAction.getFailCount()
         def skipped = testResultAction.getSkipCount()
 
-        summary = "[Test results] "
-        summary = summary + ("Passed: " + (total - failed - skipped))
+        summary = "[Tests] "
+        summary = summary + ("Total: " + total)
+        summary = summary + (", Passed: " + (total - failed - skipped))
         summary = summary + (", Failed: " + failed)
         summary = summary + (", Skipped: " + skipped)
+        env.TESTS_SUMMARY="${summary}"
+        if(failed!=0)
+        {
+            currentBuild.result = "UNSTABLE"
+        }
     } else {
-        summary = "[Tests result] No tests found"
+        summary = "[Tests] No tests found"
     }
-    println("${summary}")
     return summary
 }
+
