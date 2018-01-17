@@ -20,7 +20,9 @@ def call() {
         {
             currentBuild.result = "UNSTABLE"
         }
-    } else {
+    }
+    else
+    {
         summary = "[Tests] No tests found"
     }
     return summary
