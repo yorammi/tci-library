@@ -1,12 +1,12 @@
 def call(String dir, Closure body)
 {
-    def directory = "."
+    String directory = "."
 //    if(flag)
 //    {
         directory = dir
 //    }
-//    dir(directory)
-//    {
-//        body()
-//    }
+    dir(directory)
+    {
+        body()
+    }
 }
