@@ -5,8 +5,8 @@ def call(String dir, Closure body)
 //    {
         directory = dir
 //    }
-    dir(directory)
-    {
-        body()
-    }
+//    dir(directory)
+//    {
+//        body()
+//    }
 }
