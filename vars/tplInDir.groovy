@@ -1,4 +1,4 @@
-def call(Closure body, boolean flag, String dir)
+def call(boolean flag, String dir, Closure body)
 {
     def directory = "."
     if(flag)
