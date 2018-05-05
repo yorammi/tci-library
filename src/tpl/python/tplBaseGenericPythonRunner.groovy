@@ -73,7 +73,7 @@ abstract class tplBaseGenericPythonRunner implements Serializable {
     void requirements(){
         commonRequirements()
         additionalGroovySetup()
-        script.echo "Install Pyhton requirements file '${pythonRequirements}'"
+        script.echo "Install Python requirements file '${pythonRequirements}'"
         def file = new File( script.env.WORKSPACE + "/" + pythonRequirements )
         if( file.exists() && file.isFile()) {
             script.sh "pip install -r ${pythonRequirements}"
@@ -99,7 +99,7 @@ abstract class tplBaseGenericPythonRunner implements Serializable {
     }
 
     void scriptRun(){
-        script.echo "Run Pyhton script '${pythonScript}'"
+        script.echo "Run Python script '${pythonScript}'"
         script.sh "python ./${pythonScript}"
     }
 }
