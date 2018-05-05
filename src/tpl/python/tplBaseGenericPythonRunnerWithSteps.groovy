@@ -72,12 +72,12 @@ abstract class tplBaseGenericPythonRunner implements Serializable {
     void requirements(){
         commonRequirements()
         additionalGroovySetup()
-        script.echo "Install Pyhton requirements file '${pythonRequirements}'"
+        script.echo "Install Python requirements file '${pythonRequirements}'"
         script.tplPythonRequirements(pythonRequirements)
     }
 
     void scriptRun(){
-        script.echo "Run Pyhton script '${pythonScript}'"
+        script.echo "Run Python script '${pythonScript}'"
         script.tplPythonScriptRun(pythonScript)
     }
 
