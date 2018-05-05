@@ -1,4 +1,4 @@
-def call(Closure body,String dir)
+def call(String dir, Closure body)
 {
     String directory = "."
 //    if(flag)
