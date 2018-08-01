@@ -2,9 +2,41 @@ package tpl.ci.node
 import tpl.ci.tplBaseCiPipeline
 
 
-class tplNodeCiPipeline extends tplBastplMavenCiPipeline{
+class tplNodeCiPipeline extends tplBaseCiPipeline{
+
+ tplNodeCiPipeline(script){
+        super(script)
+ }
+
+@Override
+    void setup() {
+        gitConfig()
 
 
+        // automatically capture environment variables while downloading and uploading files
+    }
+
+    @Override
+    void runImpl() {
+        try {
+            runStage('Setup', this.&setup)
+            runStage('Checkout', this.&checkout)
+           // runStage('Test', this.&unitTests)
+            runStage('Build', this.&build)
+            runStage('Deploy', this.&deploy)
+        } catch (e) {
+            script.currentBuild.result = "FAILURE"
+            throw e
+        }
+        finally {
+            buildNotifier()
+        }
+
+    }
+@Override
+    void checkout() {
+        script.checkout script.scm
+    }
  @Override
     void build() {
 
@@ -27,8 +59,38 @@ class tplNodeCiPipeline extends tplBastplMavenCiPipeline{
         }
             
     }     
+@Override
+    void deploy() {
+        logger.info "Helm Deploy"
+        def deployer = new Deployer(script,script.scm.branchName,serviceTag)
+        deployer.deploy()
+    }
 
 
 
+    void gitConfig() {
+   }
+
+    void gitCommit() {
+
+    }
+
+void computeScmTag(String tag) {
+        // set scm/tag to '[name]-[version]'
+        script.pom.scm.tag = tag
+        script.writeMavenPom model: script.pom
+    }
+
+    void buildNotifier() {
+
+        def subject = script.env.JOB_NAME + ' - Build #' + script.currentBuild.number + ' - ' + script.currentBuild.currentResult
+        script.emailext(
+                to: 'user@domain.com',
+                subject: subject,
+                body: script.env.BUILD_URL
+//                attachLog: true,
+                //recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+        )
+    }
 }
 
