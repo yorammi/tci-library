@@ -1,4 +1,4 @@
-//package tpl.ci;
+package tpl.ci;
 
 import tpl.utils.Logger
 import com.cloudbees.groovy.cps.NonCPS

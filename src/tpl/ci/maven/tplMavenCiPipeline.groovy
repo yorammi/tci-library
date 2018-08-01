@@ -1,4 +1,4 @@
-package maven
+package tpl.ci.maven
 
 import tpl.ci.tplBaseCiPipeline
 import tpl.services.Deployer
