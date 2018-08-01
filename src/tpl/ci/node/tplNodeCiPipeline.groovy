@@ -78,7 +78,7 @@ class tplNodeCiPipeline extends tplBaseCiPipeline{
 void computeScmTag(String tag) {
         // set scm/tag to '[name]-[version]'
         script.pom.scm.tag = tag
-        script.writeMavenPom model: script.pom
+        // script.writeMavenPom model: script.pom
     }
 
     void buildNotifier() {
