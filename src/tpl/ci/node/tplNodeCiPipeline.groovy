@@ -16,23 +16,7 @@ class tplNodeCiPipeline extends tplBaseCiPipeline{
         // automatically capture environment variables while downloading and uploading files
     }
 
-    @Override
-    void runImpl() {
-        try {
-            runStage('Setup', this.&setup)
-            runStage('Checkout', this.&checkout)
-           // runStage('Test', this.&unitTests)
-            runStage('Build', this.&build)
-            runStage('Deploy', this.&deploy)
-        } catch (e) {
-            script.currentBuild.result = "FAILURE"
-            throw e
-        }
-        finally {
-            buildNotifier()
-        }
-
-    }
+    
 @Override
     void checkout() {
         script.checkout script.scm
@@ -75,11 +59,7 @@ class tplNodeCiPipeline extends tplBaseCiPipeline{
 
     }
 
-void computeScmTag(String tag) {
-        // set scm/tag to '[name]-[version]'
-        script.pom.scm.tag = tag
-        // script.writeMavenPom model: script.pom
-    }
+
 
     void buildNotifier() {
 
