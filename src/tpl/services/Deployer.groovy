@@ -13,14 +13,12 @@ class Deployer implements Serializable{
     def baseVersion = '0.1.0'
     def newVersion
 
-    Deployer(script,featureName,serviceToBuild,serviceTag,chart2Deploy) {
+    Deployer(script,featureName,serviceTag) {
         this.script = script
         logger = new Logger(script)
         this.featureName=featureName
-        this.serviceName=serviceToBuild
         this.tag=serviceTag
         this.newVersion = "${baseVersion}-${featureName}-${script.env.BUILD_NUMBER}"
-        this.chart2Deploy=chart2Deploy
     }
 
 

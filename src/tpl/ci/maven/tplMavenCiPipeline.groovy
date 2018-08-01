@@ -96,7 +96,7 @@ class tplMavenCiPipeline extends tplBaseCiPipeline {
     @Override
     void deploy() {
         logger.info "Helm Deploy"
-        def deployer = new Deployer(script,branchName,serviceToBuild,serviceTag,chrat2Deploy)
+        def deployer = new Deployer(script,script.scm.branchName,serviceTag)
         deployer.deploy()
     }
 
