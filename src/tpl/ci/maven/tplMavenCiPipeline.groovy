@@ -37,8 +37,8 @@ class tplMavenCiPipeline extends tplBaseCiPipeline {
         try {
             runStage('Setup', this.&setup)
             runStage('Checkout', this.&checkout)
-            runStage('Test', this.&unitTests)
-            runStage('Install', this.&build)
+           // runStage('Test', this.&unitTests)
+            runStage('Build', this.&build)
             runStage('Deploy', this.&deploy)
         } catch (e) {
             script.currentBuild.result = "FAILURE"
