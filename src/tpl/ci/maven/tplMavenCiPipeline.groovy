@@ -84,9 +84,10 @@ class tplMavenCiPipeline extends tplBaseCiPipeline {
 //                                    script.sh "mvn --projects ${serviceToBuild} -P docker --also-make clean install"
 //                                }
 //                            }
-//                }
-             def mavenHome = tool 'MVN-3.5.0'
-             script.sh "${mavenHome}/bin/mvn clean install"
+//
+                def mavenHome = tool 'MVN-3.5.0'
+                script.sh "${mavenHome}/bin/mvn clean install"
+            }
 
         }
 
