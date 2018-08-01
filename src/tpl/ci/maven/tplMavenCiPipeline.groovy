@@ -55,13 +55,6 @@ class tplMavenCiPipeline extends tplBaseCiPipeline {
         gitConfig()
 
 
-        rtMaven.tool = 'MVN-3.5.0' // Tool name from Jenkins configuration
-        rtMaven.resolver releaseRepo: vReleaseRepo, snapshotRepo: vSnapshotRepo, server: server
-        rtMaven.deployer releaseRepo: releaseRepo, snapshotRepo: snapshotRepo, server: server
-        rtMaven.deployer.deployArtifacts = false // Disable artifacts deployment during Maven run
-
-        buildInfo = artifactory.newBuildInfo()
-        buildInfo.env.capture = true
         // automatically capture environment variables while downloading and uploading files
     }
 
