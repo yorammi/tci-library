@@ -1,4 +1,4 @@
-package com.tikalk.utils;
+package tpl.utils;
 
 class Logger implements Serializable {
     def script
