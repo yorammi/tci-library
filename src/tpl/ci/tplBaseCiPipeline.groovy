@@ -3,7 +3,7 @@ package tpl.ci;
 import tpl.utils.Logger
 import com.cloudbees.groovy.cps.NonCPS
 
-abstract class tpl_BaseCiPipeline implements Serializable {
+abstract class tplBaseCiPipeline implements Serializable {
 
     def logger
     def script
@@ -13,7 +13,7 @@ abstract class tpl_BaseCiPipeline implements Serializable {
     def firstUnstableStage
     def pauseAfterEachStage
 
-    tpl_BaseCiPipeline(script) {
+    tplBaseCiPipeline(script) {
         this.script = script
 
         logger = new Logger(script)
