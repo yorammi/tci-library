@@ -73,7 +73,7 @@ class tplMavenCiPipeline extends tplBaseCiPipeline {
     @Override
     void build() {
         script.dir("${script.env.WORKSPACE}") {
-            script.withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'DOCKER_REGISTRY_PASS', usernameVariable: 'DOCKER_REGISTRY_USER')]) {
+            script.withCredentials([script.usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'DOCKER_REGISTRY_PASS', usernameVariable: 'DOCKER_REGISTRY_USER')]) {
 //                script.withMaven(
 //                            maven: 'maven-3.3.9',
 //                            jdk: 'oracle-jdk-8',
