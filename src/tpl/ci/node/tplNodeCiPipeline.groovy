@@ -1,6 +1,6 @@
 package tpl.ci.node
 import tpl.ci.tplBaseCiPipeline
-
+import tpl.services.Deployer
 
 class tplNodeCiPipeline extends tplBaseCiPipeline{
 
