@@ -12,6 +12,9 @@ class Deployer implements Serializable{
     def tag
     def baseVersion = '0.1.0'
     def newVersion
+    def kubeContext
+    def helmRepoURL
+    def helmRepo
 
     Deployer(script,featureName,serviceTag) {
         this.script = script
@@ -23,11 +26,11 @@ class Deployer implements Serializable{
 
 
     void checkoutSCM(){
-        script.checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'kubernetes']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '15f67460-fb15-4ca2-8e33-84914b1a151d', url: 'git@bitbucket.org:anodotengineering/kubernetes.git']]])
+        script.checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'kubernetes']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: '']]])
         script.dir("${script.env.WORKSPACE}/kubernetes" ) {
             script.withCredentials([script.sshUserPrivateKey(credentialsId: "gitsshkey", keyFileVariable: 'keyfile')]) {
 
-                boolean remoteBranchExist = script.sh(returnStdout: true, script: "ssh-agent bash -c 'ssh-add $script.keyfile ; git ls-remote --heads git@bitbucket.org:anodotengineering/kubernetes.git ${featureName} | wc -l'").toBoolean()
+                boolean remoteBranchExist = script.sh(returnStdout: true, script: "ssh-agent bash -c 'ssh-add $script.keyfile ; git ls-remote --heads git@bitbucket.org:aa.git ${featureName} | wc -l'").toBoolean()
                 if (remoteBranchExist)
                     script.sh "ssh-agent bash -c 'ssh-add $script.keyfile ;git checkout --track -b ${featureName}  origin/${featureName}'"
                 else
@@ -67,7 +70,7 @@ class Deployer implements Serializable{
         pushCode()
         script.sh "helm package ."
         script.withEnv(["AWS_REGION=us-east-1"]) {
-            script.sh "helm s3 push --force ./${it}-${newVersion}.tgz anodot"
+            script.sh "helm s3 push --force ./${it}-${newVersion}.tgz ants"
         }
         updateHelmUmbrella(it)
     }
@@ -116,7 +119,7 @@ class Deployer implements Serializable{
     void helmDeploy(){
         script.dir("${script.env.WORKSPACE}/kubernetes/umbrella-chart"){
             script.withEnv(["AWS_REGION=us-east-1"]) {
-                script.sh "kubectl config use-context k8s-features.anodot.com"
+                script.sh "kubectl config use-context ${kubeContext}"
                 script.sh "helm upgrade $featureName --set global.namespace=$featureName,global.stack=$featureName,global.database=bc-$featureName-psql.ano-dev.com ."
             }
             // aws rds --region us-east-1 describe-db-instances
@@ -129,7 +132,7 @@ class Deployer implements Serializable{
     void helmDependencyUpdate(){
         script.dir("${script.env.WORKSPACE}/kubernetes/umbrella-chart") {
             script.withEnv(["AWS_REGION=us-east-1"]) {
-                script.sh "kubectl config use-context k8s-features.anodot.com"
+                script.sh "kubectl config use-context ${kubeContext}"
                 script.sh "helm dep update ."
             }
         }
@@ -180,13 +183,13 @@ class Deployer implements Serializable{
     void helmInit(){
         try {
             script.dir("${script.env.WORKSPACE}") {
-                script.withEnv(["HELM_HOST=jenkins-ci.anodot.com", "AWS_REGION=us-east-1"]) {
+                script.withEnv(["HELM_HOST=AAA", "AWS_REGION=us-east-1"]) {
                     script.sh "mkdir -p /home/ubuntu/.kube"
                     script.sh "cp ${script.env.WORKSPACE}/kubernetes/config /home/ubuntu/.kube/"
-                    script.sh "kubectl config use-context k8s-features.anodot.com"
-                    script.sh "helm init --kube-context k8s-features.anodot.com"
+                    script.sh "kubectl config use-context ${kubeContext}"
+                    script.sh "helm init --kube-context ${kubeContext}"
                     script.sh "helm plugin install https://github.com/hypnoglow/helm-s3.git"
-                    script.sh "helm repo add anodot s3://anodot-helm-charts/charts"
+                    script.sh "helm repo add ${helmRepo} ${helmRepoURL}"
                 }
             }
         }catch(e){}
