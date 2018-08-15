@@ -28,9 +28,9 @@ class tplNodeCiPipeline extends tplBaseCiPipeline{
         script.dir("${script.env.WORKSPACE}") {
             script.withCredentials([script.usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'DOCKER_REGISTRY_PASS', usernameVariable: 'DOCKER_REGISTRY_USER')]) {
 
-                def nodeHome =script.tool 'NodeJS10'
-                script.sh "${nodeHome}/bin/npm install"
-                script.sh "${nodeHome}/bin/npm run build"
+//                def nodeHome =script.tool 'NodeJS10'
+//                script.sh "export PATH=\${PATH}/${nodeHome}/bin; npm install"
+//                script.sh "${nodeHome}/bin/npm run build"
                 script.docker.withRegistry('https://index.docker.io/v1/tikalk','dockerHub') {
                         def customImage = script.docker.build("${script.env.DOCKER_REPOSITORY}","./docker/src/${script.env.DOCKER_GROUP}/${script.env.DOCKER_REPOSITORY}")
                         /* Push the container to the custom Registry */
