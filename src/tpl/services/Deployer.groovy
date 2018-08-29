@@ -181,14 +181,16 @@ class Deployer implements Serializable{
     }
     void helmInit(){
         try {
-            script.dir("${script.env.WORKSPACE}") {
+            script.dir("${script.env.WORKSPACE}"){
                 script.withEnv(["HELM_HOST=AAA", "AWS_REGION=us-east-1"]) {
-                    script.sh "mkdir -p ~/.kube"
-                    script.sh "cp ${script.env.WORKSPACE}/kubernetes/config /home/ubuntu/.kube/"
-                    script.sh "kubectl config use-context ${kubeContext}"
-                    script.sh "helm init --kube-context ${kubeContext}"
-                    script.sh "helm plugin install https://github.com/hypnoglow/helm-s3.git"
-                    script.sh "helm repo add ${helmRepo} ${helmRepoURL}"
+                    script.withCredentials([file(credentialsId: 'secret', variable: 'FILE')]) {
+                        script.sh "mkdir -p ~/.kube"
+                        script.sh "echo ${FILE} > /home/ubuntu/.kube/config"
+                        script.sh "kubectl config use-context ${kubeContext}"
+                        script.sh "helm init --kube-context ${kubeContext}"
+                        script.sh "helm plugin install https://github.com/hypnoglow/helm-s3.git"
+                        script.sh "helm repo add ${helmRepo} ${helmRepoURL}"
+                    }
                 }
             }
         }catch(e){}
