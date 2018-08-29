@@ -56,7 +56,7 @@ class Deployer implements Serializable{
     }
 
     void buildHelm(it){
-
+        script.sh "ls"
         def valuesYaml = script.readYaml file: 'values.yaml'
         valuesYaml.image.tag =
 //        if ( ! serviceName.startsWith('bc') )
