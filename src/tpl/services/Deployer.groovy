@@ -49,7 +49,6 @@ class Deployer implements Serializable{
     void packegeHelm(){
         logger.info('packegeHelm')
         logger.info('Test vova'+serviceName)
-        logger.info('The Charts '+ files)
         script.dir("${script.env.WORKSPACE}/src/main/helm/$it") {
             buildHelm(it)
                     // script.sh "cp ${script.env.WORKSPACE}/kubernetes/helm_charts/$it/*.tgz ${script.env.WORKSPACE}/kubernetes/umbrella-chart/charts/"
