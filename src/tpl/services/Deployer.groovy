@@ -49,13 +49,14 @@ class Deployer implements Serializable{
     void packegeHelm(){
         logger.info('packegeHelm')
         script.dir("${script.env.WORKSPACE}/kubernetes/helm/${service}") {
-            buildHelm(it)
+            buildHelm('.')
                     // script.sh "cp ${script.env.WORKSPACE}/kubernetes/helm_charts/$it/*.tgz ${script.env.WORKSPACE}/kubernetes/umbrella-chart/charts/"
         }
 
     }
 
     void buildHelm(it){
+
         def valuesYaml = script.readYaml file: 'values.yaml'
         valuesYaml.image.tag =
 //        if ( ! serviceName.startsWith('bc') )
