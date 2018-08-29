@@ -26,9 +26,9 @@ class Deployer implements Serializable{
 
 
     void checkoutSCM(){
-        script.checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'kubernetes']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: '']]])
+        script.checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'kubernetes']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'antcbot', url: 'git@github.com:shelleg/ac-k8s.git']]])
         script.dir("${script.env.WORKSPACE}/kubernetes" ) {
-            script.withCredentials([script.sshUserPrivateKey(credentialsId: "gitsshkey", keyFileVariable: 'keyfile')]) {
+            script.withCredentials([script.sshUserPrivateKey(credentialsId: "antcbot", keyFileVariable: 'keyfile')]) {
 
                 boolean remoteBranchExist = script.sh(returnStdout: true, script: "ssh-agent bash -c 'ssh-add $script.keyfile ; git ls-remote --heads git@bitbucket.org:aa.git ${featureName} | wc -l'").toBoolean()
                 if (remoteBranchExist)
