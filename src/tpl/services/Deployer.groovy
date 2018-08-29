@@ -184,7 +184,7 @@ class Deployer implements Serializable{
         try {
             script.dir("${script.env.WORKSPACE}") {
                 script.withEnv(["HELM_HOST=AAA", "AWS_REGION=us-east-1"]) {
-                    script.sh "mkdir -p /home/ubuntu/.kube"
+                    script.sh "mkdir -p ~/.kube"
                     script.sh "cp ${script.env.WORKSPACE}/kubernetes/config /home/ubuntu/.kube/"
                     script.sh "kubectl config use-context ${kubeContext}"
                     script.sh "helm init --kube-context ${kubeContext}"
