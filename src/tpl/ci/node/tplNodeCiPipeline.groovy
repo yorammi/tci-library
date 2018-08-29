@@ -46,7 +46,7 @@ class tplNodeCiPipeline extends tplBaseCiPipeline{
 @Override
     void deploy() {
         logger.info "Helm Deploy"
-        def deployer = new Deployer(script,script.scm.branchName,"${script.env.JOB_NAME}-${script.env.BUILD_NUMBER}")
+        def deployer = new Deployer(script,script.scm.branchName,"${script.env.JOB_NAME}")
         deployer.deploy()
     }
 

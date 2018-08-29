@@ -9,7 +9,7 @@ class Deployer implements Serializable{
     def logger
     def featureName
     def serviceName
-    def tag
+    def service
     def baseVersion = '0.1.0'
     def newVersion
     def kubeContext
@@ -20,7 +20,7 @@ class Deployer implements Serializable{
         this.script = script
         logger = new Logger(script)
         this.featureName=featureName
-        this.tag=serviceTag
+        this.service=serviceTag
         this.newVersion = "${baseVersion}-${featureName}-${script.env.BUILD_NUMBER}"
     }
 
@@ -48,8 +48,7 @@ class Deployer implements Serializable{
 
     void packegeHelm(){
         logger.info('packegeHelm')
-        logger.info('Test vova'+serviceName)
-        script.dir("${script.env.WORKSPACE}/src/main/helm/$it") {
+        script.dir("${script.env.WORKSPACE}/kubernetes/helm/${service}") {
             buildHelm(it)
                     // script.sh "cp ${script.env.WORKSPACE}/kubernetes/helm_charts/$it/*.tgz ${script.env.WORKSPACE}/kubernetes/umbrella-chart/charts/"
         }
