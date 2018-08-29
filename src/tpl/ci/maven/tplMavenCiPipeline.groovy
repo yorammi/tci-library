@@ -86,7 +86,9 @@ class tplMavenCiPipeline extends tplBaseCiPipeline {
 //                            }
 //
                 def mavenHome = script.tool 'MVN-3.5.0'
-                script.sh "${mavenHome}/bin/mvn clean install"
+                script.withEnv(["SERVICE_TAG=${script.env.JOB_NAME}-${script.env.BUILD_NUMBER}"]) {
+                    script.sh "${mavenHome}/bin/mvn clean install"
+                }
             }
 
         }
