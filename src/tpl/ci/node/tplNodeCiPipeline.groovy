@@ -3,10 +3,23 @@ import tpl.ci.tplBaseCiPipeline
 import tpl.services.Deployer
 
 class tplNodeCiPipeline extends tplBaseCiPipeline{
-
+    def containerName
+    def dockerRegisteryPrefix
+    def containerTag
+    def dockerRegisteryUrl
  tplNodeCiPipeline(script){
         super(script)
+
  }
+
+@Override
+void initParams(){
+    super.initParams()
+    containerName = script.params.containerName;
+    dockerRegisteryPrefix = script.params.dockerRegisteryPrefix;
+    containerTag = script.params.containerTag;
+    dockerRegisteryUrl= (script.params.get('dockerRegisteryUrl') == null ) ? 'https://index.docker.io/v1' : script.params.get('dockerRegisteryUrl')
+}
 
 @Override
     void setup() {
@@ -26,20 +39,19 @@ class tplNodeCiPipeline extends tplBaseCiPipeline{
 
 
         script.dir("${script.env.WORKSPACE}") {
-           // script.withCredentials([script.usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'DOCKER_REGISTRY_PASS', usernameVariable: 'DOCKER_REGISTRY_USER')]) {
+           script.withCredentials([script.usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'DOCKER_REGISTRY_PASS', usernameVariable: 'DOCKER_REGISTRY_USER')]) {
 
 //                def nodeHome =script.tool 'NodeJS10'
 //                script.sh "export PATH=\${PATH}/${nodeHome}/bin; npm install"
 //                script.sh "${nodeHome}/bin/npm run build"
-                    script.docker.withRegistry('https://index.docker.io/v1','dockerHub') {
-                        def customImage = script.docker.build("tikal/web-ui:${script.env.BUILD_NUMBER}")
-                        /* Push the container to the custom Registry */
-                        customImage.push()
-                    }
+               script.docker.withRegistry('https://index.docker.io/v1', 'dockerHub') {
+                   def customImage = script.docker.build("${dockerRegisteryPrefix}/${containerName}:${containerTag}")
+                   /* Push the container to the custom Registry */
+                   customImage.push()
+               }
 
-
-            //}
-
+               //}
+           }
         }
             
     }     
