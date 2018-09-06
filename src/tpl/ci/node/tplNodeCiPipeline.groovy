@@ -14,7 +14,7 @@ class tplNodeCiPipeline extends tplBaseCiPipeline{
 
 @Override
 void initParams(){
-    super.initParams()
+    //super.initParams()
     containerName = script.params.containerName;
     dockerRegisteryPrefix = script.params.dockerRegisteryPrefix;
     containerTag = script.params.containerTag;
