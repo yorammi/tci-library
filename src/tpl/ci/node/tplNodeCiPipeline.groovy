@@ -24,6 +24,7 @@ void initParams(){
 @Override
     void setup() {
         gitConfig()
+        initParams()
 
 
         // automatically capture environment variables while downloading and uploading files
