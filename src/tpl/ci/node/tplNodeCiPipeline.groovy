@@ -40,7 +40,7 @@ void initParams(){
 
 
         script.dir("${script.env.WORKSPACE}") {
-           script.withCredentials([script.usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'DOCKER_REGISTRY_PASS', usernameVariable: 'DOCKER_REGISTRY_USER')]) {
+          // script.withCredentials([script.usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'DOCKER_REGISTRY_PASS', usernameVariable: 'DOCKER_REGISTRY_USER')]) {
 
 //                def nodeHome =script.tool 'NodeJS10'
 //                script.sh "export PATH=\${PATH}/${nodeHome}/bin; npm install"
@@ -52,7 +52,7 @@ void initParams(){
                }
 
                //}
-           }
+           //}
         }
             
     }     
