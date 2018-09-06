@@ -27,22 +27,22 @@ class Deployer implements Serializable{
 
     void checkoutSCM(){
         script.checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'kubernetes']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'antcbot', url: 'git@github.com:shelleg/ac-k8s.git']]])
-        script.dir("${script.env.WORKSPACE}/kubernetes" ) {
-            script.withCredentials([script.sshUserPrivateKey(credentialsId: "antcbot", keyFileVariable: 'keyfile')]) {
-
-                boolean remoteBranchExist = script.sh(returnStdout: true, script: "ssh-agent bash -c 'ssh-add $script.keyfile ; git ls-remote --heads git@bitbucket.org:aa.git ${featureName} | wc -l'").toBoolean()
-                if (remoteBranchExist)
-                    script.sh "ssh-agent bash -c 'ssh-add $script.keyfile ;git checkout --track -b ${featureName}  origin/${featureName}'"
-                else
-                    script.sh "ssh-agent bash -c 'ssh-add $script.keyfile ;git checkout -b ${featureName}'"
-
-                //merge master to branch for case some one else update the master
-                // to get the latest
-                script.sh "ssh-agent bash -c 'ssh-add $script.keyfile ;git fetch origin'"
-                script.sh "ssh-agent bash -c 'ssh-add $script.keyfile ;git merge -X theirs origin/master'"
-                //  script.sh "git pull"
-            }
-        }
+//        script.dir("${script.env.WORKSPACE}/kubernetes" ) {
+//            script.withCredentials([script.sshUserPrivateKey(credentialsId: "antcbot", keyFileVariable: 'keyfile')]) {
+//
+//                boolean remoteBranchExist = script.sh(returnStdout: true, script: "ssh-agent bash -c 'ssh-add $script.keyfile ; git ls-remote --heads git@bitbucket.org:aa.git ${featureName} | wc -l'").toBoolean()
+//                if (remoteBranchExist)
+//                    script.sh "ssh-agent bash -c 'ssh-add $script.keyfile ;git checkout --track -b ${featureName}  origin/${featureName}'"
+//                else
+//                    script.sh "ssh-agent bash -c 'ssh-add $script.keyfile ;git checkout -b ${featureName}'"
+//
+//                //merge master to branch for case some one else update the master
+//                // to get the latest
+//                script.sh "ssh-agent bash -c 'ssh-add $script.keyfile ;git fetch origin'"
+//                script.sh "ssh-agent bash -c 'ssh-add $script.keyfile ;git merge -X theirs origin/master'"
+//                //  script.sh "git pull"
+//            }
+//        }
 
     }
 
@@ -139,7 +139,7 @@ class Deployer implements Serializable{
     }
 
     void deploy(){
-       // checkoutSCM()
+        checkoutSCM()
         helmInit()
         packegeHelm()
         helmDependencyUpdate()
