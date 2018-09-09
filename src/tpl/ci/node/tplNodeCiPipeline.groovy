@@ -7,6 +7,7 @@ class tplNodeCiPipeline extends tplBaseCiPipeline{
     def dockerRegisteryPrefix
     def containerTag
     def dockerRegisteryUrl
+    def dockerPath=""
  tplNodeCiPipeline(script){
         super(script)
 
@@ -19,6 +20,7 @@ void initParams(){
     dockerRegisteryPrefix = script.params.dockerRegisteryPrefix;
     containerTag = script.params.containerTag;
     dockerRegisteryUrl= (script.params.get('dockerRegisteryUrl') == null ) ? 'https://index.docker.io/v1' : script.params.get('dockerRegisteryUrl')
+    dockerPath=  (script.params.get('dockerPath') == null ) ? '""' : script.params.get('dockerPath')
 }
 
 @Override
@@ -39,7 +41,7 @@ void initParams(){
     void build() {
 
 
-        script.dir("${script.env.WORKSPACE}") {
+        script.dir("${script.env.WORKSPACE}/${dockerPath}") {
           // script.withCredentials([script.usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'DOCKER_REGISTRY_PASS', usernameVariable: 'DOCKER_REGISTRY_USER')]) {
 
 //                def nodeHome =script.tool 'NodeJS10'
