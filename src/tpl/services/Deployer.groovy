@@ -89,7 +89,7 @@ class Deployer implements Serializable{
         script.sh "mv values.yaml values.yaml.org"
         script.writeYaml file: 'values.yaml', data: valuesYaml
         upgradeChartVersion()
-        pushCode()
+        //pushCode()
         script.sh "helm package ."
         script.withEnv(["AWS_REGION=us-east-1"]) {
             script.sh "helm s3 push --force ./${it}-${newVersion}.tgz ants"
