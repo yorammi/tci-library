@@ -46,10 +46,10 @@ void initParams(){
 //                script.sh "export PATH=\${PATH}/${nodeHome}/bin; npm install"
 //                script.sh "${nodeHome}/bin/npm run build"
                   script.docker.withRegistry('https://index.docker.io/v1', 'dockerHub') {
-                      script.docker.build("${dockerRegisteryPrefix}/${containerName}:${containerTag}")
+                      script.docker.build("${dockerRegisteryPrefix}/${containerName}")
                      /* Push the container to the custom Registry */
-                      script.docker.Image("${dockerRegisteryPrefix}/${containerName}:${containerTag}").push('latest')
-                      script.docker.Image("${dockerRegisteryPrefix}/${containerName}:${containerTag}").push(${containerTag})
+                      script.docker.Image("${dockerRegisteryPrefix}/${containerName}").push('latest')
+                      script.docker.Image("${dockerRegisteryPrefix}/${containerName}").push(${containerTag})
                }
 
                //}
