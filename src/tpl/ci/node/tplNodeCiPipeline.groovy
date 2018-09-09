@@ -48,8 +48,8 @@ void initParams(){
                   script.docker.withRegistry('https://index.docker.io/v1', 'dockerHub') {
                       script.docker.build("${dockerRegisteryPrefix}/${containerName}")
                      /* Push the container to the custom Registry */
-                      script.docker.Image("${dockerRegisteryPrefix}/${containerName}").push('latest')
-                      script.docker.Image("${dockerRegisteryPrefix}/${containerName}").push(${containerTag})
+                      script.docker.image("${dockerRegisteryPrefix}/${containerName}").push('latest')
+                      script.docker.image("${dockerRegisteryPrefix}/${containerName}").push(${containerTag})
                }
 
                //}
