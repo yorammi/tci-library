@@ -47,10 +47,10 @@ void initParams(){
 //                def nodeHome =script.tool 'NodeJS10'
 //                script.sh "export PATH=\${PATH}/${nodeHome}/bin; npm install"
 //                script.sh "${nodeHome}/bin/npm run build"
-              script.echo "docker login ${script.env.DOCKER_REGISTRY_USER} ${script.env.DOCKER_REGISTRY_PASS}"
               script.sh "docker login -u ${script.env.DOCKER_REGISTRY_USER} -p ${script.env.DOCKER_REGISTRY_PASS}"
               script.sh "docker build -t ${dockerRegisteryPrefix}/${containerName}:latest ."
               script.sh "docker push ${dockerRegisteryPrefix}/${containerName}:latest"
+              script.sh "docker push ${dockerRegisteryPrefix}/${containerName}:${containerTag}"
 //
           }
 
