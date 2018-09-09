@@ -63,7 +63,7 @@ void initParams(){
 @Override
     void deploy() {
         logger.info "Helm Deploy"
-        def deployer = new Deployer(script,script.scm.branchName,"${script.env.JOB_NAME}")
+        def deployer =  new Deployer(script,'with-docker',"${script.env.JOB_NAME}")
         deployer.deploy()
     }
 
