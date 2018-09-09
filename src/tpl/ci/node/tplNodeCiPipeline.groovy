@@ -20,7 +20,14 @@ void initParams(){
     dockerRegisteryPrefix = script.params.dockerRegisteryPrefix;
     containerTag = script.params.containerTag;
     dockerRegisteryUrl= (script.params.get('dockerRegisteryUrl') == null ) ? 'https://index.docker.io/v1' : script.params.get('dockerRegisteryUrl')
-    dockerPath=  (script.params.get('dockerPath') == null ) ? '' : script.params.get('dockerPath')
+    dockerPath =  (script.params.get('dockerPath') == null ) ? '' : script.params.get('dockerPath')
+    helmRepoURL = (script.params.get('helmRepoURL') == null ) ? 'Missing Helm Repo Url param' : script.params.get('helmRepoURL')
+    helmRepo = (script.params.get('helmRepo') == null ) ? 'Missing Helm Repo param' : script.params.get('helmRepo')
+    helmGitRepo = (script.params.get('helmGitRepo') == null ) ? 'Missing Helm Git Repo param' : script.params.get('helmGitRepo')
+    helmGitRepoBranch = (script.params.get('helmGitRepoBranch') == null ) ? 'Missing Helm Git Repo branch param' : script.params.get('helmGitRepoBranch')
+    helmCrendetiaslId = (script.params.get('helmCrendetiaslId') == null ) ? 'Missing Helm-Jenkins Credentials id' : script.params.get('helmCrendetiaslId')
+    helmGitRepo = (script.params.get('helmGitRepo') == null ) ? 'Missing helm Git Repo url' : script.params.get('helmGitRepo')
+    helmGitRepoBranch = (script.params.get('helmGitRepoBranch') == null ) ? 'Missing helm Git Repo branch name' : script.params.get('helmGitRepoBranch')
 }
 
 @Override
@@ -63,10 +70,9 @@ void initParams(){
 @Override
     void deploy() {
         logger.info "Helm Deploy"
-        def deployer =  new Deployer(script,'with-docker',"${script.env.JOB_NAME}")
+        def deployer =  new Deployer(script,'with-docker',"${script.env.JOB_NAME}",helmRepoURL,helmRepo,helmGitRepo,helmGitRepoBranch,helmCrendetiaslId,helmGitRepo,helmGitRepoBranch)
         deployer.deploy()
     }
-
 
 
     void gitConfig() {

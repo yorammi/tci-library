@@ -15,18 +15,40 @@ class Deployer implements Serializable{
     def kubeContext
     def helmRepoURL
     def helmRepo
+    def helmGitRepo
+    def helmGitRepoBranch
+    def helmCrendetiaslId
 
-    Deployer(script,featureName,serviceTag) {
+    Deployer(script,featureName,serviceTag,helmRepoURL,helmRepo,helmGitRepo,helmGitRepoBranch,helmCrendetiaslId) {
         this.script = script
         logger = new Logger(script)
-        this.featureName=featureName
-        this.service=serviceTag
+        this.featureName = featureName
+        this.service = serviceTag
         this.newVersion = "${baseVersion}-${featureName}-${script.env.BUILD_NUMBER}"
+        this.helmRepoURL = helmRepoURL
+        this.helmRepo = helmRepo
+        this.helmCrendetiaslId =  helmCrendetiaslId
+        this.helmGitRepo = helmGitRepo
+        this.helmGitRepoBranch = helmGitRepoBranch
     }
 
+    void deploy(){
+        checkoutSCM()
+        helmInit()
+        packegeHelm()
+        helmDependencyUpdate()
+        helmDeploy()
+        waitTillDeployComplete()
+    }
 
     void checkoutSCM(){
-        script.checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'kubernetes']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'antcbot', url: 'git@github.com:shelleg/ac-k8s.git']]])
+        script.checkout([$class: 'GitSCM',
+                         branches: [[name: '*/master']],
+                         doGenerateSubmoduleConfigurations: false,
+                         extensions: [[$class: 'RelativeTargetDirectory',
+                                       relativeTargetDir: 'kubernetes']],
+                                       submoduleCfg: [],
+                         userRemoteConfigs: [[credentialsId: helmCrendetiaslId, url: helmRepoURL ]]])
 //        script.dir("${script.env.WORKSPACE}/kubernetes" ) {
 //            script.withCredentials([script.sshUserPrivateKey(credentialsId: "antcbot", keyFileVariable: 'keyfile')]) {
 //
@@ -48,7 +70,7 @@ class Deployer implements Serializable{
 
     void packegeHelm(){
         logger.info('packegeHelm')
-        script.dir("${script.env.WORKSPACE}/kubernetes/helm/${service}") {
+        script.dir("${script.env.WORKSPACE}/kubernetes/helm/") {
             buildHelm('.')
                     // script.sh "cp ${script.env.WORKSPACE}/kubernetes/helm_charts/$it/*.tgz ${script.env.WORKSPACE}/kubernetes/umbrella-chart/charts/"
         }
@@ -138,14 +160,8 @@ class Deployer implements Serializable{
         }
     }
 
-    void deploy(){
-        checkoutSCM()
-        helmInit()
-        packegeHelm()
-        helmDependencyUpdate()
-        helmDeploy()
-        waitTillDeployComplete()
-    }
+
+
     void waitTillDeployComplete(){
         script.timeout(time: 4,unit: 'MINUTES') {
             script.waitUntil {
@@ -157,6 +173,7 @@ class Deployer implements Serializable{
             }
         }
     }
+
     boolean validateDeployment(){
         script.echo "Waiting for Services to start"
         def podsList = script.sh(script: "kubectl get pods -n $featureName" ,  returnStdout: true).split("\r?\n")
