@@ -139,7 +139,7 @@ class Deployer implements Serializable{
     }
 
     void deploy(){
-        checkoutSCM()
+        //checkoutSCM()
         helmInit()
         packegeHelm()
         helmDependencyUpdate()
