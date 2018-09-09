@@ -42,19 +42,16 @@ void initParams(){
 
 
         script.dir("${script.env.WORKSPACE}/${dockerPath}") {
-          // script.withCredentials([script.usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'DOCKER_REGISTRY_PASS', usernameVariable: 'DOCKER_REGISTRY_USER')]) {
+          script.withCredentials([script.usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'DOCKER_REGISTRY_PASS', usernameVariable: 'DOCKER_REGISTRY_USER')]) {
 
 //                def nodeHome =script.tool 'NodeJS10'
 //                script.sh "export PATH=\${PATH}/${nodeHome}/bin; npm install"
 //                script.sh "${nodeHome}/bin/npm run build"
-                  script.docker.withRegistry('https://index.docker.io/v1', 'dockerHub') {
-                      script.docker.build("${dockerRegisteryPrefix}/${containerName}")
-                      /* Push the container to the custom Registry */
-                  }
-                  script.docker.withRegistry('https://index.docker.io/v1', 'dockerHub') {
-                      script.docker.image("${dockerRegisteryPrefix}/${containerName}").push('latest')
-                      script.docker.image("${dockerRegisteryPrefix}/${containerName}").push($ { containerTag })
-                  }
+              script.sh "docker login ${script.env.DOCKER_REGISTRY_USER} ${script.env.DOCKER_REGISTRY_PASS}"
+              script.sh "docker build -t ${dockerRegisteryPrefix}/${containerName}:latest ."
+              script.sh "docker push ${dockerRegisteryPrefix}/${containerName}:latest"
+//
+          }
 
 
                //}
