@@ -222,7 +222,7 @@ class Deployer implements Serializable{
 
     }
     void installKubectl(){
-        script.sh "curl -L -o /usr/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v1.6.0/bin/linux/amd64/kubectl "
+        script.sh "sudo curl -L -o /usr/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v1.6.0/bin/linux/amd64/kubectl "
         script.sh "sudo chmod +x /usr/bin/kubectl"
         script.sh "kubectl version --client "
     }
