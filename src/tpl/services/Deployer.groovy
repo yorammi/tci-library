@@ -207,7 +207,7 @@ class Deployer implements Serializable{
                 script.withEnv(["HELM_HOST=AAA", "AWS_REGION=us-east-1"]) {
                     script.withCredentials([script.file(credentialsId: 'kube-config', variable: 'FILE')]) {
                         script.sh "mkdir -p ~/.kube"
-                        script.sh "echo ${FILE} > /home/ubuntu/.kube/config"
+                        script.sh "echo ${script.env.FILE} > /home/ubuntu/.kube/config"
                         script.sh "kubectl config use-context ${kubeContext}"
                         script.sh "helm init --kube-context ${kubeContext}"
                         script.sh "helm plugin install https://github.com/hypnoglow/helm-s3.git"
