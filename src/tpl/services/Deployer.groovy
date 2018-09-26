@@ -233,6 +233,8 @@ class Deployer implements Serializable{
         script.sh "chmod 700 get_helm.sh"
 //        script.sh "cat get_helm.sh"
         script.withEnv("HELM_INSTALL_DIR","/home/jenkins")
-        script.sh "./get_helm.sh"
+        {
+            script.sh "./get_helm.sh"
+        }
     }
 }
