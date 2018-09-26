@@ -13,6 +13,7 @@ class tplNodeCiPipeline extends tplBaseCiPipeline{
     def helmGitRepo
     def helmGitRepoBranch
     def helmCrendetiaslId
+    def kubeContext
  tplNodeCiPipeline(script){
         super(script)
 
@@ -31,6 +32,7 @@ void initParams(){
     helmGitRepo = (script.params.get('helmGitRepo') == null ) ? 'Missing Helm Git Repo param' : script.params.get('helmGitRepo')
     helmGitRepoBranch = (script.params.get('helmGitRepoBranch') == null ) ? 'Missing Helm Git Repo branch param' : script.params.get('helmGitRepoBranch')
     helmCrendetiaslId = (script.params.get('helmCrendetiaslId') == null ) ? 'Missing Helm-Jenkins Credentials id' : script.params.get('helmCrendetiaslId')
+    kubeContext = (script.params.get('kubeContext') == null ) ? 'Missing kubeContext' : script.params.get('kubeContext')
   }
 
 @Override
@@ -74,7 +76,7 @@ void initParams(){
 @Override
     void deploy() {
         script.echo "Helm Deploy"
-        def deployer =  new Deployer(script,"${script.env.JOB_NAME}",containerTag,helmRepoURL,helmRepo,helmGitRepo,helmGitRepoBranch,helmCrendetiaslId)
+        def deployer =  new Deployer(script,"${script.env.JOB_NAME}",containerTag,helmRepoURL,helmRepo,helmGitRepo,helmGitRepoBranch,helmCrendetiaslId,kubeContext)
         deployer.deploy()
     }
 

@@ -19,7 +19,7 @@ class Deployer implements Serializable{
     def helmGitRepoBranch
     def helmCrendetiaslId
 
-    Deployer(script,featureName,serviceTag,helmRepoURL,helmRepo,helmGitRepo,helmGitRepoBranch,helmCrendetiaslId) {
+    Deployer(script,featureName,serviceTag,helmRepoURL,helmRepo,helmGitRepo,helmGitRepoBranch,helmCrendetiaslId, kubeContext) {
         this.script = script
         logger = new Logger(script)
         this.featureName = featureName
@@ -30,6 +30,7 @@ class Deployer implements Serializable{
         this.helmCrendetiaslId =  helmCrendetiaslId
         this.helmGitRepo = helmGitRepo
         this.helmGitRepoBranch = helmGitRepoBranch
+        this.kubeContext = kubeContext
     }
 
     void deploy(){
