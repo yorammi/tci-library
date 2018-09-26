@@ -206,6 +206,7 @@ class Deployer implements Serializable{
         logger.info "in init"
         script.dir("${script.env.WORKSPACE}"){
              installKubectl()
+            installHelm()
              script.withEnv(["HELM_HOST=AAA", "AWS_REGION=us-east-1"]) {
                    // script.withCredentials([script.file(credentialsId: 'kube-config', variable: 'FILE')]) {
                  script.withCredentials([script.kubeconfigContent(credentialsId: 'kube-config', variable: 'KUBECONFIG_CONTENT')]){
@@ -225,5 +226,10 @@ class Deployer implements Serializable{
         script.sh "curl -L -o ~/kubectl https://storage.googleapis.com/kubernetes-release/release/v1.6.0/bin/linux/amd64/kubectl "
         script.sh "chmod +x ~/kubectl"
         script.sh "~/kubectl version --client "
+    }
+    void installHelm(){
+        script.sh "curl https://raw.githubusercontent.com/helm/helm/master/scripts/get > get_helm.sh "
+        script.sh "chmod 700 get_helm.sh"
+        script.sh "./get_helm.sh"
     }
 }
