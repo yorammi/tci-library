@@ -73,7 +73,7 @@ void initParams(){
 @Override
     void deploy() {
         logger.info "Helm Deploy"
-        def deployer =  new Deployer(script,'with-docker',"${script.env.JOB_NAME}",helmRepoURL,helmRepo,helmGitRepo,helmGitRepoBranch,helmCrendetiaslId,helmGitRepo,helmGitRepoBranch)
+        def deployer =  new Deployer(script,"${script.env.JOB_NAME}",containerTag,helmRepoURL,helmRepo,helmGitRepo,helmGitRepoBranch,helmCrendetiaslId)
         deployer.deploy()
     }
 
