@@ -232,7 +232,7 @@ class Deployer implements Serializable{
         script.sh "sed -i 's|sudo| |g' get_helm.sh"
         script.sh "chmod 700 get_helm.sh"
 //        script.sh "cat get_helm.sh"
-        script.sh("echo $PATH")
+        script.sh("echo ${env.PATH}")
         script.withEnv(["HELM_INSTALL_DIR=/home/jenkins"]) {
             script.sh "./get_helm.sh"
         }
