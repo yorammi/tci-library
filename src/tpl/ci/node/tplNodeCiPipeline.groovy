@@ -72,7 +72,7 @@ void initParams(){
     }     
 @Override
     void deploy() {
-        logger.info "Helm Deploy"
+        script.echo "Helm Deploy"
         def deployer =  new Deployer(script,"${script.env.JOB_NAME}",containerTag,helmRepoURL,helmRepo,helmGitRepo,helmGitRepoBranch,helmCrendetiaslId)
         deployer.deploy()
     }
