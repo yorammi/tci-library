@@ -228,7 +228,8 @@ class Deployer implements Serializable{
         script.sh "~/kubectl version --client "
     }
     void installHelm(){
-        script.sh "curl https://raw.githubusercontent.com/helm/helm/master/scripts/get > get_helm.sh "
+        script.sh "curl https://raw.githubusercontent.com/helm/helm/master/scripts/get > get_helm.sh"
+        script.sh "sudo sed -i 's|sudo | |g' get_helm.sh"
         script.sh "chmod 700 get_helm.sh"
         script.sh "./get_helm.sh"
     }
