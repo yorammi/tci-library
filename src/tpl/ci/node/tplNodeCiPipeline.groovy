@@ -8,6 +8,11 @@ class tplNodeCiPipeline extends tplBaseCiPipeline{
     def containerTag
     def dockerRegisteryUrl
     def dockerPath
+    def helmRepoURL
+    def helmRepo
+    def helmGitRepo
+    def helmGitRepoBranch
+    def helmCrendetiaslId
  tplNodeCiPipeline(script){
         super(script)
 
@@ -26,9 +31,7 @@ void initParams(){
     helmGitRepo = (script.params.get('helmGitRepo') == null ) ? 'Missing Helm Git Repo param' : script.params.get('helmGitRepo')
     helmGitRepoBranch = (script.params.get('helmGitRepoBranch') == null ) ? 'Missing Helm Git Repo branch param' : script.params.get('helmGitRepoBranch')
     helmCrendetiaslId = (script.params.get('helmCrendetiaslId') == null ) ? 'Missing Helm-Jenkins Credentials id' : script.params.get('helmCrendetiaslId')
-    helmGitRepo = (script.params.get('helmGitRepo') == null ) ? 'Missing helm Git Repo url' : script.params.get('helmGitRepo')
-    helmGitRepoBranch = (script.params.get('helmGitRepoBranch') == null ) ? 'Missing helm Git Repo branch name' : script.params.get('helmGitRepoBranch')
-}
+  }
 
 @Override
     void setup() {
