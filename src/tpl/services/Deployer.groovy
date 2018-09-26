@@ -50,7 +50,9 @@ class Deployer implements Serializable{
                                        submoduleCfg: [],
                          userRemoteConfigs: [[credentialsId: helmCrendetiaslId, url: helmGitRepo ]]])
 //        script.dir("${script.env.WORKSPACE}/kubernetes" ) {
-//            script.withCredentials([script.sshUserPrivateKey(credentialsId: "antcbot", keyFileVariable: 'keyfile')]) {
+//            script.withCredentials([script.sshUserPrivateKey(credentialsId: helmCrendetiaslId, keyFileVariable: 'keyfile')]) {
+//                script.sh "ssh-agent bash -c 'ssh-add $script.keyfile ;git checkout --track -b ${featureName}  origin/${featureName}'"
+//            }
 //
 //                boolean remoteBranchExist = script.sh(returnStdout: true, script: "ssh-agent bash -c 'ssh-add $script.keyfile ; git ls-remote --heads git@bitbucket.org:aa.git ${featureName} | wc -l'").toBoolean()
 //                if (remoteBranchExist)
@@ -71,13 +73,14 @@ class Deployer implements Serializable{
     void packegeHelm(){
         logger.info('packegeHelm')
         script.dir("${script.env.WORKSPACE}/kubernetes/helm/") {
-            buildHelm('.')
+            buildHelm(featureName)
                     // script.sh "cp ${script.env.WORKSPACE}/kubernetes/helm_charts/$it/*.tgz ${script.env.WORKSPACE}/kubernetes/umbrella-chart/charts/"
         }
 
     }
 
     void buildHelm(it){
+        script.dir(it)
         def myls =script.sh( script: "ls" , returnStdout: true)
         script.echo "The Values $myls"
         def valuesYaml = script.readYaml file: 'values.yaml'
