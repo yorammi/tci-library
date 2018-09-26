@@ -210,10 +210,9 @@ class Deployer implements Serializable{
                    // script.withCredentials([script.file(credentialsId: 'kube-config', variable: 'FILE')]) {
                  script.withCredentials([script.kubeconfigContent(credentialsId: 'kube-config', variable: 'KUBECONFIG_CONTENT')]){
                         script.sh "mkdir -p ~/.kube"
-                        script.echo "script.echo ${kubeContext}"
-                        script.sh "echo ${script.env.KUBECONFIG_CONTENT} > ~/.kube/config"
+                        script.sh "echo ${script.env.KUBECONFIG_CONTENT} > /home/jenkins/.kube/config"
                         script.sh "~/kubectl config current-context"
-                        script.sh "~/kubectl config set-context ${kubeContext}"
+                        script.sh "~/kubectl config use-context ${kubeContext}"
                         script.sh "helm init --kube-context ${kubeContext}"
                         script.sh "helm plugin install https://github.com/hypnoglow/helm-s3.git"
                         script.sh "helm repo add ${helmRepo} ${helmRepoURL}"
