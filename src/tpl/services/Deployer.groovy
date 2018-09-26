@@ -43,12 +43,12 @@ class Deployer implements Serializable{
 
     void checkoutSCM(){
         script.checkout([$class: 'GitSCM',
-                         branches: [[name: '*/master']],
+                         branches: [[name: "*/${helmGitRepoBranch}"]],
                          doGenerateSubmoduleConfigurations: false,
                          extensions: [[$class: 'RelativeTargetDirectory',
                                        relativeTargetDir: 'kubernetes']],
                                        submoduleCfg: [],
-                         userRemoteConfigs: [[credentialsId: helmCrendetiaslId, url: helmRepoURL ]]])
+                         userRemoteConfigs: [[credentialsId: helmCrendetiaslId, url: helmGitRepo ]]])
 //        script.dir("${script.env.WORKSPACE}/kubernetes" ) {
 //            script.withCredentials([script.sshUserPrivateKey(credentialsId: "antcbot", keyFileVariable: 'keyfile')]) {
 //
