@@ -204,18 +204,10 @@ class Deployer implements Serializable{
     }
     void helmInit(){
         logger.info "in init"
-        script.podTemplate(label: 'label', containers: [
-                script.containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl:v1.8.8', command: 'cat', ttyEnabled: true),
-                script.containerTemplate(name: 'helm', image: 'lachlanevenson/k8s-helm:latest', command: 'cat', ttyEnabled: true)
-        ],
-                volumes: [
-                        script.hostPathVolume(mountPath: '/home/gradle/.gradle', hostPath: '/tmp/jenkins/.gradle'),
-                        script.hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
-                ])
         script.dir("${script.env.WORKSPACE}"){
-                script.withEnv(["HELM_HOST=AAA", "AWS_REGION=us-east-1"]) {
+             installKubectl()
+             script.withEnv(["HELM_HOST=AAA", "AWS_REGION=us-east-1"]) {
                     script.withCredentials([script.file(credentialsId: 'kube-config', variable: 'FILE')]) {
-                        script.container()
                         script.sh "mkdir -p ~/.kube"
                         script.sh "echo ${script.env.FILE} > ~/.kube/config"
                         script.container('kubectl') {
@@ -228,5 +220,10 @@ class Deployer implements Serializable{
                 }
             }
 
+    }
+    void installKubectl(){
+        script.sh "curl -L -o /usr/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v1.6.0/bin/linux/amd64/kubectl "
+        script.sh "chmod +x /usr/bin/kubectl"
+        script.sh "kubectl version --client "
     }
 }
