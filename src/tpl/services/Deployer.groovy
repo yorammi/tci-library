@@ -80,22 +80,23 @@ class Deployer implements Serializable{
     }
 
     void buildHelm(it){
-        script.dir(it)
-        def myls =script.sh( script: "ls" , returnStdout: true)
-        script.echo "The Values $myls"
-        def valuesYaml = script.readYaml file: 'values.yaml'
-        valuesYaml.image.tag =
+        script.dir(it) {
+            def myls = script.sh(script: "ls", returnStdout: true)
+            script.echo "The Values $myls"
+            def valuesYaml = script.readYaml file: 'values.yaml'
+            valuesYaml.image.tag =
 //        if ( ! serviceName.startsWith('bc') )
 //            valuesYaml.image.repository = "340481513670.dkr.ecr.us-east-1.amazonaws.com/$serviceName"
-        valuesYaml.namespace = featureName
-        script.echo "The Values $valuesYaml"
-        script.sh "mv values.yaml values.yaml.org"
-        script.writeYaml file: 'values.yaml', data: valuesYaml
-        upgradeChartVersion()
-        //pushCode()
-        script.sh "helm package ."
-        script.withEnv(["AWS_REGION=us-east-1"]) {
-            script.sh "helm s3 push --force ./${it}-${newVersion}.tgz ants"
+                    valuesYaml.namespace = featureName
+            script.echo "The Values $valuesYaml"
+            script.sh "mv values.yaml values.yaml.org"
+            script.writeYaml file: 'values.yaml', data: valuesYaml
+            upgradeChartVersion()
+            //pushCode()
+            script.sh "helm package ."
+            script.withEnv(["AWS_REGION=us-east-1"]) {
+                script.sh "helm s3 push --force ./${it}-${newVersion}.tgz ants"
+            }
         }
         updateHelmUmbrella(it)
     }
