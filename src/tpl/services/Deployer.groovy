@@ -202,6 +202,7 @@ class Deployer implements Serializable{
         return services.isEmpty();
     }
     void helmInit(){
+        logger.info "in init"
         try {
             script.dir("${script.env.WORKSPACE}"){
                 script.withEnv(["HELM_HOST=AAA", "AWS_REGION=us-east-1"]) {
