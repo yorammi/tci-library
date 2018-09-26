@@ -60,7 +60,8 @@ void initParams(){
               script.sh "docker login -u ${script.env.DOCKER_REGISTRY_USER} -p ${script.env.DOCKER_REGISTRY_PASS}"
               script.sh "docker build -t ${dockerRegisteryPrefix}/${containerName}:latest ."
               script.sh "docker push ${dockerRegisteryPrefix}/${containerName}:latest"
-              //script.sh "docker push ${dockerRegisteryPrefix}/${containerName}:${containerTag}"
+              script.sh "docker tag ${dockerRegisteryPrefix}/${containerName}:latest ${dockerRegisteryPrefix}/${containerName}:${containerTag}"
+              script.sh "docker push ${dockerRegisteryPrefix}/${containerName}:${containerTag}"
 //
           }
 
