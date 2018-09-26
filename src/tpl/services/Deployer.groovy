@@ -210,9 +210,7 @@ class Deployer implements Serializable{
                     script.withCredentials([script.file(credentialsId: 'kube-config', variable: 'FILE')]) {
                         script.sh "mkdir -p ~/.kube"
                         script.sh "echo ${script.env.FILE} > ~/.kube/config"
-                        script.container('kubectl') {
-                            script.sh "kubectl config use-context ${kubeContext}"
-                        }
+                        script.sh "~/kubectl config use-context ${kubeContext}"
                         script.sh "helm init --kube-context ${kubeContext}"
                         script.sh "helm plugin install https://github.com/hypnoglow/helm-s3.git"
                         script.sh "helm repo add ${helmRepo} ${helmRepoURL}"
@@ -222,8 +220,8 @@ class Deployer implements Serializable{
 
     }
     void installKubectl(){
-        script.sh "sudo curl -L -o /usr/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v1.6.0/bin/linux/amd64/kubectl "
-        script.sh "sudo chmod +x /usr/bin/kubectl"
-        script.sh "kubectl version --client "
+        script.sh "curl -L -o ~/kubectl https://storage.googleapis.com/kubernetes-release/release/v1.6.0/bin/linux/amd64/kubectl "
+        script.sh "chmod +x ~/kubectl"
+        script.sh "~/kubectl version --client "
     }
 }
