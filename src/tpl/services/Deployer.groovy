@@ -203,8 +203,7 @@ class Deployer implements Serializable{
     }
     void helmInit(){
         logger.info "in init"
-        try {
-            script.dir("${script.env.WORKSPACE}"){
+        script.dir("${script.env.WORKSPACE}"){
                 script.withEnv(["HELM_HOST=AAA", "AWS_REGION=us-east-1"]) {
                     script.withCredentials([file(credentialsId: 'secret', variable: 'FILE')]) {
                         script.sh "mkdir -p ~/.kube"
@@ -216,6 +215,6 @@ class Deployer implements Serializable{
                     }
                 }
             }
-        }catch(e){}
+
     }
 }
