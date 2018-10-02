@@ -235,6 +235,6 @@ class Deployer implements Serializable{
         script.withEnv(["HELM_INSTALL_DIR=/home/jenkins/"]) {
             script.sh "./get_helm.sh"
         }
-        script.sh "ls -laR /home/jenkins/helm"
+        script.sh "ls -laR /home/jenkins"
     }
 }
