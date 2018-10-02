@@ -214,9 +214,9 @@ class Deployer implements Serializable{
                         script.sh "echo \"${script.env.KUBECONFIG_CONTENT}\" > /home/jenkins/.kube/config"
                         script.sh "~/kubectl config  current-context"
                         script.sh "~/kubectl config  use-context ${kubeContext}"
-                        script.sh "/home/jenkins/helm init --kube-context ${kubeContext}"
-                        script.sh "/home/jenkins/helm plugin install https://github.com/hypnoglow/helm-s3.git"
-                        script.sh "/home/jenkins/helm repo add ${helmRepo} ${helmRepoURL}"
+                        script.sh "/home/jenkins/workspace/ant-ui/kubernetes/helm init --kube-context ${kubeContext}"
+                        script.sh "/home/jenkins/workspace/ant-ui/kubernetes/helm plugin install https://github.com/hypnoglow/helm-s3.git"
+                        script.sh "/home/jenkins/workspace/ant-ui/kubernetes/helm repo add ${helmRepo} ${helmRepoURL}"
                     }
                 }
             }
@@ -235,6 +235,5 @@ class Deployer implements Serializable{
         script.withEnv(["HELM_INSTALL_DIR=/home/jenkins/"]) {
             script.sh "./get_helm.sh"
         }
-        script.sh "ls -laR /home/jenkins"
     }
 }
