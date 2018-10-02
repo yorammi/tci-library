@@ -207,7 +207,7 @@ class Deployer implements Serializable{
         script.dir("${script.env.WORKSPACE}"){
              installKubectl()
             //installHelm()
-             script.withEnv(["HELM_HOST=AAA", "AWS_REGION=us-east-1"]) {
+             script.withEnv(["HELM_HOST=AAA", "AWS_REGION=eu-west-1"]) {
                    // script.withCredentials([script.file(credentialsId: 'kube-config', variable: 'FILE')]) {
                  script.withCredentials([script.kubeconfigContent(credentialsId: 'kube-config', variable: 'KUBECONFIG_CONTENT')]){
                         script.sh "mkdir -p ~/.kube"
