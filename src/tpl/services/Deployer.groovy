@@ -235,5 +235,6 @@ class Deployer implements Serializable{
         script.withEnv(["HELM_INSTALL_DIR=/home/jenkins/"]) {
             script.sh "./install_helm.sh"
         }
+        script.sh "apk update && apk add --virtual build-dependencies"
     }
 }
