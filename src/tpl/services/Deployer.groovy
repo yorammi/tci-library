@@ -215,7 +215,7 @@ class Deployer implements Serializable{
                         script.sh "~/kubectl config  current-context"
                         script.sh "~/kubectl config  use-context ${kubeContext}"
                         script.sh "/home/jenkins/helm init --kube-context ${kubeContext}"
-                        //script.sh "/home/jenkins/helm plugin install https://github.com/hypnoglow/helm-s3.git"
+                        script.sh "/home/jenkins/helm plugin install https://github.com/hypnoglow/helm-s3.git"
                         script.sh "/home/jenkins/helm repo add ${helmRepo} ${helmRepoURL}"
                     }
                 }
