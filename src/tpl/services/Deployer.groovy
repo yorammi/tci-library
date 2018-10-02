@@ -207,7 +207,6 @@ class Deployer implements Serializable{
         script.dir("${script.env.WORKSPACE}"){
              installKubectl()
             installHelm()
-            installMake()
              script.withEnv(["HELM_HOST=AAA", "AWS_REGION=us-east-1"]) {
                    // script.withCredentials([script.file(credentialsId: 'kube-config', variable: 'FILE')]) {
                  script.withCredentials([script.kubeconfigContent(credentialsId: 'kube-config', variable: 'KUBECONFIG_CONTENT')]){
@@ -236,9 +235,5 @@ class Deployer implements Serializable{
         script.withEnv(["HELM_INSTALL_DIR=/home/jenkins/"]) {
             script.sh "./install_helm.sh"
         }
-    }
-
-    void installMake(){
-        script.sh "yum install make"
     }
 }
