@@ -230,10 +230,11 @@ class Deployer implements Serializable{
     void installHelm(){
         script.sh "curl https://raw.githubusercontent.com/helm/helm/master/scripts/get > get_helm.sh"
         script.sh "sed -i 's|USE_SUDO=\"true\"|USE_SUDO=\"false\" |g' get_helm.sh"
-        script.sh "cat get_helm.sh"
-        script.sh "chmod 700 get_helm.sh"
+        script.sh "head -n -2 get_helm.sh > install_helm.sh"
+        script.sh "cat install_helm.sh"
+        script.sh "chmod 700 install_helm.sh"
         script.withEnv(["HELM_INSTALL_DIR=/home/jenkins/"]) {
-            script.sh "./get_helm.sh"
+            script.sh "./install_helm.sh"
         }
     }
 }
