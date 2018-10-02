@@ -239,6 +239,6 @@ class Deployer implements Serializable{
     }
 
     void installMake(){
-        script.sh "apt-get install build-essential"
+        script.sh "yum install make"
     }
 }
