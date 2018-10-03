@@ -42,8 +42,6 @@ class Deployer implements Serializable{
         waitTillDeployComplete()
     }
 
-    }
-
     void packegeHelm(){
         logger.info('packegeHelm')
         script.dir("${script.env.WORKSPACE}/kubernetes/helm/") {
