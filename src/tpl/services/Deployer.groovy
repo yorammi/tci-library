@@ -205,7 +205,7 @@ class Deployer implements Serializable{
     void helmInit(){
         logger.info "in init"
         script.dir("${script.env.WORKSPACE}"){
-             //installKubectl()
+             installKubectl()
              script.withEnv(["HELM_HOST=AAA", "AWS_REGION=eu-west-1"]) {
                    // script.withCredentials([script.file(credentialsId: 'kube-config', variable: 'FILE')]) {
                  script.withCredentials([script.kubeconfigContent(credentialsId: 'kube-config', variable: 'KUBECONFIG_CONTENT')]){
