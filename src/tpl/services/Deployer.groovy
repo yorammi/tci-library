@@ -34,7 +34,8 @@ class Deployer implements Serializable{
     }
 
     void deploy(){
-        checkoutSCM()
+        script.tplRepositoryDirectoryCheckout(helmGitRepo,helmGitRepoBranch,helmCrendetiaslId,'kubernetes')
+//        checkoutSCM()
         helmInit()
         packegeHelm()
         helmDependencyUpdate()
