@@ -35,40 +35,12 @@ class Deployer implements Serializable{
 
     void deploy(){
         script.tplRepositoryDirectoryCheckout(helmGitRepo,helmGitRepoBranch,helmCrendetiaslId,'kubernetes')
-//        checkoutSCM()
         helmInit()
         packegeHelm()
         helmDependencyUpdate()
         helmDeploy()
         waitTillDeployComplete()
     }
-
-    void checkoutSCM(){
-        script.checkout([$class: 'GitSCM',
-                         branches: [[name: "*/${helmGitRepoBranch}"]],
-                         doGenerateSubmoduleConfigurations: false,
-                         extensions: [[$class: 'RelativeTargetDirectory',
-                                       relativeTargetDir: 'kubernetes']],
-                                       submoduleCfg: [],
-                         userRemoteConfigs: [[credentialsId: helmCrendetiaslId, url: helmGitRepo ]]])
-//        script.dir("${script.env.WORKSPACE}/kubernetes" ) {
-//            script.withCredentials([script.sshUserPrivateKey(credentialsId: helmCrendetiaslId, keyFileVariable: 'keyfile')]) {
-//                script.sh "ssh-agent bash -c 'ssh-add $script.keyfile ;git checkout --track -b ${featureName}  origin/${featureName}'"
-//            }
-//
-//                boolean remoteBranchExist = script.sh(returnStdout: true, script: "ssh-agent bash -c 'ssh-add $script.keyfile ; git ls-remote --heads git@bitbucket.org:aa.git ${featureName} | wc -l'").toBoolean()
-//                if (remoteBranchExist)
-//                    script.sh "ssh-agent bash -c 'ssh-add $script.keyfile ;git checkout --track -b ${featureName}  origin/${featureName}'"
-//                else
-//                    script.sh "ssh-agent bash -c 'ssh-add $script.keyfile ;git checkout -b ${featureName}'"
-//
-//                //merge master to branch for case some one else update the master
-//                // to get the latest
-//                script.sh "ssh-agent bash -c 'ssh-add $script.keyfile ;git fetch origin'"
-//                script.sh "ssh-agent bash -c 'ssh-add $script.keyfile ;git merge -X theirs origin/master'"
-//                //  script.sh "git pull"
-//            }
-//        }
 
     }
 
