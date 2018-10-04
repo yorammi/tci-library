@@ -122,7 +122,7 @@ class Deployer implements Serializable{
     }
 
     void helmDeploy(){
-        script.dir("${script.env.WORKSPACE}/kubernetes/umbrella-chart"){
+        script.dir("${script.env.WORKSPACE}/kubernetes/helm/ant-umbrella"){
             script.withEnv(["AWS_REGION=us-east-1"]) {
                 script.sh "kubectl config use-context ${kubeContext}"
                 script.sh "helm upgrade $featureName --set global.namespace=$featureName,global.stack=$featureName,global.database=bc-$featureName-psql.ano-dev.com ."
@@ -135,7 +135,7 @@ class Deployer implements Serializable{
 
     }
     void helmDependencyUpdate(){
-        script.dir("${script.env.WORKSPACE}/kubernetes/umbrella-chart") {
+        script.dir("${script.env.WORKSPACE}/kubernetes/helm/ant-umbrella") {
             script.withEnv(["AWS_REGION=us-east-1"]) {
                 script.sh "kubectl config use-context ${kubeContext}"
                 script.sh "helm dep update ."
