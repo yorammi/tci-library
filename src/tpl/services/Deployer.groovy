@@ -135,7 +135,7 @@ class Deployer implements Serializable{
         script.dir("${script.env.WORKSPACE}/kubernetes/umbrella-chart") {
             script.withEnv(["AWS_REGION=us-east-1"]) {
                 script.sh "kubectl config use-context ${kubeContext}"
-                script.sh "helm dep update ."
+               // script.sh "helm dep update ."
             }
         }
     }
