@@ -70,11 +70,11 @@ class Deployer implements Serializable{
             upgradeChartVersion()
             //pushCode()
             script.sh "helm package ."
-            script.withEnv(["AWS_REGION=eu-west-1"]) {
+            //script.withEnv(["AWS_REGION=eu-west-1"]) {
                 script.withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
                     script.sh "helm s3 push --force ./${it}-${newVersion}.tgz ${helmRepo}"
                 }
-            }
+            //}
         }
         updateHelmUmbrella(it)
     }
