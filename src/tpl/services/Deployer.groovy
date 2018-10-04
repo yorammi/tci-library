@@ -82,13 +82,14 @@ class Deployer implements Serializable{
 
     void updateHelmUmbrella(chartName){
         script.dir("${script.env.WORKSPACE}/kubernetes/umbrella-chart") {
+            script.echo "handle requirements.yaml"
+            script.sh "ls -laR"
             def requirementsYaml = script.readYaml file: 'requirements.yaml'
             requirementsYaml.dependencies.each{
                 if ( it.name == chartName )
                     it.version = newVersion
 
             }
-            script.echo "handle requirements.yaml"
             script.sh "mv requirements.yaml requirements.yaml.org"
             script.writeYaml file: 'requirements.yaml', data: requirementsYaml
             pushUmbrellaCode()
