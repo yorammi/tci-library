@@ -114,7 +114,7 @@ class Deployer implements Serializable{
 
     void pushUmbrellaCode(){
         script.echo "push umbrella code"
-        script.withCredentials([script.sshUserPrivateKey(credentialsId: "antcbot", keyFileVariable: 'keyfile')]) {
+        script.withCredentials([script.sshUserPrivateKey(credentialsId: "gitsshkey", keyFileVariable: 'keyfile')]) {
             script.sh "git add requirements.yaml"
             script.sh "git commit -m 'jenkins update version'"
             script.sh "ssh-agent bash -c 'ssh-add $script.keyfile ;git push -u origin ${featureName}'"
