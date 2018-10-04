@@ -34,13 +34,16 @@ class Deployer implements Serializable{
     }
 
     void deploy(){
-        script.tplRepositoryDirectoryCheckout(helmGitRepo,helmGitRepoBranch,helmCrendetiaslId,'kubernetes')
+        script.stage("k8s checkout", this.&k8sCheckout)
         script.stage("HELM init", this.&helmInit)
-        //helmInit()
-        packegeHelm()
-        helmDependencyUpdate()
-        helmDeploy()
+        script.stage("HELM package", this.&packegeHelm)
+        script.stage("HELM dependecy update", this.&helmDependencyUpdate)
+        script.stage("HELM deploy", this.&helmDeploy)
         waitTillDeployComplete()
+    }
+
+    void k8sCheckout() {
+        script.tplRepositoryDirectoryCheckout(helmGitRepo, helmGitRepoBranch, helmCrendetiaslId, 'kubernetes')
     }
 
     void packegeHelm(){
@@ -187,7 +190,7 @@ class Deployer implements Serializable{
                         script.sh "kubectl config  use-context ${kubeContext}"
                         script.sh "helm init --kube-context ${kubeContext}"
                         script.sh "helm plugin install https://github.com/hypnoglow/helm-s3.git"
-                        script.sh "helm repo add ${helmRepo} ${helmRepoURL}"
+                        //script.sh "helm repo add ${helmRepo} ${helmRepoURL}"
                     }
                 }
             }
