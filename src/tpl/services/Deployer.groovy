@@ -88,6 +88,7 @@ class Deployer implements Serializable{
                     it.version = newVersion
 
             }
+            script.echo "handle requirements.yaml"
             script.sh "mv requirements.yaml requirements.yaml.org"
             script.writeYaml file: 'requirements.yaml', data: requirementsYaml
             pushUmbrellaCode()
@@ -113,6 +114,7 @@ class Deployer implements Serializable{
     }
 
     void pushUmbrellaCode(){
+        script.echo "push umbrella code"
         script.withCredentials([script.sshUserPrivateKey(credentialsId: "15f67460-fb15-4ca2-8e33-84914b1a151d", keyFileVariable: 'keyfile')]) {
             script.sh "git add requirements.yaml"
             script.sh "git commit -m 'jenkins update version'"
