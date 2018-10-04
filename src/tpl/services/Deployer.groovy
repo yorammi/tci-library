@@ -90,7 +90,7 @@ class Deployer implements Serializable{
             }
             script.sh "mv requirements.yaml requirements.yaml.org"
             script.writeYaml file: 'requirements.yaml', data: requirementsYaml
-            pushUmbrellaCode()
+            //pushUmbrellaCode()
         }
 
     }
