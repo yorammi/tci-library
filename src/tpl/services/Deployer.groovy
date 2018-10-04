@@ -191,6 +191,7 @@ class Deployer implements Serializable{
                         script.sh "helm init --kube-context ${kubeContext}"
                         script.sh "helm plugin install https://github.com/hypnoglow/helm-s3.git"
                         script.withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+                            script.sh "helm repo list"
                             script.sh "helm repo add ${helmRepo} ${helmRepoURL}"
                         }
 
