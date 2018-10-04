@@ -34,7 +34,7 @@ class Deployer implements Serializable{
     }
 
     void deploy(){
-        script.tplRunStage('k8s checkout', this.&k8s_checkout)
+        script.tplRunStage('k8s checkout', this.&k8sCheckout)
 //        script.tplRepositoryDirectoryCheckout(helmGitRepo,helmGitRepoBranch,helmCrendetiaslId,'kubernetes')
         helmInit()
         packegeHelm()
@@ -43,7 +43,7 @@ class Deployer implements Serializable{
         waitTillDeployComplete()
     }
 
-    void k8s_checkout(){
+    void k8sCheckout(){
         script.tplRepositoryDirectoryCheckout(helmGitRepo,helmGitRepoBranch,helmCrendetiaslId,'kubernetes')
     }
 
