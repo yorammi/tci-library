@@ -34,12 +34,17 @@ class Deployer implements Serializable{
     }
 
     void deploy(){
-        script.tplRepositoryDirectoryCheckout(helmGitRepo,helmGitRepoBranch,helmCrendetiaslId,'kubernetes')
+        runStage('k8s checkout', this.&k8s_checkout)
+//        script.tplRepositoryDirectoryCheckout(helmGitRepo,helmGitRepoBranch,helmCrendetiaslId,'kubernetes')
         helmInit()
         packegeHelm()
         helmDependencyUpdate()
         helmDeploy()
         waitTillDeployComplete()
+    }
+
+    void k8s_checkout(){
+        script.tplRepositoryDirectoryCheckout(helmGitRepo,helmGitRepoBranch,helmCrendetiaslId,'kubernetes')
     }
 
     void packegeHelm(){
