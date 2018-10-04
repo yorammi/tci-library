@@ -71,7 +71,7 @@ class Deployer implements Serializable{
             //pushCode()
             script.sh "helm package ."
             script.withEnv(["AWS_REGION=us-east-1"]) {
-                script.sh "helm s3 push --force ./${it}-${newVersion}.tgz ants"
+                script.sh "helm s3 push --force ./${it}-${newVersion}.tgz"
             }
         }
         updateHelmUmbrella(it)
