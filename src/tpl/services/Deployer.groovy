@@ -136,7 +136,7 @@ class Deployer implements Serializable{
     }
     void helmDependencyUpdate(){
         script.dir("${script.env.WORKSPACE}/kubernetes/helm/ant-umbrella") {
-            script.withEnv(["AWS_REGION=us-east-1"]) {
+            script.withEnv(["AWS_REGION=eu-west-1"]) {
                 script.sh "kubectl config use-context ${kubeContext}"
                 script.withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
                     script.sh "helm repo add ${helmRepo} ${helmRepoURL}"
