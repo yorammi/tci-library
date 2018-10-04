@@ -49,7 +49,7 @@ class Deployer implements Serializable{
     void packegeHelm(){
         logger.info('packegeHelm')
         script.dir("${script.env.WORKSPACE}/kubernetes/helm/") {
-            buildHelm(featureName)
+  //          buildHelm(featureName)
                     // script.sh "cp ${script.env.WORKSPACE}/kubernetes/helm_charts/$it/*.tgz ${script.env.WORKSPACE}/kubernetes/umbrella-chart/charts/"
         }
 
@@ -71,7 +71,7 @@ class Deployer implements Serializable{
             //pushCode()
             script.sh "helm package ."
             script.withEnv(["AWS_REGION=us-east-1"]) {
-// TODO enable                script.sh "helm s3 push --force ./${it}-${newVersion}.tgz ants"
+                script.sh "helm s3 push --force ./${it}-${newVersion}.tgz ants"
             }
         }
         updateHelmUmbrella(it)
@@ -190,7 +190,7 @@ class Deployer implements Serializable{
                         script.sh "kubectl config  use-context ${kubeContext}"
                         script.sh "helm init --kube-context ${kubeContext}"
                         script.sh "helm plugin install https://github.com/hypnoglow/helm-s3.git"
-// TODO enable                         script.sh "helm repo add ${helmRepo} ${helmRepoURL}"
+                      //  script.sh "helm repo add ${helmRepo} ${helmRepoURL}"
                     }
                 }
             }
