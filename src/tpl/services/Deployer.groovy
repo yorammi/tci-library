@@ -117,7 +117,7 @@ class Deployer implements Serializable{
     void helmDependencyUpdate(){
         script.dir("${script.env.WORKSPACE}/kubernetes/helm/ant-umbrella") {
             script.sh "kubectl config use-context ${kubeContext}"
-            script.sh "helm dep update ."
+        //    script.sh "helm dep update ."
         }
     }
 
