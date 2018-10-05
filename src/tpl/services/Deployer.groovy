@@ -17,9 +17,10 @@ class Deployer implements Serializable{
     def helmRepo
     def helmGitRepo
     def helmGitRepoBranch
-    def helmCrendetiaslId
+    def helmCrendetialId
+    def awsCrendetialId
 
-    Deployer(script,featureName,serviceTag,helmRepoURL,helmRepo,helmGitRepo,helmGitRepoBranch,helmCrendetiaslId, kubeContext) {
+    Deployer(script,featureName,serviceTag,helmRepoURL,helmRepo,helmGitRepo,helmGitRepoBranch,helmCrendetialId,awsCrendetialId,kubeContext) {
         this.script = script
         logger = new Logger(script)
         this.featureName = featureName
@@ -27,7 +28,8 @@ class Deployer implements Serializable{
         this.newVersion = "${baseVersion}-${featureName}-${script.env.BUILD_NUMBER}"
         this.helmRepoURL = helmRepoURL
         this.helmRepo = helmRepo
-        this.helmCrendetiaslId =  helmCrendetiaslId
+        this.helmCrendetialId =  helmCrendetialId
+        this.awsCrendetialId =  awsCrendetialId
         this.helmGitRepo = helmGitRepo
         this.helmGitRepoBranch = helmGitRepoBranch
         this.kubeContext = kubeContext
@@ -55,17 +57,13 @@ class Deployer implements Serializable{
             script.echo "The Values $myls"
             def valuesYaml = script.readYaml file: 'values.yaml'
             valuesYaml.image.tag =
-//        if ( ! serviceName.startsWith('bc') )
-//            valuesYaml.image.repository = "340481513670.dkr.ecr.us-east-1.amazonaws.com/$serviceName"
-                    valuesYaml.namespace = featureName
+            valuesYaml.namespace = featureName
             script.echo "The Values $valuesYaml"
             script.sh "mv values.yaml values.yaml.org"
             script.writeYaml file: 'values.yaml', data: valuesYaml
             upgradeChartVersion()
             script.sh "helm package ."
-            script.withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                script.sh "helm s3 push --force ./${it}-${newVersion}.tgz ${helmRepo}"
-            }
+            script.sh "helm s3 push --force ./${it}-${newVersion}.tgz ${helmRepo}"
         }
         updateHelmUmbrella(it)
     }
@@ -96,7 +94,7 @@ class Deployer implements Serializable{
     }
     void pushUmbrellaCode(){
         script.echo "push umbrella code"
-        //script.withCredentials([script.sshUserPrivateKey(credentialsId: helmCrendetiaslId, keyFileVariable: 'keyfile')]) {
+        //script.withCredentials([script.sshUserPrivateKey(credentialsId: helmCrendetialId, keyFileVariable: 'keyfile')]) {
             script.sh "git config user.email jenkins@tikalk.com"
             script.sh "git config user.name JenkinsOfTikal"
             script.sh "git checkout ${helmGitRepoBranch}"
@@ -110,28 +108,18 @@ class Deployer implements Serializable{
     }
 
     void helmDeploy(){
-        script.dir("${script.env.WORKSPACE}/kubernetes/helm/ant-umbrella"){
-         //   script.withEnv(["AWS_REGION=us-east-1"]) {
-                script.sh "kubectl config use-context ${kubeContext}"
-                script.sh "helm upgrade $featureName --set global.namespace=$featureName,global.stack=$featureName,global.database=bc-$featureName-psql.ano-dev.com ."
-         //   }
-            // aws rds --region us-east-1 describe-db-instances
-
-
-            //--set global.namespace=${BRANCHNAME},global.stack=${BRANCHNAME},global.database=$ENDPOINT ./kubernetes/umbrella-chart/
+        script.dir("${script.env.WORKSPACE}/kubernetes/helm/ant-umbrella") {
+            script.sh "kubectl config use-context ${kubeContext}"
+            script.sh "helm upgrade $featureName --set global.namespace=$featureName,global.stack=$featureName,global.database=bc-$featureName-psql.ano-dev.com ."
         }
 
     }
     void helmDependencyUpdate(){
         script.dir("${script.env.WORKSPACE}/kubernetes/helm/ant-umbrella") {
             script.sh "kubectl config use-context ${kubeContext}"
-            //script.withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                script.sh "helm dep update ."
-            //}
+            script.sh "helm dep update ."
         }
     }
-
-
 
     void waitTillDeployComplete(){
         script.timeout(time: 4,unit: 'MINUTES') {
@@ -174,9 +162,9 @@ class Deployer implements Serializable{
 
         script.env.AWS_REGION="eu-west-1"
         script.env.HELM_HOST="AAA"
-        script.tplAWSConfigure('aws')
+        script.tplAWSConfigure(awsCrendetialId)
 
-        script.tplRepositoryDirectoryCheckout(helmGitRepo, helmGitRepoBranch, helmCrendetiaslId, 'kubernetes')
+        script.tplRepositoryDirectoryCheckout(helmGitRepo, helmGitRepoBranch, helmCrendetialId, 'kubernetes')
 
         script.dir("${script.env.WORKSPACE}"){
              script.withCredentials([script.kubeconfigContent(credentialsId: 'kube-config', variable: 'KUBECONFIG_CONTENT')]){
@@ -186,12 +174,9 @@ class Deployer implements Serializable{
                 script.sh "kubectl config  use-context ${kubeContext}"
                 script.sh "helm init --kube-context ${kubeContext}"
                 script.sh "helm plugin install https://github.com/hypnoglow/helm-s3.git"
-                //script.withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                 script.sh "helm repo add ${helmRepo} ${helmRepoURL}"
-                 script.sh "helm repo add incubator ${helmRepoURL}"
-                    //}
-                }
+                script.sh "helm repo add ${helmRepo} ${helmRepoURL}"
+                script.sh "helm repo add incubator ${helmRepoURL}"
             }
-
+        }
     }
 }
