@@ -96,15 +96,17 @@ class Deployer implements Serializable{
     }
     void pushUmbrellaCode(){
         script.echo "push umbrella code"
-        script.withCredentials([script.sshUserPrivateKey(credentialsId: helmCrendetiaslId, keyFileVariable: 'keyfile')]) {
+        //script.withCredentials([script.sshUserPrivateKey(credentialsId: helmCrendetiaslId, keyFileVariable: 'keyfile')]) {
             script.sh "git config user.email jenkins@tikalk.com"
             script.sh "git config user.name JenkinsOfTikal"
             script.sh "git checkout ${helmGitRepoBranch}"
             script.sh "git add requirements.yaml"
             script.sh "git commit -m 'jenkins update version'"
+        sshagent([helmCrendetiaslId]) {
             script.sh "git push -u origin ${helmGitRepoBranch}"
-            // script.sh "ssh-agent bash -c 'ssh-add $script.keyfile ;git push -u origin ${featureName}'"
         }
+            // script.sh "ssh-agent bash -c 'ssh-add $script.keyfile ;git push -u origin ${featureName}'"
+        //}
     }
 
     void helmDeploy(){
