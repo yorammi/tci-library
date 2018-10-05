@@ -102,7 +102,7 @@ class Deployer implements Serializable{
             script.sh "git checkout ${helmGitRepoBranch}"
             script.sh "git add requirements.yaml"
             script.sh "git commit -m 'jenkins update version'"
-        sshagent([helmCrendetiaslId]) {
+        script.sshagent([helmCrendetiaslId ]) {
             script.sh "git push -u origin ${helmGitRepoBranch}"
         }
             // script.sh "ssh-agent bash -c 'ssh-add $script.keyfile ;git push -u origin ${featureName}'"
