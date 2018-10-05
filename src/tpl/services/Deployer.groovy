@@ -65,11 +65,9 @@ class Deployer implements Serializable{
             upgradeChartVersion()
             //pushCode()
             script.sh "helm package ."
-//            script.withEnv(["AWS_REGION=eu-west-1"]) {
-                script.withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                    script.sh "helm s3 push --force ./${it}-${newVersion}.tgz ${helmRepo}"
-                }
-//            }
+            script.withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+                script.sh "helm s3 push --force ./${it}-${newVersion}.tgz ${helmRepo}"
+            }
         }
         updateHelmUmbrella(it)
     }
@@ -118,10 +116,10 @@ class Deployer implements Serializable{
 
     void helmDeploy(){
         script.dir("${script.env.WORKSPACE}/kubernetes/helm/ant-umbrella"){
-            script.withEnv(["AWS_REGION=us-east-1"]) {
+         //   script.withEnv(["AWS_REGION=us-east-1"]) {
                 script.sh "kubectl config use-context ${kubeContext}"
                 script.sh "helm upgrade $featureName --set global.namespace=$featureName,global.stack=$featureName,global.database=bc-$featureName-psql.ano-dev.com ."
-            }
+         //   }
             // aws rds --region us-east-1 describe-db-instances
 
 
@@ -131,13 +129,11 @@ class Deployer implements Serializable{
     }
     void helmDependencyUpdate(){
         script.dir("${script.env.WORKSPACE}/kubernetes/helm/ant-umbrella") {
-//            script.withEnv(["AWS_REGION=eu-west-1"]) {
-                script.sh "kubectl config use-context ${kubeContext}"
-                script.withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                    script.sh "helm repo add incubator ${helmRepoURL}"
-                    script.sh "helm dep update ."
-                }
-//            }
+            script.sh "kubectl config use-context ${kubeContext}"
+            script.withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+                script.sh "helm repo add incubator ${helmRepoURL}"
+                script.sh "helm dep update ."
+            }
         }
     }
 
@@ -188,22 +184,18 @@ class Deployer implements Serializable{
         script.tplRepositoryDirectoryCheckout(helmGitRepo, helmGitRepoBranch, helmCrendetiaslId, 'kubernetes')
 
         script.dir("${script.env.WORKSPACE}"){
-//             script.withEnv(["HELM_HOST=AAA", "AWS_REGION=eu-west-1"]) {
-                   // script.withCredentials([script.file(credentialsId: 'kube-config', variable: 'FILE')]) {
-                 script.withCredentials([script.kubeconfigContent(credentialsId: 'kube-config', variable: 'KUBECONFIG_CONTENT')]){
-                        script.sh "mkdir -p ~/.kube"
-                        script.sh "echo \"${script.env.KUBECONFIG_CONTENT}\" > /home/jenkins/.kube/config"
-                        script.sh "kubectl config  current-context"
-                        script.sh "kubectl config  use-context ${kubeContext}"
-                        script.sh "helm init --kube-context ${kubeContext}"
-                        script.sh "helm plugin install https://github.com/hypnoglow/helm-s3.git"
-                        script.withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                            script.sh "helm repo add ${helmRepo} ${helmRepoURL}"
-                        }
-
+             script.withCredentials([script.kubeconfigContent(credentialsId: 'kube-config', variable: 'KUBECONFIG_CONTENT')]){
+                    script.sh "mkdir -p ~/.kube"
+                    script.sh "echo \"${script.env.KUBECONFIG_CONTENT}\" > /home/jenkins/.kube/config"
+                    script.sh "kubectl config  current-context"
+                    script.sh "kubectl config  use-context ${kubeContext}"
+                    script.sh "helm init --kube-context ${kubeContext}"
+                    script.sh "helm plugin install https://github.com/hypnoglow/helm-s3.git"
+                    script.withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+                        script.sh "helm repo add ${helmRepo} ${helmRepoURL}"
                     }
                 }
-//            }
+            }
 
     }
 }
