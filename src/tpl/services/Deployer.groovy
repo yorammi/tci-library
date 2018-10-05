@@ -172,6 +172,9 @@ class Deployer implements Serializable{
 
         script.tplRepositoryDirectoryCheckout(helmGitRepo, helmGitRepoBranch, helmCrendetiaslId, 'kubernetes')
 
+        script.sh "git config user.email jenkins@tikalk.com"
+        script.sh "git config --global user.name JenkinsOfTikal"
+
         script.dir("${script.env.WORKSPACE}"){
              script.withCredentials([script.kubeconfigContent(credentialsId: 'kube-config', variable: 'KUBECONFIG_CONTENT')]){
                     script.sh "mkdir -p ~/.kube"
