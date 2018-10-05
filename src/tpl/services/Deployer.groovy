@@ -101,7 +101,7 @@ class Deployer implements Serializable{
             script.sh "git config user.name JenkinsOfTikal"
             script.sh "git add requirements.yaml"
             script.sh "git commit -m 'jenkins update version'"
-            script.sh "git push -u origin ${featureName}'"
+            script.sh "git push -u origin ${featureName}"
             // script.sh "ssh-agent bash -c 'ssh-add $script.keyfile ;git push -u origin ${featureName}'"
 //        }
     }
