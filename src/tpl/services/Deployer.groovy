@@ -34,7 +34,7 @@ class Deployer implements Serializable{
     }
 
     void deploy(){
-        script.stage("Deplyment env. setup", this.&deploymentEnvSetup)
+        script.stage("Deployment env. setup", this.&deploymentEnvSetup)
         script.stage("HELM package", this.&packegeHelm)
         script.stage("HELM dependecy update", this.&helmDependencyUpdate)
         script.stage("HELM deploy", this.&helmDeploy)
@@ -45,7 +45,6 @@ class Deployer implements Serializable{
         logger.info('packegeHelm')
         script.dir("${script.env.WORKSPACE}/kubernetes/helm/") {
             buildHelm(featureName)
-                    // script.sh "cp ${script.env.WORKSPACE}/kubernetes/helm_charts/$it/*.tgz ${script.env.WORKSPACE}/kubernetes/umbrella-chart/charts/"
         }
 
     }
@@ -63,7 +62,6 @@ class Deployer implements Serializable{
             script.sh "mv values.yaml values.yaml.org"
             script.writeYaml file: 'values.yaml', data: valuesYaml
             upgradeChartVersion()
-            //pushCode()
             script.sh "helm package ."
             script.withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
                 script.sh "helm s3 push --force ./${it}-${newVersion}.tgz ${helmRepo}"
@@ -83,7 +81,7 @@ class Deployer implements Serializable{
             }
             script.sh "mv requirements.yaml requirements.yaml.org"
             script.writeYaml file: 'requirements.yaml', data: requirementsYaml
-            //pushUmbrellaCode()
+            pushUmbrellaCode()
         }
 
     }
@@ -96,22 +94,13 @@ class Deployer implements Serializable{
         script.writeYaml file: 'Chart.yaml', data: chartYaml
 
     }
-    void pushCode(){
-        // script.sh "git checkout -b ${featureName}"
-        script.withCredentials([script.sshUserPrivateKey(credentialsId: "15f67460-fb15-4ca2-8e33-84914b1a151d", keyFileVariable: 'keyfile')]) {
-            script.sh "git add values.yaml Chart.yaml"
-            script.sh "git commit -m 'jenkins update version'"
-            script.sh "ssh-agent bash -c 'ssh-add $script.keyfile ;git push --set-upstream origin HEAD:${featureName}'"
-        }
-    }
-
     void pushUmbrellaCode(){
         script.echo "push umbrella code"
-        script.withCredentials([script.sshUserPrivateKey(credentialsId: "gitsshkey", keyFileVariable: 'keyfile')]) {
+//        script.withCredentials([script.sshUserPrivateKey(credentialsId: "gitsshkey", keyFileVariable: 'keyfile')]) {
             script.sh "git add requirements.yaml"
             script.sh "git commit -m 'jenkins update version'"
             script.sh "ssh-agent bash -c 'ssh-add $script.keyfile ;git push -u origin ${featureName}'"
-        }
+//        }
     }
 
     void helmDeploy(){
