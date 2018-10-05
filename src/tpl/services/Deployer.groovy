@@ -97,6 +97,8 @@ class Deployer implements Serializable{
     void pushUmbrellaCode(){
         script.echo "push umbrella code"
 //        script.withCredentials([script.sshUserPrivateKey(credentialsId: "gitsshkey", keyFileVariable: 'keyfile')]) {
+            script.sh "git config user.email jenkins@tikalk.com"
+            script.sh "git config user.name JenkinsOfTikal"
             script.sh "git add requirements.yaml"
             script.sh "git commit -m 'jenkins update version'"
             script.sh "ssh-agent bash -c 'ssh-add $script.keyfile ;git push -u origin ${featureName}'"
@@ -171,9 +173,6 @@ class Deployer implements Serializable{
         script.env.HELM_HOST="AAA"
 
         script.tplRepositoryDirectoryCheckout(helmGitRepo, helmGitRepoBranch, helmCrendetiaslId, 'kubernetes')
-
-        script.sh "git config user.email jenkins@tikalk.com"
-        script.sh "git config --global user.name JenkinsOfTikal"
 
         script.dir("${script.env.WORKSPACE}"){
              script.withCredentials([script.kubeconfigContent(credentialsId: 'kube-config', variable: 'KUBECONFIG_CONTENT')]){
