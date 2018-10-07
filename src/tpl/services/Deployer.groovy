@@ -175,7 +175,7 @@ class Deployer implements Serializable{
                 script.sh "helm init --kube-context ${kubeContext}"
                 script.sh "helm plugin install https://github.com/hypnoglow/helm-s3.git"
                 script.sh "helm repo add ${helmRepo} ${helmRepoURL}"
-                script.sh "helm repo add incubator ${helmRepoURL}"
+                script.sh "helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator"
             }
         }
     }
