@@ -79,7 +79,7 @@ class Deployer implements Serializable{
             }
             script.sh "mv requirements.yaml requirements.yaml.org"
             script.writeYaml file: 'requirements.yaml', data: requirementsYaml
-            //pushUmbrellaCode()
+            pushUmbrellaCode()
         }
 
     }
@@ -101,7 +101,7 @@ class Deployer implements Serializable{
             script.sh "git add requirements.yaml"
             script.sh "git commit -m 'jenkins update version'"
         script.sshagent(['github']) {
-            script.sh "git push -u origin ${helmGitRepoBranch}"
+            script.sh "git push -u origin ${helmGitRepoBranch} | true"
         }
             // script.sh "ssh-agent bash -c 'ssh-add $script.keyfile ;git push -u origin ${featureName}'"
         //}
@@ -117,7 +117,7 @@ class Deployer implements Serializable{
     void helmDependencyUpdate(){
         script.dir("${script.env.WORKSPACE}/kubernetes/helm/ant-umbrella") {
             script.sh "kubectl config use-context ${kubeContext}"
-        //    script.sh "helm dep update ."
+            script.sh "helm dep update . | true"
         }
     }
 
