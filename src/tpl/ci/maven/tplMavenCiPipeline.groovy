@@ -44,9 +44,9 @@ class tplMavenCiPipeline extends tplBaseCiPipeline {
             script.currentBuild.result = "FAILURE"
             throw e
         }
-        finally {
-            buildNotifier()
-        }
+//        finally {
+//            buildNotifier()
+//        }
 
     }
 
