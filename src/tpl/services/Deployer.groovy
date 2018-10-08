@@ -25,7 +25,7 @@ class Deployer implements Serializable{
         logger = new Logger(script)
         this.featureName = featureName
         this.service = serviceTag
-        this.newVersion = "${baseVersion}-${featureName}-${script.env.BUILD_NUMBER}"
+        this.newVersion = "${baseVersion}.${script.env.BUILD_NUMBER}"
         this.helmRepoURL = helmRepoURL
         this.helmRepo = helmRepo
         this.helmCrendetialId =  helmCrendetialId
