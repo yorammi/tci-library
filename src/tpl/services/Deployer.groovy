@@ -10,7 +10,7 @@ class Deployer implements Serializable{
     def featureName
     def serviceName
     def service
-    def baseVersion = '0.1.0'
+    def baseVersion = '0.1'
     def newVersion
     def kubeContext
     def helmRepoURL
