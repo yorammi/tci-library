@@ -46,7 +46,7 @@ class tplMavenCiPipeline extends tplBaseCiPipeline {
     }
 
     @Override
-    initParams(){
+    void initParams(){
         containerName = script.params.containerName;
         dockerRegisteryPrefix = script.params.dockerRegisteryPrefix;
         containerTag = script.params.containerTag;
