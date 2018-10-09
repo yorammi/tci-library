@@ -56,7 +56,7 @@ class Deployer implements Serializable{
             def myls = script.sh(script: "ls", returnStdout: true)
             script.echo "The Values $myls"
             def valuesYaml = script.readYaml file: 'values.yaml'
-            valuesYaml.image.tag =
+            valuesYaml.image.tag = service
             valuesYaml.namespace = featureName
             script.echo "The Values $valuesYaml"
             script.sh "mv values.yaml values.yaml.org"
