@@ -66,12 +66,12 @@ class Deployer implements Serializable{
             script.writeYaml file: 'values.yaml', data: valuesYaml
             upgradeChartVersion()
 
-            def deploymentYaml = script.readYaml file: 'templates/deployment.yaml'
+            def deploymentYaml = script.readYaml file: 'templates/deployment.yml'
             dockerImage = "${it}.${service}.${script.env.BUILD_NUMBER}"
             script.echo "-----DOCKER IMAGE NAME------ " + dockerImage
             deploymentYaml.spec.template.spec.containers.image = dockerImage
-            script.sh "mv templates/deployment.yaml templates/deployment.yaml.org"
-            script.writeYaml file: 'templates/deployment.yaml', data: deploymentYaml
+            script.sh "mv templates/deployment.yml templates/deployment.yml.org"
+            script.writeYaml file: 'templates/deployment.yml', data: deploymentYaml
 
 
             script.sh "helm package ."
