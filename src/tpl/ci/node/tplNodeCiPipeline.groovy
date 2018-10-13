@@ -62,11 +62,9 @@ void initParams(){
 //                script.sh "export PATH=\${PATH}/${nodeHome}/bin; npm install"
 //                script.sh "${nodeHome}/bin/npm run build"
               script.sh "docker login -u ${script.env.DOCKER_REGISTRY_USER} -p ${script.env.DOCKER_REGISTRY_PASS}"
-              script.sh "docker build -t ${dockerRegisteryPrefix}/${containerName}:latest ."
-              script.sh "docker push ${dockerRegisteryPrefix}/${containerName}:latest"
-              script.sh "docker tag ${dockerRegisteryPrefix}/${containerName}:latest ${dockerRegisteryPrefix}/${containerName}:${containerTag}"
-              script.sh "docker push ${dockerRegisteryPrefix}/${containerName}:${containerTag}"
-//
+              def dockerImagePath = "${dockerRegisteryPrefix}/${containerName}:${script.env.containerTag}.${script.env.BUILD_NUMBER}"
+              script.sh "docker build -t " + dockerImagePath + " ."
+              script.sh "docker push " + dockerImagePath
           }
 
 
