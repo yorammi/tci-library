@@ -1,5 +1,9 @@
 package tpl.services
 
+import org.yaml.snakeyaml.DumperOptions
+import org.yaml.snakeyaml.Yaml
+@Grab('org.yaml:snakeyaml:1.17')
+
 import tpl.utils.Logger
 class Deployer implements Serializable{
 
@@ -70,15 +74,25 @@ class Deployer implements Serializable{
             dockerImage = "${script.env.dockerRegisteryPrefix}/${it}:${service}.${script.env.BUILD_NUMBER}"
             script.echo "-----DOCKER IMAGE NAME------ " + dockerImage
             deploymentYaml.spec.template.spec.containers.image = "$dockerImage"
+
+
             script.echo "The changed Deployment.yaml $deploymentYaml"
             script.sh "mv templates/deployment.yml templates/deployment.yml.org"
-            script.writeYaml file: 'templates/deployment.yml', data: deploymentYaml
-
+            //script.writeYaml file: 'templates/deployment.yml', data: deploymentYaml
+            def txt = yamlToString(deploymentYaml)
+            script.echo "----------- YAML STRING THAT WILL BE SAVED TO deployment.yml  -------- \n $txt"
+            script.writeFile file: 'templates/deployment.yml', text: txt
 
             script.sh "helm package ."
             script.sh "helm s3 push --force ./${it}-${newVersion}.tgz ${helmRepo}"
         }
         updateHelmUmbrella(it)
+    }
+
+    String yamlToString(Object data) {
+        def opts = new DumperOptions()
+        opts.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK)
+        return new Yaml(opts).dump(data)
     }
 
 
