@@ -78,11 +78,11 @@ class Deployer implements Serializable{
 
 
             script.echo "The changed Deployment.yaml $deploymentYaml"
-            script.sh "mv templates/deployment.yml templates/deployment.yml.org"
+            script.sh "mv templates/deployment.yaml templates/deployment.yaml.org"
             //script.writeYaml file: 'templates/deployment.yml', data: deploymentYaml
             def txt = yamlToString(deploymentYaml)
-            script.echo "----------- YAML STRING THAT WILL BE SAVED TO deployment.yml  -------- \n $txt"
-            script.writeFile file: 'templates/deployment.yml', text: txt
+            script.echo "----------- YAML STRING THAT WILL BE SAVED TO deployment.yaml  -------- \n $txt"
+            script.writeFile file: 'templates/deployment.yaml', text: txt
 
             script.sh "helm package ."
             script.sh "helm s3 push --force ./${it}-${newVersion}.tgz ${helmRepo}"
