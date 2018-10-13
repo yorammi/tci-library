@@ -19,6 +19,8 @@ class Deployer implements Serializable{
     def helmGitRepoBranch
     def helmCrendetialId
     def awsCrendetialId
+    private String helmPluginUrl
+    private GString dockerImage
 
     Deployer(script,featureName,serviceTag,helmRepoURL,helmRepo,helmGitRepo,helmGitRepoBranch,helmCrendetialId,awsCrendetialId,kubeContext) {
         this.script = script
@@ -33,6 +35,7 @@ class Deployer implements Serializable{
         this.helmGitRepo = helmGitRepo
         this.helmGitRepoBranch = helmGitRepoBranch
         this.kubeContext = kubeContext
+        helmPluginUrl = "https://github.com/hypnoglow/helm-s3.git"
     }
 
     void deploy(){
@@ -62,6 +65,15 @@ class Deployer implements Serializable{
             script.sh "mv values.yaml values.yaml.org"
             script.writeYaml file: 'values.yaml', data: valuesYaml
             upgradeChartVersion()
+
+            def deploymentYaml = script.readYaml file: 'templates/deployment.yaml'
+            dockerImage = "${it}.${service}.${script.env.BUILD_NUMBER}"
+            script.echo "-----DOCKER IMAGE NAME------ " + dockerImage
+            deploymentYaml.spec.template.spec.containers.image = dockerImage
+            script.sh "mv templates/deployment.yaml templates/deployment.yaml.org"
+            script.writeYaml file: 'templates/deployment.yaml', data: deploymentYaml
+
+
             script.sh "helm package ."
             script.sh "helm s3 push --force ./${it}-${newVersion}.tgz ${helmRepo}"
         }
@@ -173,7 +185,7 @@ class Deployer implements Serializable{
                 script.sh "kubectl config  current-context"
                 script.sh "kubectl config  use-context ${kubeContext}"
                 script.sh "helm init --kube-context ${kubeContext}"
-                script.sh "helm plugin install https://github.com/hypnoglow/helm-s3.git"
+                script.sh "helm plugin install ${helmPluginUrl}"
                 script.sh "helm repo add ${helmRepo} ${helmRepoURL}"
                 script.sh "helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator"
             }
