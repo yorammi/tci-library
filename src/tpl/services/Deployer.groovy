@@ -74,7 +74,7 @@ class Deployer implements Serializable{
             script.echo "====================  The original Deployment.yaml ================= \n" + yamlToString(deploymentYaml)
             dockerImage = "${script.env.dockerRegisteryPrefix}/${it}:${service}.${script.env.BUILD_NUMBER}"
             script.echo "-----DOCKER IMAGE NAME------ " + dockerImage
-            deploymentYaml.spec.template.spec.containers.image = dockerImage
+            deploymentYaml.spec.template.spec.containers.image = dockerImage.toString()
 
 
             script.echo "The changed Deployment.yaml $deploymentYaml"
