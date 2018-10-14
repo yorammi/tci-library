@@ -71,7 +71,8 @@ class Deployer implements Serializable{
             script.writeYaml file: 'values.yaml', data: valuesYaml
             upgradeChartVersion()
             script.deploymentYaml = new Yaml()
-            new File("../${script.env.JOB_NAME}/templates/deployment.yaml").withReader('UTF-8') { reader ->
+            script.echo "${script.env.WORKSPACE}/kubernetes/${featureName}/templates/deployment.yaml"
+            new File("${script.env.WORKSPACE}/kubernetes/${featureName}/templates/deployment.yaml").withReader('UTF-8') { reader ->
                  script.deploymentYaml.load(reader)
             }
 //            def deploymentYaml = script.readYaml (file: 'templates/deployment.yaml')
