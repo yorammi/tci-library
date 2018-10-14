@@ -71,7 +71,7 @@ class Deployer implements Serializable{
             script.writeYaml file: 'values.yaml', data: valuesYaml
             upgradeChartVersion()
             Yaml deploymentYaml = new Yaml()
-            new File('templates/deployment.yaml').withReader('UTF-8') { reader ->
+            new File("./helm/${script.env.JOB_NAME}/templates/deployment.yaml").withReader('UTF-8') { reader ->
                 result = deploymentYaml.load(reader)
             }
 //            def deploymentYaml = script.readYaml (file: 'templates/deployment.yaml')
@@ -85,9 +85,9 @@ class Deployer implements Serializable{
             script.sh "rm templates/deployment.yaml"
 //            script.sh "mv templates/deployment.yaml templates/.deployment.yaml.org"
             //script.writeYaml file: 'templates/deployment.yml', data: deploymentYaml
-            def yamlString = yamlToString(deploymentYaml).replaceAll("@","\"").replaceAll("\'","")
+            def yamlString = yamlToString(deploymentYaml)
             script.echo "----------- YAML STRING THAT WILL BE SAVED TO deployment.yaml  -------- \n $yamlString"
-            script.writeFile file: 'templates/deployment.yaml', text: yamlString
+            script.writeFile file: "./helm/${script.env.JOB_NAME}/templates/deployment.yaml", text: yamlString
 
             script.sh "helm package ."
             script.sh "helm s3 push --force ./${it}-${newVersion}.tgz ${helmRepo}"
