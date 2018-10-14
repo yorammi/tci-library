@@ -62,7 +62,7 @@ class Deployer implements Serializable {
         script.dir(it) {
             def valuesYaml = script.readYaml file: 'values.yaml'
             script.echo "=============== Values before build =====================\n" + yamlToString(valuesYaml)
-            valuesYaml.image.tag = "${service}.${script.env.BUILD_NUMBER}"
+            valuesYaml.image.tag = "${service}.${script.env.BUILD_NUMBER}".toString()
             valuesYaml.namespace = featureName
             script.echo "The Values " + yamlToString(valuesYaml)
             script.sh "mv values.yaml .values.yaml.org"
@@ -106,7 +106,7 @@ class Deployer implements Serializable {
             script.echo "==========   Requirements Before Build  ==============\n" + yamlToString(requirementsYaml)
             requirementsYaml.dependencies.each {
                 if (it.name == chartName)
-                    it.version = "${newVersion}"
+                    it.version = newVersion.toString()
             }
             script.sh "mv requirements.yaml requirements.yaml.org"
             script.echo "==========   New Requirements  ==============\n" + yamlToString(requirementsYaml)
