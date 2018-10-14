@@ -63,7 +63,7 @@ class Deployer implements Serializable {
             def valuesYaml = script.readYaml file: 'values.yaml'
             script.echo "=============== Values before build =====================\n" + yamlToString(valuesYaml)
             valuesYaml.image.tag = "${service}.${script.env.BUILD_NUMBER}".toString()
-            valuesYaml.namespace = featureName
+            valuesYaml.namespace = featureName.toString()
             script.echo "The Values " + yamlToString(valuesYaml)
             script.sh "mv values.yaml .values.yaml.org"
             script.writeYaml file: 'values.yaml', data: valuesYaml
@@ -85,7 +85,7 @@ class Deployer implements Serializable {
     def updateHelmDeploymentImage(it) {
         script.dir("${script.env.WORKSPACE}/kubernetes/helm/${it}") {
             def valuesYaml = script.readYaml file: 'values.yaml'
-            valuesYaml.image.tag = "${service}.${script.env.BUILD_NUMBER}"
+            valuesYaml.image.tag = "${service}.${script.env.BUILD_NUMBER}".toString()
             script.sh "mv values.yaml values.yaml.org"
             script.echo "The new values file:\n" + yamlToString(valuesYaml)
             script.writeYaml file: 'values.yaml', data: valuesYaml
