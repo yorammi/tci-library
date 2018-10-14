@@ -66,7 +66,7 @@ class Deployer implements Serializable{
             valuesYaml.image.tag = service
             valuesYaml.namespace = featureName
             script.echo "The Values $valuesYaml"
-            script.sh "mv values.yaml values.yaml.org"
+            script.sh "mv values.yaml .values.yaml.org"
             script.writeYaml file: 'values.yaml', data: valuesYaml
             upgradeChartVersion()
 
@@ -78,11 +78,11 @@ class Deployer implements Serializable{
 
 
             script.echo "The changed Deployment.yaml $deploymentYaml"
-            script.sh "mv templates/deployment.yaml templates/deployment.yaml.org"
+            script.sh "mv templates/deployment.yaml templates/.deployment.yaml.org"
             //script.writeYaml file: 'templates/deployment.yml', data: deploymentYaml
-            def txt = yamlToString(deploymentYaml).replaceAll("@","\"").replaceAll("\'","")
-            script.echo "----------- YAML STRING THAT WILL BE SAVED TO deployment.yaml  -------- \n $txt"
-            script.writeFile file: 'templates/deployment.yaml', text: txt
+            def yamlString = yamlToString(deploymentYaml).replaceAll("@","\"").replaceAll("\'","")
+            script.echo "----------- YAML STRING THAT WILL BE SAVED TO deployment.yaml  -------- \n $yamlString"
+            script.writeFile file: 'templates/deployment.yaml', text: yamlString
 
             script.sh "helm package ."
             script.sh "helm s3 push --force ./${it}-${newVersion}.tgz ${helmRepo}"
