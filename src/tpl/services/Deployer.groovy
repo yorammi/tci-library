@@ -4,7 +4,8 @@ package tpl.services
 import org.yaml.snakeyaml.*
 
 import tpl.utils.Logger
-class Deployer implements Serializable{
+
+class Deployer implements Serializable {
 
     def log = Logger
 
@@ -25,7 +26,7 @@ class Deployer implements Serializable{
     private String helmPluginUrl
     private String dockerImage
 
-    Deployer(script,featureName,serviceTag,helmRepoURL,helmRepo,helmGitRepo,helmGitRepoBranch,helmCrendetialId,awsCrendetialId,kubeContext) {
+    Deployer(script, featureName, serviceTag, helmRepoURL, helmRepo, helmGitRepo, helmGitRepoBranch, helmCrendetialId, awsCrendetialId, kubeContext) {
         this.script = script
         logger = new Logger(script)
         this.featureName = featureName
@@ -33,15 +34,15 @@ class Deployer implements Serializable{
         this.newVersion = "${baseVersion}.${script.env.BUILD_NUMBER}"
         this.helmRepoURL = helmRepoURL
         this.helmRepo = helmRepo
-        this.helmCrendetialId =  helmCrendetialId
-        this.awsCrendetialId =  awsCrendetialId
+        this.helmCrendetialId = helmCrendetialId
+        this.awsCrendetialId = awsCrendetialId
         this.helmGitRepo = helmGitRepo
         this.helmGitRepoBranch = helmGitRepoBranch
         this.kubeContext = kubeContext
         helmPluginUrl = "https://github.com/hypnoglow/helm-s3.git"
     }
 
-    void deploy(){
+    void deploy() {
         script.stage("Deployment env. setup", this.&deploymentEnvSetup)
         script.stage("HELM package", this.&packegeHelm)
         script.stage("HELM dependecy update", this.&helmDependencyUpdate)
@@ -49,7 +50,7 @@ class Deployer implements Serializable{
         waitTillDeployComplete()
     }
 
-    void packegeHelm(){
+    void packegeHelm() {
         logger.info('packegeHelm')
         script.dir("${script.env.WORKSPACE}/kubernetes/helm/") {
             buildHelm(featureName)
@@ -57,7 +58,7 @@ class Deployer implements Serializable{
 
     }
 
-    void buildHelm(it){
+    void buildHelm(it) {
         script.dir(it) {
             def valuesYaml = script.readYaml file: 'values.yaml'
             script.echo "=============== Values before build =====================\n" + yamlToString(valuesYaml)
@@ -82,7 +83,7 @@ class Deployer implements Serializable{
     }
 
     def updateHelmDeploymentImage(it) {
-        script.dir("${script.env.WORKSPACE}/kubernetes/helm/${it}"){
+        script.dir("${script.env.WORKSPACE}/kubernetes/helm/${it}") {
             def valuesYaml = script.readYaml file: 'values.yaml'
             valuesYaml.image.tag = "${service}.${script.env.BUILD_NUMBER}"
             script.sh "mv values.yaml values.yaml.org"
@@ -99,13 +100,13 @@ class Deployer implements Serializable{
     }
 
 
-    void updateHelmUmbrella(chartName){
+    void updateHelmUmbrella(chartName) {
         script.dir("${script.env.WORKSPACE}/kubernetes/helm/ant-umbrella") {
             def requirementsYaml = script.readYaml file: 'requirements.yaml'
             script.echo "==========   Requirements Before Build  ==============\n" + yamlToString(requirementsYaml)
-            requirementsYaml.dependencies.each{
-                if ( it.name == chartName )
-                    it.version = newVersion
+            requirementsYaml.dependencies.each {
+                if (it.name == chartName)
+                    it.version = "${newVersion}"
             }
             script.sh "mv requirements.yaml requirements.yaml.org"
             script.echo "==========   New Requirements  ==============\n" + yamlToString(requirementsYaml)
@@ -123,6 +124,7 @@ class Deployer implements Serializable{
         script.writeYaml file: 'Chart.yaml', data: chartYaml
 
     }
+
     void pushUmbrellaCode() {
         script.echo "Push umbrella code"
         script.sh "git config user.email jenkins@tikalk.com"
@@ -137,22 +139,23 @@ class Deployer implements Serializable{
         }
     }
 
-    void helmDeploy(){
+    void helmDeploy() {
         script.dir("${script.env.WORKSPACE}/kubernetes/helm/ant-umbrella") {
             script.sh "kubectl config use-context ${kubeContext}"
             script.sh "helm upgrade ant-smasher --set global.namespace=ant-smasher ."
         }
 
     }
-    void helmDependencyUpdate(){
+
+    void helmDependencyUpdate() {
         script.dir("${script.env.WORKSPACE}/kubernetes/helm/ant-umbrella") {
             script.sh "kubectl config use-context ${kubeContext}"
             script.sh "helm dep update ."
         }
     }
 
-    void waitTillDeployComplete(){
-        script.timeout(time: 4,unit: 'MINUTES') {
+    void waitTillDeployComplete() {
+        script.timeout(time: 4, unit: 'MINUTES') {
             script.waitUntil {
                 try {
                     validateDeployment()
@@ -163,22 +166,22 @@ class Deployer implements Serializable{
         }
     }
 
-    boolean validateDeployment(){
+    boolean validateDeployment() {
         script.echo "Waiting for Services to start"
-        def podsList = script.sh(script: "kubectl get pods -n $featureName" ,  returnStdout: true).split("\r?\n")
+        def podsList = script.sh(script: "kubectl get pods -n $featureName", returnStdout: true).split("\r?\n")
         def services = [:]
         podsList.each { line, count ->
-            def index =0
+            def index = 0
             def name, status
             //logger.info "The Line $line"
-            line.tokenize().each{ a ->
-                index +=1
-                if ( index == 1)
-                    name= a
-                if ( index == 3 )
-                    status= a
+            line.tokenize().each { a ->
+                index += 1
+                if (index == 1)
+                    name = a
+                if (index == 3)
+                    status = a
             }
-            if ( !status.equals('Running') && !status.equals('STATUS') )
+            if (!status.equals('Running') && !status.equals('STATUS'))
                 services.put(name, status)
         }
         services.each {
@@ -187,17 +190,17 @@ class Deployer implements Serializable{
         return services.isEmpty();
     }
 
-    void deploymentEnvSetup(){
+    void deploymentEnvSetup() {
         logger.info "Deployment env. setup"
 
-        script.env.AWS_REGION="eu-west-1"
-        script.env.HELM_HOST="AAA"
+        script.env.AWS_REGION = "eu-west-1"
+        script.env.HELM_HOST = "AAA"
         script.tplAWSConfigure(awsCrendetialId)
 
         script.tplRepositoryDirectoryCheckout(helmGitRepo, helmGitRepoBranch, helmCrendetialId, 'kubernetes')
 
-        script.dir("${script.env.WORKSPACE}"){
-             script.withCredentials([script.kubeconfigContent(credentialsId: 'kube-config', variable: 'KUBECONFIG_CONTENT')]){
+        script.dir("${script.env.WORKSPACE}") {
+            script.withCredentials([script.kubeconfigContent(credentialsId: 'kube-config', variable: 'KUBECONFIG_CONTENT')]) {
                 script.sh "mkdir -p ~/.kube"
                 script.sh "echo \"${script.env.KUBECONFIG_CONTENT}\" > /home/jenkins/.kube/config"
                 script.sh "kubectl config  current-context"
