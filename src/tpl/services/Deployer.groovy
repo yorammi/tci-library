@@ -118,7 +118,7 @@ class Deployer implements Serializable {
     void upgradeChartVersion() {
         def chartYaml = script.readYaml file: 'Chart.yaml'
         script.echo "----- Chart before build ------\n" + yamlToString(chartYaml)
-        chartYaml.version = this.newVersion.tpString()
+        chartYaml.version = this.newVersion.toString()
         script.sh "mv Chart.yaml Chart.yaml.org"
         script.echo "------ New Chart -------\n" + yamlToString(chartYaml)
         script.writeYaml file: 'Chart.yaml', data: chartYaml
