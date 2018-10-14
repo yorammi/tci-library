@@ -130,9 +130,7 @@ class Deployer implements Serializable {
         script.sh "git config user.email jenkins@tikalk.com"
         script.sh "git config user.name JenkinsOfTikal"
         script.sh "git checkout ${helmGitRepoBranch}"
-        script.sh "git add requirements.yaml"
-        script.sh "git add ../$featureName/templates/deployment.yaml"
-        script.sh "git add ../$featureName/values.yaml"
+        script.sh "git add requirements.yaml ../$featureName/values.yaml"
         script.sh "git commit -m 'jenkins update version component [${script.env.JOB_NAME}] build [${script.env.BUILD_NUMBER}]'"
         script.sshagent([helmCrendetialId]) {
             script.sh "git push -u origin ${helmGitRepoBranch}"
