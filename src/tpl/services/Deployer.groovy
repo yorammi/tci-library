@@ -84,7 +84,7 @@ class Deployer implements Serializable{
             script.echo "====================  The changed Deployment.yaml ================= \n" + yamlToString(deploymentYaml)
             script.sh "rm ./templates/deployment.yaml"
 //            script.sh "mv templates/deployment.yaml templates/.deployment.yaml.org"
-            script.writeYaml file: 'templates/deployment.yml', text: $yamlString
+            script.writeYaml file: 'templates/deployment.yml', text: yamlToString(deploymentYaml)
             script.echo "----------- YAML STRING THAT WILL BE SAVED TO deployment.yaml  -------- \n" + yamlToString(deploymentYaml)
             script.writeFile file: "./templates/deployment.yaml", text: yamlToString(deploymentYaml)
 
