@@ -66,7 +66,8 @@ class Deployer implements Serializable{
             valuesYaml.image.tag = service
             valuesYaml.namespace = featureName
             script.echo "The Values $valuesYaml"
-            script.sh "mv values.yaml .values.yaml.org"
+            script.sh "rm values.yaml"
+//            script.sh "mv values.yaml .values.yaml.org"
             script.writeYaml file: 'values.yaml', data: valuesYaml
             upgradeChartVersion()
 
@@ -78,7 +79,8 @@ class Deployer implements Serializable{
 
 
             script.echo "The changed Deployment.yaml $deploymentYaml"
-            script.sh "mv templates/deployment.yaml templates/.deployment.yaml.org"
+            script.sh "rm templates/deployment.yaml"
+//            script.sh "mv templates/deployment.yaml templates/.deployment.yaml.org"
             //script.writeYaml file: 'templates/deployment.yml', data: deploymentYaml
             def yamlString = yamlToString(deploymentYaml).replaceAll("@","\"").replaceAll("\'","")
             script.echo "----------- YAML STRING THAT WILL BE SAVED TO deployment.yaml  -------- \n $yamlString"
@@ -105,7 +107,8 @@ class Deployer implements Serializable{
                     it.version = newVersion
 
             }
-            script.sh "mv requirements.yaml requirements.yaml.org"
+            script.sh "rm requirements.yaml"
+//            script.sh "mv requirements.yaml requirements.yaml.org"
             script.writeYaml file: 'requirements.yaml', data: requirementsYaml
             pushUmbrellaCode()
         }
@@ -116,7 +119,8 @@ class Deployer implements Serializable{
     void upgradeChartVersion() {
         def chartYaml = script.readYaml file: 'Chart.yaml'
         chartYaml.version = this.newVersion
-        script.sh "mv Chart.yaml Chart.yaml.org"
+        script.sh "rm Chart.yaml"
+//        script.sh "mv Chart.yaml Chart.yaml.org"
         script.writeYaml file: 'Chart.yaml', data: chartYaml
 
     }
