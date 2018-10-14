@@ -103,17 +103,6 @@ class tplMavenCiPipeline extends tplBaseCiPipeline {
     void build() {
         script.dir("${script.env.WORKSPACE}") {
             script.withCredentials([script.usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'DOCKER_REGISTRY_PASS', usernameVariable: 'DOCKER_REGISTRY_USER')]) {
-//                script.withMaven(
-//                            maven: 'maven-3.3.9',
-//                            jdk: 'oracle-jdk-8',
-//                            mavenSettingsFilePath: script.env.MAVEN_SETTINGS,
-//                            mavenLocalRepo: '.repository')
-//                            {
-//                                script.withEnv(["SERVICE_TAG=${serviceTag}"]) {
-//                                    script.sh "mvn --projects ${serviceToBuild} -P docker --also-make clean install"
-//                                }
-//                            }
-//
                 def mavenHome = script.tool 'MVN-3.5.0'
                 script.withEnv(["SERVICE_TAG=${script.env.JOB_NAME}-${script.env.BUILD_NUMBER}"]) {
                     script.sh "${mavenHome}/bin/mvn clean install"

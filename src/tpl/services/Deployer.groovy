@@ -59,36 +59,22 @@ class Deployer implements Serializable{
 
     void buildHelm(it){
         script.dir(it) {
-            def myls = script.sh(script: "ls", returnStdout: true)
-            script.echo "The Values $myls"
             def valuesYaml = script.readYaml file: 'values.yaml'
+            script.echo "=============== Values before build =====================\n" + yamlToString(valuesYaml)
             valuesYaml.image.tag = "${service}.${script.env.BUILD_NUMBER}"
             valuesYaml.namespace = featureName
             script.echo "The Values " + yamlToString(valuesYaml)
             script.sh "mv values.yaml .values.yaml.org"
             script.writeYaml file: 'values.yaml', data: valuesYaml
+
+            // add build number to chart version
             upgradeChartVersion()
+
+            // change the docker image this chart uses (templates/deplyoment.yaml:containers.image)
             updateHelmDeploymentImage(featureName)
 
-
-            // change featureName/values.image.tag = "${script.env.dockerRegisteryPrefix}/${it}:${service}.${script.env.BUILD_NUMBER}"
-//            script.echo "${script.env.WORKSPACE}/kubernetes/helm/${featureName}/templates/deployment.yaml"
-//
-//            def deploymentYaml
-//            script.dir("${script.env.WORKSPACE}/kubernetes/helm/${featureName}"){
-//                deploymentYaml = script.readYaml (file: './templates/deployment.yaml')
-//            }
-//            script.echo "====================  The original Deployment.yaml ================= \n" + yamlToString(deploymentYaml)
-//            dockerImage = "${script.env.dockerRegisteryPrefix}/${it}:${service}.${script.env.BUILD_NUMBER}"
-//            script.echo "-----DOCKER IMAGE NAME------ " + dockerImage
-//            deploymentYaml.spec.template.spec.containers.image = dockerImage.toString()
-//            script.echo "====================  The changed Deployment.yaml ================= \n" + yamlToString(deploymentYaml)
-//            script.sh "rm ./templates/deployment.yaml"
-//            script.sh "mv templates/deployment.yaml templates/.deployment.yaml.org"
-//            script.writeYaml file: 'templates/deployment.yml', text: yamlToString(deploymentYaml)
-//            script.echo "----------- YAML STRING THAT WILL BE SAVED TO deployment.yaml  -------- \n" + yamlToString(deploymentYaml)
-//            script.writeFile file: "./templates/deployment.yaml", text: yamlToString(deploymentYaml)
-
+            def updatedValues = script.readYaml file: 'values.yaml'
+            script.echo "=============== New Values =====================\n" + yamlToString(updatedValues)
             script.sh "helm package ."
             script.sh "helm s3 push --force ./${it}-${newVersion}.tgz ${helmRepo}"
         }
@@ -98,8 +84,9 @@ class Deployer implements Serializable{
     def updateHelmDeploymentImage(it) {
         script.dir("${script.env.WORKSPACE}/kubernetes/helm/${it}"){
             def valuesYaml = script.readYaml file: 'values.yaml'
-            valuesYaml.image.tag = "${script.env.dockerRegisteryPrefix}/${it}:${service}.${script.env.BUILD_NUMBER}"
+            valuesYaml.image.tag = "${service}.${script.env.BUILD_NUMBER}"
             script.sh "mv values.yaml values.yaml.org"
+            script.echo "The new values file:\n" + yamlToString(valuesYaml)
             script.writeYaml file: 'values.yaml', data: valuesYaml
         }
 
@@ -115,11 +102,13 @@ class Deployer implements Serializable{
     void updateHelmUmbrella(chartName){
         script.dir("${script.env.WORKSPACE}/kubernetes/helm/ant-umbrella") {
             def requirementsYaml = script.readYaml file: 'requirements.yaml'
+            script.echo "==========   Requirements Before Build  ==============\n" + yamlToString(requirementsYaml)
             requirementsYaml.dependencies.each{
                 if ( it.name == chartName )
                     it.version = newVersion
             }
             script.sh "mv requirements.yaml requirements.yaml.org"
+            script.echo "==========   New Requirements  ==============\n" + yamlToString(requirementsYaml)
             script.writeYaml file: 'requirements.yaml', data: requirementsYaml
             pushUmbrellaCode()
         }
@@ -135,7 +124,7 @@ class Deployer implements Serializable{
 
     }
     void pushUmbrellaCode() {
-        script.echo "push umbrella code"
+        script.echo "Push umbrella code"
         script.sh "git config user.email jenkins@tikalk.com"
         script.sh "git config user.name JenkinsOfTikal"
         script.sh "git checkout ${helmGitRepoBranch}"
