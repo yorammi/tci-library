@@ -1,8 +1,7 @@
 package tpl.services
 
-import org.yaml.snakeyaml.DumperOptions
-import org.yaml.snakeyaml.Yaml
 @Grab('org.yaml:snakeyaml:1.17')
+import org.yaml.snakeyaml.*
 
 import tpl.utils.Logger
 class Deployer implements Serializable{
@@ -24,7 +23,7 @@ class Deployer implements Serializable{
     def helmCrendetialId
     def awsCrendetialId
     private String helmPluginUrl
-    private GString dockerImage
+    private String dockerImage
 
     Deployer(script,featureName,serviceTag,helmRepoURL,helmRepo,helmGitRepo,helmGitRepoBranch,helmCrendetialId,awsCrendetialId,kubeContext) {
         this.script = script
@@ -70,25 +69,24 @@ class Deployer implements Serializable{
 //            script.sh "mv values.yaml .values.yaml.org"
             script.writeYaml file: 'values.yaml', data: valuesYaml
             upgradeChartVersion()
-            script.deploymentYaml = new Yaml()
-            script.echo "${script.env.WORKSPACE}/kubernetes/${featureName}/templates/deployment.yaml"
-            new File("${script.env.WORKSPACE}/kubernetes/helm/${featureName}/templates/deployment.yaml").withReader('UTF-8') { reader ->
-                 script.deploymentYaml.load(reader)
+            script.echo "${script.env.WORKSPACE}/kubernetes/helm/${featureName}/templates/deployment.yaml"
+//            new File("${script.env.WORKSPACE}/kubernetes/helm/${featureName}/templates/deployment.yaml").withReader('UTF-8') { reader ->
+//                 script.deploymentYaml.load(reader)
+//            }
+            def deploymentYaml
+            script.dir("${script.env.WORKSPACE}/kubernetes/helm/${featureName}"){
+                deploymentYaml = script.readYaml (file: './templates/deployment.yaml')
             }
-//            def deploymentYaml = script.readYaml (file: 'templates/deployment.yaml')
-            script.echo "====================  The original Deployment.yaml ================= \n" + yamlToString(script.deploymentYaml)
+            script.echo "====================  The original Deployment.yaml ================= \n" + yamlToString(deploymentYaml)
             dockerImage = "${script.env.dockerRegisteryPrefix}/${it}:${service}.${script.env.BUILD_NUMBER}"
             script.echo "-----DOCKER IMAGE NAME------ " + dockerImage
-            script.deploymentYaml.spec.template.spec.containers.image = dockerImage.toString()
-
-
-            script.echo "The changed Deployment.yaml $script.deploymentYaml"
+            deploymentYaml.spec.template.spec.containers.image = dockerImage.toString()
+            script.echo "====================  The changed Deployment.yaml ================= \n" + yamlToString(deploymentYaml)
             script.sh "rm ./templates/deployment.yaml"
 //            script.sh "mv templates/deployment.yaml templates/.deployment.yaml.org"
-            //script.writeYaml file: 'templates/deployment.yml', data: deploymentYaml
-            def yamlString = yamlToString(script.deploymentYaml)
-            script.echo "----------- YAML STRING THAT WILL BE SAVED TO deployment.yaml  -------- \n $yamlString"
-            script.writeFile file: "./templates/deployment.yaml", text: yamlString
+            script.writeYaml file: 'templates/deployment.yml', text: $yamlString
+            script.echo "----------- YAML STRING THAT WILL BE SAVED TO deployment.yaml  -------- \n" + yamlToString(deploymentYaml)"
+            script.writeFile file: "./templates/deployment.yaml", text: yamlToString(deploymentYaml)
 
             script.sh "helm package ."
             script.sh "helm s3 push --force ./${it}-${newVersion}.tgz ${helmRepo}"
