@@ -80,7 +80,7 @@ class Deployer implements Serializable{
             script.echo "The changed Deployment.yaml $deploymentYaml"
             script.sh "mv templates/deployment.yaml templates/deployment.yaml.org"
             //script.writeYaml file: 'templates/deployment.yml', data: deploymentYaml
-            def txt = yamlToString(deploymentYaml)
+            def txt = yamlToString(deploymentYaml).replaceAll("@","\"")
             script.echo "----------- YAML STRING THAT WILL BE SAVED TO deployment.yaml  -------- \n $txt"
             script.writeFile file: 'templates/deployment.yaml', text: txt
 
