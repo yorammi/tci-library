@@ -64,7 +64,6 @@ class Deployer implements Serializable {
             script.echo "=============== Values before build =====================\n" + yamlToString(valuesYaml)
             valuesYaml.image.tag = "${service}.${script.env.BUILD_NUMBER}".toString()
             valuesYaml.namespace = featureName.toString()
-            script.echo "The Values " + yamlToString(valuesYaml)
             script.sh "mv values.yaml .values.yaml.org"
             script.writeYaml file: 'values.yaml', data: valuesYaml
 
@@ -87,7 +86,6 @@ class Deployer implements Serializable {
             def valuesYaml = script.readYaml file: 'values.yaml'
             valuesYaml.image.tag = "${service}.${script.env.BUILD_NUMBER}".toString()
             script.sh "mv values.yaml values.yaml.org"
-            script.echo "The new values file:\n" + yamlToString(valuesYaml)
             script.writeYaml file: 'values.yaml', data: valuesYaml
         }
 
@@ -119,14 +117,16 @@ class Deployer implements Serializable {
 
     void upgradeChartVersion() {
         def chartYaml = script.readYaml file: 'Chart.yaml'
+        script.echo "----- Chart before build ------\n" + yamlToString(chartYaml)
         chartYaml.version = this.newVersion
         script.sh "mv Chart.yaml Chart.yaml.org"
+        script.echo "------ New Chart -------\n" + yamlToString(chartYaml)
         script.writeYaml file: 'Chart.yaml', data: chartYaml
 
     }
 
     void pushUmbrellaCode() {
-        script.echo "Push umbrella code"
+        script.echo "Pushing ant-umbrella code"
         script.sh "git config user.email jenkins@tikalk.com"
         script.sh "git config user.name JenkinsOfTikal"
         script.sh "git checkout ${helmGitRepoBranch}"
