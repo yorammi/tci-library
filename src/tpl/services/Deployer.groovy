@@ -62,31 +62,32 @@ class Deployer implements Serializable{
             def myls = script.sh(script: "ls", returnStdout: true)
             script.echo "The Values $myls"
             def valuesYaml = script.readYaml file: 'values.yaml'
-            valuesYaml.image.tag = service
+            valuesYaml.image.tag = "${service}.${script.env.BUILD_NUMBER}"
             valuesYaml.namespace = featureName
-            script.echo "The Values $valuesYaml"
-            script.sh "rm values.yaml"
-//            script.sh "mv values.yaml .values.yaml.org"
+            script.echo "The Values " + yamlToString(valuesYaml)
+            script.sh "mv values.yaml .values.yaml.org"
             script.writeYaml file: 'values.yaml', data: valuesYaml
             upgradeChartVersion()
-            script.echo "${script.env.WORKSPACE}/kubernetes/helm/${featureName}/templates/deployment.yaml"
-//            new File("${script.env.WORKSPACE}/kubernetes/helm/${featureName}/templates/deployment.yaml").withReader('UTF-8') { reader ->
-//                 script.deploymentYaml.load(reader)
+            updateHelmDeploymentImage(featureName)
+
+
+            // change featureName/values.image.tag = "${script.env.dockerRegisteryPrefix}/${it}:${service}.${script.env.BUILD_NUMBER}"
+//            script.echo "${script.env.WORKSPACE}/kubernetes/helm/${featureName}/templates/deployment.yaml"
+//
+//            def deploymentYaml
+//            script.dir("${script.env.WORKSPACE}/kubernetes/helm/${featureName}"){
+//                deploymentYaml = script.readYaml (file: './templates/deployment.yaml')
 //            }
-            def deploymentYaml
-            script.dir("${script.env.WORKSPACE}/kubernetes/helm/${featureName}"){
-                deploymentYaml = script.readYaml (file: './templates/deployment.yaml')
-            }
-            script.echo "====================  The original Deployment.yaml ================= \n" + yamlToString(deploymentYaml)
-            dockerImage = "${script.env.dockerRegisteryPrefix}/${it}:${service}.${script.env.BUILD_NUMBER}"
-            script.echo "-----DOCKER IMAGE NAME------ " + dockerImage
-            deploymentYaml.spec.template.spec.containers.image = dockerImage.toString()
-            script.echo "====================  The changed Deployment.yaml ================= \n" + yamlToString(deploymentYaml)
-            script.sh "rm ./templates/deployment.yaml"
+//            script.echo "====================  The original Deployment.yaml ================= \n" + yamlToString(deploymentYaml)
+//            dockerImage = "${script.env.dockerRegisteryPrefix}/${it}:${service}.${script.env.BUILD_NUMBER}"
+//            script.echo "-----DOCKER IMAGE NAME------ " + dockerImage
+//            deploymentYaml.spec.template.spec.containers.image = dockerImage.toString()
+//            script.echo "====================  The changed Deployment.yaml ================= \n" + yamlToString(deploymentYaml)
+//            script.sh "rm ./templates/deployment.yaml"
 //            script.sh "mv templates/deployment.yaml templates/.deployment.yaml.org"
-            script.writeYaml file: 'templates/deployment.yml', text: yamlToString(deploymentYaml)
-            script.echo "----------- YAML STRING THAT WILL BE SAVED TO deployment.yaml  -------- \n" + yamlToString(deploymentYaml)
-            script.writeFile file: "./templates/deployment.yaml", text: yamlToString(deploymentYaml)
+//            script.writeYaml file: 'templates/deployment.yml', text: yamlToString(deploymentYaml)
+//            script.echo "----------- YAML STRING THAT WILL BE SAVED TO deployment.yaml  -------- \n" + yamlToString(deploymentYaml)
+//            script.writeFile file: "./templates/deployment.yaml", text: yamlToString(deploymentYaml)
 
             script.sh "helm package ."
             script.sh "helm s3 push --force ./${it}-${newVersion}.tgz ${helmRepo}"
@@ -94,7 +95,17 @@ class Deployer implements Serializable{
         updateHelmUmbrella(it)
     }
 
-    String yamlToString(Object data) {
+    def updateHelmDeploymentImage(it) {
+        script.dir("${script.env.WORKSPACE}/kubernetes/helm/${it}"){
+            def valuesYaml = script.readYaml file: 'values.yaml'
+            valuesYaml.image.tag = "${script.env.dockerRegisteryPrefix}/${it}:${service}.${script.env.BUILD_NUMBER}"
+            script.sh "mv values.yaml values.yaml.org"
+            script.writeYaml file: 'values.yaml', data: valuesYaml
+        }
+
+    }
+
+    static String yamlToString(Object data) {
         def opts = new DumperOptions()
         opts.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK)
         return new Yaml(opts).dump(data)
@@ -107,10 +118,8 @@ class Deployer implements Serializable{
             requirementsYaml.dependencies.each{
                 if ( it.name == chartName )
                     it.version = newVersion
-
             }
-            script.sh "rm requirements.yaml"
-//            script.sh "mv requirements.yaml requirements.yaml.org"
+            script.sh "mv requirements.yaml requirements.yaml.org"
             script.writeYaml file: 'requirements.yaml', data: requirementsYaml
             pushUmbrellaCode()
         }
@@ -121,26 +130,22 @@ class Deployer implements Serializable{
     void upgradeChartVersion() {
         def chartYaml = script.readYaml file: 'Chart.yaml'
         chartYaml.version = this.newVersion
-        script.sh "rm Chart.yaml"
-//        script.sh "mv Chart.yaml Chart.yaml.org"
+        script.sh "mv Chart.yaml Chart.yaml.org"
         script.writeYaml file: 'Chart.yaml', data: chartYaml
 
     }
-    void pushUmbrellaCode(){
+    void pushUmbrellaCode() {
         script.echo "push umbrella code"
-        //script.withCredentials([script.sshUserPrivateKey(credentialsId: helmCrendetialId, keyFileVariable: 'keyfile')]) {
-            script.sh "git config user.email jenkins@tikalk.com"
-            script.sh "git config user.name JenkinsOfTikal"
-            script.sh "git checkout ${helmGitRepoBranch}"
-            script.sh "git add requirements.yaml"
-            script.sh "git add ../$featureName/templates/deployment.yaml"
-            script.sh "git add ../$featureName/values.yaml"
-            script.sh "git commit -m 'jenkins update version component [${script.env.JOB_NAME}] build [${script.env.BUILD_NUMBER}]'"
+        script.sh "git config user.email jenkins@tikalk.com"
+        script.sh "git config user.name JenkinsOfTikal"
+        script.sh "git checkout ${helmGitRepoBranch}"
+        script.sh "git add requirements.yaml"
+        script.sh "git add ../$featureName/templates/deployment.yaml"
+        script.sh "git add ../$featureName/values.yaml"
+        script.sh "git commit -m 'jenkins update version component [${script.env.JOB_NAME}] build [${script.env.BUILD_NUMBER}]'"
         script.sshagent([helmCrendetialId]) {
             script.sh "git push -u origin ${helmGitRepoBranch}"
         }
-            // script.sh "ssh-agent bash -c 'ssh-add $script.keyfile ;git push -u origin ${featureName}'"
-        //}
     }
 
     void helmDeploy(){
