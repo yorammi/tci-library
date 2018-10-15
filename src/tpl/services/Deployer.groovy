@@ -99,6 +99,7 @@ class Deployer implements Serializable {
 
 
     void updateHelmUmbrella(chartName) {
+        //todo tomg: generify
         script.dir("${script.env.WORKSPACE}/kubernetes/helm/ant-umbrella") {
             def requirementsYaml = script.readYaml file: 'requirements.yaml'
             script.echo "==========   Requirements Before Build  ==============\n" + yamlToString(requirementsYaml)
