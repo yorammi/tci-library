@@ -141,7 +141,7 @@ class Deployer implements Serializable {
     void helmDeploy() {
         script.dir("${script.env.WORKSPACE}/kubernetes/helm/ant-umbrella") {
             script.sh "kubectl config use-context ${kubeContext}"
-            script.sh "helm upgrade ant-smasher --set global.namespace=ant-smasher ."
+            script.sh "helm upgrade ant-smasher ."
         }
 
     }
