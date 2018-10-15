@@ -99,7 +99,7 @@ class Deployer implements Serializable {
 
 
     void updateHelmUmbrella(chartName) {
-        script.dir("${script.env.WORKSPACE}/kubernetes/helm/ant-umbrella") {
+4        script.dir("${script.env.WORKSPACE}/kubernetes/helm/ant-umbrella") {
             def requirementsYaml = script.readYaml file: 'requirements.yaml'
             script.echo "==========   Requirements Before Build  ==============\n" + yamlToString(requirementsYaml)
             requirementsYaml.dependencies.each {
@@ -140,7 +140,7 @@ class Deployer implements Serializable {
     void helmDeploy() {
         script.dir("${script.env.WORKSPACE}/kubernetes/helm/ant-umbrella") {
             script.sh "kubectl config use-context ${kubeContext}"
-            script.sh "helm upgrade ant-smasher --set global.namespace=ant-smasher ."
+            script.sh "helm upgrade ant-smasher ."
         }
 
     }
