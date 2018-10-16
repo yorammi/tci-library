@@ -141,7 +141,7 @@ class Deployer implements Serializable {
     void helmDeploy() {
         script.dir("${script.env.WORKSPACE}/kubernetes/helm/msa-umbrella") {
             script.sh "kubectl config use-context ${kubeContext}"
-            script.sh "helm upgrade msa-umbrella --set global.namespace=msa-umbrella-ci ."
+            script.sh "helm upgrade v1 --set global.namespace=msa-umbrella ."
         }
 
     }
@@ -207,7 +207,7 @@ class Deployer implements Serializable {
                 script.sh "helm init --kube-context ${kubeContext}"
                 script.sh "helm plugin install ${helmPluginUrl}"
                 script.sh "helm repo add ${helmRepo} ${helmRepoURL}"
-                script.sh "helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator"
+                script.sh "helm repo add stable https://kubernetes-charts.storage.googleapis.com"
             }
         }
     }
