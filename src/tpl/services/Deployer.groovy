@@ -100,7 +100,7 @@ class Deployer implements Serializable {
 
     void updateHelmUmbrella(chartName) {
         //todo tomg: generify
-        script.dir("${script.env.WORKSPACE}/kubernetes/helm/ant-umbrella") {
+        script.dir("${script.env.WORKSPACE}/kubernetes/helm/msa-umbrella") {
             def requirementsYaml = script.readYaml file: 'requirements.yaml'
             script.echo "==========   Requirements Before Build  ==============\n" + yamlToString(requirementsYaml)
             requirementsYaml.dependencies.each {
@@ -127,7 +127,7 @@ class Deployer implements Serializable {
     }
 
     void pushUmbrellaCode() {
-        script.echo "Pushing ant-umbrella code"
+        script.echo "Pushing msa-umbrella code"
         script.sh "git config user.email jenkins@tikalk.com"
         script.sh "git config user.name JenkinsOfTikal"
         script.sh "git checkout ${helmGitRepoBranch}"
@@ -139,15 +139,15 @@ class Deployer implements Serializable {
     }
 
     void helmDeploy() {
-        script.dir("${script.env.WORKSPACE}/kubernetes/helm/ant-umbrella") {
+        script.dir("${script.env.WORKSPACE}/kubernetes/helm/msa-umbrella") {
             script.sh "kubectl config use-context ${kubeContext}"
-            script.sh "helm upgrade ant-smasher --set global.namespace=ant-smasher ."
+            script.sh "helm upgrade msa-umbrella --set global.namespace=msa-umbrella-ci ."
         }
 
     }
 
     void helmDependencyUpdate() {
-        script.dir("${script.env.WORKSPACE}/kubernetes/helm/ant-umbrella") {
+        script.dir("${script.env.WORKSPACE}/kubernetes/helm/msa-umbrella") {
             script.sh "kubectl config use-context ${kubeContext}"
             script.sh "helm dep update ."
         }
