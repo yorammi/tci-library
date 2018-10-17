@@ -205,7 +205,7 @@ class Deployer implements Serializable {
                 script.sh "echo \"${script.env.KUBECONFIG_CONTENT}\" > /home/jenkins/.kube/config"
                 script.sh "kubectl config  current-context"
                 script.sh "kubectl config  use-context ${kubeContext}"
-                script.sh "helm init --kube-context ${kubeContext} ; helm version ; helm status v1"
+                script.sh "helm init --kube-context ${kubeContext} ; helm --host=100.106.128.1:44134 version --debug ; helm status v1"
                 script.sh "helm plugin install ${helmPluginUrl}"
                 script.sh "helm repo add ${helmRepo} ${helmRepoURL}"
                 script.sh "helm repo add stable https://kubernetes-charts.storage.googleapis.com"
