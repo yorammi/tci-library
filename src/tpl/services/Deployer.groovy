@@ -168,7 +168,7 @@ class Deployer implements Serializable {
 
     boolean validateDeployment() {
         script.echo "Waiting for Services to start"
-        def podsList = script.sh(script: "kubectl get pods -n $featureName", returnStdout: true).split("\r?\n")
+        def podsList = script.sh(script: "kubectl get pods -n msa-umbrella", returnStdout: true).split("\r?\n")
         def services = [:]
         podsList.each { line, count ->
             def index = 0
