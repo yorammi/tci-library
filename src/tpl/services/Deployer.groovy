@@ -141,7 +141,8 @@ class Deployer implements Serializable {
     void helmDeploy() {
         script.dir("${script.env.WORKSPACE}/kubernetes/helm/msa-umbrella") {
             script.sh "kubectl config use-context ${kubeContext}"
-            script.sh "helm upgrade v1 --set global.namespace=msa-umbrella ."
+            //script.sh "helm upgrade v1 --set global.namespace=msa-umbrella ."
+            script.sh "helm get manifest ant-smasher"
         }
 
     }
