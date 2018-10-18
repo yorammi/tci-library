@@ -141,8 +141,8 @@ class Deployer implements Serializable {
     void helmDeploy() {
         script.dir("${script.env.WORKSPACE}/kubernetes/helm/msa-umbrella") {
             script.sh "kubectl config use-context ${kubeContext}"
-            script.sh "export HELM_HOST=100.106.128.1:44134 ; helm upgrade v1 --set global.namespace=msa-umbrella ."
-            //script.sh "helm version ; helm status v1"
+            //script.sh "export HELM_HOST=100.106.128.1:44134 ; helm upgrade v1 --set global.namespace=msa-umbrella ."
+            script.sh "helm upgrade v1 --set global.namespace=msa-umbrella ."
       }
 
     }
@@ -194,7 +194,7 @@ class Deployer implements Serializable {
         logger.info "Deployment env. setup"
 
         script.env.AWS_REGION = "eu-west-1"
-        script.env.HELM_HOST = "AAA"
+        //script.env.HELM_HOST = "AAA"
         script.tplAWSConfigure(awsCrendetialId)
 
         script.tplRepositoryDirectoryCheckout(helmGitRepo, helmGitRepoBranch, helmCrendetialId, 'kubernetes')
