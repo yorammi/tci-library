@@ -70,7 +70,7 @@ class Deployer implements Serializable {
             // add build number to chart version
             upgradeChartVersion()
 
-            // change the docker image this chart uses (templates/deplyoment.yaml:containers.image)
+            // change the docker image this chart uses (templates/deployment.yaml:containers.image)
             updateHelmDeploymentImage(featureName)
 
             def updatedValues = script.readYaml file: 'values.yaml'
@@ -141,7 +141,6 @@ class Deployer implements Serializable {
     void helmDeploy() {
         script.dir("${script.env.WORKSPACE}/kubernetes/helm/msa-umbrella") {
             script.sh "kubectl config use-context ${kubeContext}"
-            //script.sh "export HELM_HOST=100.106.128.1:44134 ; helm upgrade v1 --set global.namespace=msa-umbrella ."
             script.sh "helm upgrade v1 --set global.namespace=msa-umbrella ."
       }
 
