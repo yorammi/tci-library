@@ -50,11 +50,35 @@ class Deployer implements Serializable {
         waitTillDeployComplete()
     }
 
+    String[] getServiceDir(service){
+        def ret = []
+        script.dir("${script.env.WORKSPACE}"){
+            def charts = script.findFiles(glob: '**/Chart.yaml')
+            charts.each {
+                script.echo "The path $it"
+                def path = it.toString()
+                script.echo "The path " + path.minus('/Chart.yaml')
+                if(service == "all"){
+                    ret.add(path.minus('/Chart.yaml'))
+                }else if (path.contains(service)){
+                    ret.add(path.minus('/Chart.yaml'))
+                }
+            }
+            script.echo "Charts To deploy $ret"
+        }
+        return ret
+    }
+
     void packegeHelm() {
         logger.info('packegeHelm')
-        script.dir("${script.env.WORKSPACE}/kubernetes/helm/") {
-            buildHelm(featureName)
+        getServiceDir(featureName).each {
+          script.dir("${script.env.WORKSPACE}/$it") {
+            def path = it.toString()
+            def name = path.substring(path.lastIndexOf("/")+1,path.length())
+            buildHelm(name)
         }
+        //script.dir("${script.env.WORKSPACE}/kubernetes/helm/") {  
+        //}
 
     }
 
@@ -75,6 +99,9 @@ class Deployer implements Serializable {
 
             def updatedValues = script.readYaml file: 'values.yaml'
             script.echo "=============== New Values =====================\n" + yamlToString(updatedValues)
+            if (script.fileExists('requirements.yaml')){
+              script.sh "helm dep update ."
+            }
             script.sh "helm package ."
             script.sh "helm s3 push --force ./${it}-${newVersion}.tgz ${helmRepo}"
         }
