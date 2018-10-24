@@ -76,8 +76,9 @@ class Deployer implements Serializable {
             def path = it.toString()
             def name = path.substring(path.lastIndexOf("/")+1,path.length())
             buildHelm(name)
+          }
         }
-        //script.dir("${script.env.WORKSPACE}/kubernetes/helm/") {  
+        //script.dir("${script.env.WORKSPACE}/kubernetes/helm/") {
         //}
 
     }
