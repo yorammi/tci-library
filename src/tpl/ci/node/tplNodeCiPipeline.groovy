@@ -51,28 +51,6 @@ void initParams(){
     void checkout() {
         script.checkout script.scm
     }
- @Override
-    void build() {
-
-
-        script.dir("${script.env.WORKSPACE}/${dockerPath}") {
-          script.withCredentials([script.usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'DOCKER_REGISTRY_PASS', usernameVariable: 'DOCKER_REGISTRY_USER')]) {
-
-//                def nodeHome =script.tool 'NodeJS10'
-//                script.sh "export PATH=\${PATH}/${nodeHome}/bin; npm install"
-//                script.sh "${nodeHome}/bin/npm run build"
-              script.sh "docker login -u ${script.env.DOCKER_REGISTRY_USER} -p ${script.env.DOCKER_REGISTRY_PASS}"
-              def dockerImagePath = "${dockerRegisteryPrefix}/${containerName}:${script.env.containerTag}.${script.env.BUILD_NUMBER}"
-              script.sh "docker build -t " + dockerImagePath + " ."
-              script.sh "docker push " + dockerImagePath
-          }
-
-
-               //}
-           //}
-        }
-            
-    }     
 @Override
     void deploy() {
         script.echo "Helm Deploy"
