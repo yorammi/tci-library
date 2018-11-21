@@ -141,7 +141,7 @@ class Deployer implements Serializable {
         script.dir("${script.env.WORKSPACE}/ghost") {
             script.sh "kubectl config use-context ${kubeContext}"
             def scriptContent = '''
-                yum install base64
+                helm install ghost ghoster
                 export APP_HOST=$(kubectl get svc --namespace default ghoster --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
                 export APP_PASSWORD=$(kubectl get secret --namespace default ghoster -o jsonpath="{.data.ghost-password}" | base64 --decode)
                 export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace default ghoster-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
