@@ -138,7 +138,7 @@ class Deployer implements Serializable {
     }
 
     void helmDeploy() {
-        script.dir("${script.env.WORKSPACE}/ghost") {
+        script.dir("${script.env.WORKSPACE}") {
             script.sh "kubectl config use-context ${kubeContext}"
             script.sh "helm update -i ghost -n ghoster"
             def scriptContent = '''
