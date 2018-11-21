@@ -140,12 +140,15 @@ class Deployer implements Serializable {
     void helmDeploy() {
         script.dir("${script.env.WORKSPACE}/ghost") {
             script.sh "kubectl config use-context ${kubeContext}"
-            script.sh '''
+            def scriptContent = '''
                 export APP_HOST=$(kubectl get svc --namespace default ghoster --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
                 export APP_PASSWORD=$(kubectl get secret --namespace default ghoster -o jsonpath="{.data.ghost-password}" | base64 --decode)
                 export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace default ghoster-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
                 helm upgrade ghoster stable/ghost --set serviceType=LoadBalancer,ghostHost=$APP_HOST,ghostPassword=$APP_PASSWORD,mariadb.db.password=$APP_DATABASE_PASSWORD
             '''
+            writeFile file: './deployBaseStack.sh', text: scriptContent
+
+            sh 'bash ./deployBaseStack.sh'
         }
 
     }
