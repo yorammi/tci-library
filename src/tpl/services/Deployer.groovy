@@ -140,7 +140,7 @@ class Deployer implements Serializable {
     void helmDeploy() {
         script.dir("${script.env.WORKSPACE}") {
             script.sh "kubectl config use-context ${kubeContext}"
-            script.sh "helm update -i ghost -n ghoster"
+            script.sh "helm upgrade -i ghost -n ghoster"
             def scriptContent = '''
                 export APP_HOST=$(kubectl get svc --namespace default ghoster --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
                 export APP_PASSWORD=$(kubectl get secret --namespace default ghoster -o jsonpath="{.data.ghost-password}" | base64 --decode)
