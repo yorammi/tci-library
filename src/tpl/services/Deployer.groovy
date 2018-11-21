@@ -193,7 +193,7 @@ class Deployer implements Serializable {
 
         script.env.AWS_REGION = "eu-west-1"
         script.env.HELM_HOST = "AAA"
-        script.tplAWSConfigure(awsCrendetialId)
+//        script.tplAWSConfigure(awsCrendetialId)
 
         script.tplRepositoryDirectoryCheckout(helmGitRepo, helmGitRepoBranch, helmCrendetialId, 'kubernetes')
 
