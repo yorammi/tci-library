@@ -146,9 +146,9 @@ class Deployer implements Serializable {
                 export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace default ghoster-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
                 helm upgrade ghoster stable/ghost --set serviceType=LoadBalancer,ghostHost=$APP_HOST,ghostPassword=$APP_PASSWORD,mariadb.db.password=$APP_DATABASE_PASSWORD
             '''
-            writeFile file: './deployBaseStack.sh', text: scriptContent
+            script.writeFile file: './deployBaseStack.sh', text: scriptContent
 
-            sh 'bash ./deployBaseStack.sh'
+            script.sh 'bash ./deployBaseStack.sh'
         }
 
     }
