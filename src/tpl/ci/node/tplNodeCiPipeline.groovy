@@ -49,7 +49,9 @@ void initParams(){
     
 @Override
     void checkout() {
+    script.echo "Before checktou"
         script.checkout script.scm
+    script.echo "After checktou"
     }
 @Override
     void deploy() {
