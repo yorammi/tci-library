@@ -141,6 +141,7 @@ class Deployer implements Serializable {
         script.dir("${script.env.WORKSPACE}/ghost") {
             script.sh "kubectl config use-context ${kubeContext}"
             def scriptContent = '''
+                apt-get install base64
                 export APP_HOST=$(kubectl get svc --namespace default ghoster --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
                 export APP_PASSWORD=$(kubectl get secret --namespace default ghoster -o jsonpath="{.data.ghost-password}" | base64 --decode)
                 export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace default ghoster-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
@@ -201,10 +202,6 @@ class Deployer implements Serializable {
 
         script.env.AWS_REGION = "eu-west-1"
         script.env.HELM_HOST = "AAA"
-//        script.tplAWSConfigure(awsCrendetialId)
-
-//        script.tplRepositoryDirectoryCheckout(helmGitRepo, helmGitRepoBranch, helmCrendetialId, 'kubernetes')
-
         script.dir("${script.env.WORKSPACE}") {
             script.withCredentials([script.kubeconfigContent(credentialsId: 'kube-config', variable: 'KUBECONFIG_CONTENT')]) {
                 script.sh "mkdir -p ~/.kube"
@@ -212,8 +209,6 @@ class Deployer implements Serializable {
                 script.sh "kubectl config  current-context"
                 script.sh "kubectl config  use-context ${kubeContext}"
                 script.sh "helm init --kube-context ${kubeContext}"
-           //     script.sh "helm plugin install ${helmPluginUrl}"
-          //      script.sh "helm repo add ${helmRepo} ${helmRepoURL}"
                 script.sh "helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator"
             }
         }
