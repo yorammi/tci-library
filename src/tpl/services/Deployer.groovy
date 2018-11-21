@@ -195,7 +195,7 @@ class Deployer implements Serializable {
         script.env.HELM_HOST = "AAA"
 //        script.tplAWSConfigure(awsCrendetialId)
 
-        script.tplRepositoryDirectoryCheckout(helmGitRepo, helmGitRepoBranch, helmCrendetialId, 'kubernetes')
+//        script.tplRepositoryDirectoryCheckout(helmGitRepo, helmGitRepoBranch, helmCrendetialId, 'kubernetes')
 
         script.dir("${script.env.WORKSPACE}") {
             script.withCredentials([script.kubeconfigContent(credentialsId: 'kube-config', variable: 'KUBECONFIG_CONTENT')]) {
