@@ -47,7 +47,7 @@ class Deployer implements Serializable {
         //script.stage("HELM package", this.&packegeHelm)
         script.stage("HELM dependecy update", this.&helmDependencyUpdate)
         script.stage("HELM deploy", this.&helmDeploy)
-        waitTillDeployComplete()
+//        waitTillDeployComplete()
     }
 
     void packegeHelm() {
