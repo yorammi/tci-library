@@ -204,8 +204,8 @@ class Deployer implements Serializable {
                 script.sh "kubectl config  current-context"
                 script.sh "kubectl config  use-context ${kubeContext}"
                 script.sh "helm init --kube-context ${kubeContext}"
-                script.sh "helm plugin install ${helmPluginUrl}"
-                script.sh "helm repo add ${helmRepo} ${helmRepoURL}"
+           //     script.sh "helm plugin install ${helmPluginUrl}"
+          //      script.sh "helm repo add ${helmRepo} ${helmRepoURL}"
                 script.sh "helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator"
             }
         }
