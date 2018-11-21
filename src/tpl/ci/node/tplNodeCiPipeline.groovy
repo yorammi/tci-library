@@ -48,11 +48,11 @@ void initParams(){
 
     
 @Override
-//    void checkout() {
-//    script.echo "Before checktout"
+    void checkout() {
+    script.echo "Before checktout"
 //        script.checkout script.scm
-//    script.echo "After checktout"
-//    }
+    script.echo "After checktout"
+    }
 @Override
     void deploy() {
         script.echo "Helm Deploy"
