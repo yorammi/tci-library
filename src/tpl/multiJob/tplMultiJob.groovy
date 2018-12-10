@@ -72,7 +72,7 @@ class tplMultiJob implements Serializable {
     }
 
     void runImpl() {
-        echo "test"
+        script.echo "test"
     }
 
 }
