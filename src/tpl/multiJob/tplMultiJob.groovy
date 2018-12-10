@@ -11,11 +11,12 @@ class tplMultiJob implements Serializable {
         String title = ""
         String jobName = ""
         String[] parameters = [:]
+        Boolean remoteJob = false
+        String remoteHost = ""
     }
     class stage {
         String id = ""
         String title = ""
-        String genre = ""
     }
 
     def logger
@@ -46,7 +47,6 @@ class tplMultiJob implements Serializable {
                 } catch (all) {
                     logger.info "Issue during cleanup: $all. This can hide real issue that happened in the steps, check what step actually failed"
                 }
-
             }
         }
     }
