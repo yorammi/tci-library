@@ -4,19 +4,19 @@ import tpl.utils.Logger
 import com.cloudbees.groovy.cps.NonCPS
 
 
-class multiJobJob {
-    String id = ""
-    String title = ""
-    String jobName = ""
-    String[] parameters = [:]
-}
-class multiJobStage {
-    String id = ""
-    String title = ""
-    String genre = ""
-}
-
 abstract class tplMultiJob implements Serializable {
+
+    class job {
+        String id = ""
+        String title = ""
+        String jobName = ""
+        String[] parameters = [:]
+    }
+    class stage {
+        String id = ""
+        String title = ""
+        String genre = ""
+    }
 
     def logger
     def script
