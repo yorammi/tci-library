@@ -20,6 +20,7 @@ class tplMultiJob implements Serializable {
 
     def logger
     def script
+    def pauseAfterEachStage
 
     tplMultiJob(script) {
         this.script = script
