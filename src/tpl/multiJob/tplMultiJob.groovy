@@ -4,7 +4,7 @@ import tpl.utils.Logger
 import com.cloudbees.groovy.cps.NonCPS
 
 
-abstract class tplMultiJob implements Serializable {
+class tplMultiJob implements Serializable {
 
     class job {
         String id = ""
