@@ -39,9 +39,6 @@ class tplMultiJob implements Serializable {
                             script.input 'Continue to next stage?'
                         }
                     }
-                    archiveServiceLogs()
-                    cleanupResources()
-                    deleteWorkspace()
                     if (firstUnstableStage) {
                         script.echo "Build became UNSTABLE in stage $firstUnstableStage"
                     }
