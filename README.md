@@ -1,5 +1,5 @@
 # TPL - Tikal Pipeline Library
-![tikal-pipelib](src/resources/images/TPL-small.png)
+![tikal-pipelib](src/resources/images/TPL-medium.png)
 
 ### ***Tikal Jenkins Pipeline Library***
 
