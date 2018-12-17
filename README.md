@@ -1,7 +1,7 @@
 # TPL - Tikal Pipeline Library
 ![tikal-pipelib](src/resources/images/TPL-small.png)
 
-### ***Tikal Jenkins Pipeline Library***.
+### ***Tikal Jenkins Pipeline Library***
 
 Powered by **[Tikal Knowledge](http://www.tikalk.com)** and the community.
 <hr/>
