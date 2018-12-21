@@ -1,7 +1,7 @@
-# TPL - Tikal Pipeline Library
-![tikal-pipelib](src/resources/images/TPL-medium.png)
+# TCI library - Tikal Jenkins-based CI solution Jenkins shared library
+![tci-library](src/resources/images/tci-library.png)
 
-### ***Tikal Jenkins Pipeline Library***
+### ***TCI library - Tikal Jenkins-based CI solution Jenkins shared library***
 
 Powered by **[Tikal Knowledge](http://www.tikalk.com)** and the community.
 <hr/>
