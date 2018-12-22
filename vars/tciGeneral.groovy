@@ -1,6 +1,5 @@
 #!/usr/bin/groovy
 
-@NonCPS
 def echo(String text) {
 
 //    def out
