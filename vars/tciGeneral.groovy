@@ -1,5 +1,9 @@
 #!/usr/bin/groovy
 
+def deprecatedMessage(String oldStepName, String newStepName) {
+    echo "[WARNING] The step '"+oldStepName+"' is deprecated. please use '"+newStepName+"' instead."
+}
+
 @NonCPS
 def timedEcho(String text) {
 
@@ -15,6 +19,12 @@ def timedEcho(String text) {
     echo "["+tstamp+"] " + text;
 }
 
-def deprecatedMessage(String oldStepName, String newStepName) {
-    echo "[WARNING] The step '"+oldStepName+"' is deprecated. please use '"+newStepName+"' instead."
+def setStatusByLogText(String searchText) {
+
+    String logText = currentBuild.rawBuild.getLog()
+    if(logText.contains(searchText))
+    {
+        println("Found '${searchText}' in build log")
+        currentBuild.result = 'FAILURE'
+    }
 }
