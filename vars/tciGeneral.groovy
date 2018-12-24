@@ -21,6 +21,7 @@ def timedEcho(String text) {
 
 def setStatusByLogText(String searchText) {
 
+    echo "Activating tciGeneral.setStatusByLogText";
     String logText = currentBuild.rawBuild.getLog()
     if(logText.contains(searchText))
     {
