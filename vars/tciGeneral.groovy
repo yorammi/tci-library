@@ -16,5 +16,5 @@ def timedEcho(String text) {
 }
 
 def deprecatedMessage(String oldStepName, String newStepName) {
-    sh "echo -e \"\\e[31mThe step "+oldStepName+" is deprecated. please use "+newStepName+" instead\\e[0m\""
+    echo "[WARNING] The step '"+oldStepName+"' is deprecated. please use '"+newStepName+"' instead."
 }
