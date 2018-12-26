@@ -2,11 +2,17 @@
 
 def initBuildUserEnvVars() {
     wrap([$class: 'BuildUser']) {
+        echo "1"
         env.BUILD_USER = BUILD_USER
+        echo "2"
         env.BUILD_USER_FIRST_NAME = BUILD_USER_FIRST_NAME
+        echo "3"
         env.BUILD_USER_LAST_NAME = BUILD_USER_LAST_NAME
+        echo "4"
         env.BUILD_USER_ID = BUILD_USER_ID
+        echo "5"
         env.BUILD_USER_EMAIL = BUILD_USER_EMAIL
+        echo "6"
     }
 }
 
