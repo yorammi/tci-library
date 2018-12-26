@@ -1,3 +1,4 @@
 def call(String jobName, Integer jobNextBuildNumber) {
-    Jenkins.instance.getItemByFullName(jobName).updateNextBuildNumber(jobNextBuildNumber)
+    tciGeneral.deprecatedMessage("tplSetJobNextBuildNumber","tciJobs.setJobNextBuildNumber")
+    tciGeneral.setJobNextBuildNumber(jobName,jobNextBuildNumber)
 }
