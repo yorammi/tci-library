@@ -4,11 +4,19 @@ def initBuildUserEnvVars() {
     wrap([$class: 'BuildUser']) {
         env.BUILD_USER = BUILD_USER
         env.BUILD_USER_FIRST_NAME = BUILD_USER_FIRST_NAME
-//        env.BUILD_USER_LAST_NAME = BUILD_USER_LAST_NAME
-        env.BUILD_USER_LAST_NAME = BUILD_USER_FIRST_NAME
+        try {
+            env.BUILD_USER_LAST_NAME = BUILD_USER_LAST_NAME
+        }
+        catch (Error) {
+            env.BUILD_USER_LAST_NAME = ""
+        }
         env.BUILD_USER_ID = BUILD_USER_ID
-        env.BUILD_USER_EMAIL = BUILD_USER_ID
-//        env.BUILD_USER_EMAIL = BUILD_USER_EMAIL
+        try {
+            env.BUILD_USER_EMAIL = BUILD_USER_EMAIL
+        }
+        catch (Error) {
+            env.BUILD_USER_EMAIL = ""
+        }
     }
 }
 
