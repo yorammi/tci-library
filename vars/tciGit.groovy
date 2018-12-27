@@ -2,9 +2,9 @@
 
 def checkout(Map config) {
     try {
-        if (!config) {
-            config = [:]
-        }
+//        if (!config) {
+//            config = [:]
+//        }
         echo "[DEBUG] config.url=${config.url}"
         if (!config.url || config.url == "") {
             echo "[ERROR] repository URL must be provided!"
