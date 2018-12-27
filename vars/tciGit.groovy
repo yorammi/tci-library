@@ -2,8 +2,7 @@
 
 def checkout(Map config) {
     try {
-        echo config
-        if (config == null) {
+        if (!config) {
             config = [:]
         }
         if (config.repository == null || config.repository == "") {
