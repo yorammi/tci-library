@@ -1,5 +1,3 @@
-#!/usr/bin/groovy
-
 def checkout(Map config) {
     try {
         if (!config) {
