@@ -1,13 +1,5 @@
 def call(String repositoryUrl, String branch, String credentialsId, String relativPath=".") {
-    dir(relativPath)
-    {
-        timeout(time: 5, unit: 'MINUTES')
-        {
-            checkout([
-                    $class: 'GitSCM', branches: [[name: branch]],
-                    userRemoteConfigs: [[url: repositoryUrl ,credentialsId:credentialsId]]
-            ])
-        }
-    }
+    tciGeneral.deprecatedMessage("tplRepositoryDirectoryCheckout","tciJobs.setRandomBuildStatus")
+    tciGit.gitCheckout(repoUrl: repositoryUrl, branch: branch,credentialsId: credentialsId, dir: relativPath)
 }
 
