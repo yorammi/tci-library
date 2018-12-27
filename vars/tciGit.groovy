@@ -1,6 +1,7 @@
-def checkout(Map config=null) {
+#!/usr/bin/groovy
+
+def gitCheckout(Map config) {
     try {
-        echo "[DEBUG] config.repoUrl=${config.repoUrl}"
         if (!config) {
             config = [:]
         }
