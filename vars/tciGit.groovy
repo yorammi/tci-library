@@ -5,15 +5,15 @@ def checkout(Map config) {
         if (!config) {
             config = [:]
         }
-        if (config.repository == null || config.repository == "") {
+        if (!config.url || config.url == "") {
             echo "[ERROR] repository URL must be provided!"
             currentBuild.result = "FAILURE"
             return
         }
-        if (config.branch == null) {
+        if (!config.branch) {
             config.branch = "master"
         }
-        if (config.credentialsId == null) {
+        if (!config.credentialsId) {
             if (env.TCI_MASTER_DEFAULT_GIT_CREDENTIAL) {
                 config.credentialsId = env.TCI_MASTER_DEFAULT_GIT_CREDENTIAL
             }
@@ -21,7 +21,7 @@ def checkout(Map config) {
                 config.credentialsId = "gitsshkey"
             }
         }
-        if (config.dir == null) {
+        if (!config.dir) {
             config.dir = "."
         }
 
@@ -29,7 +29,7 @@ def checkout(Map config) {
             timeout(time: 5, unit: 'MINUTES') {
                 checkout([
                         $class: 'GitSCM', branches: [[name: config.branch]],
-                        userRemoteConfigs: [[url: config.repository ,credentialsId:config.credentialsId]]
+                        userRemoteConfigs: [[url: config.url ,credentialsId:config.credentialsId]]
                 ])
             }
         }
