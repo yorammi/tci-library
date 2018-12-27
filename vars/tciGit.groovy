@@ -1,5 +1,6 @@
 def checkout(Map config) {
     try {
+        echo "[DEBUG] config.repoUrl=${config.repoUrl}"
         if (!config) {
             config = [:]
         }
