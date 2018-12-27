@@ -5,8 +5,8 @@ def checkout(Map config) {
         if (config == null) {
             config = [:]
         }
-        echo "config.url=${config.url }"
-        if (config.url == null || config.url == "") {
+        echo "config.repository=${config.repository }"
+        if (config.repository == null || config.repository == "") {
             echo "[ERROR] repository URL must be provided!"
             currentBuild.result = "FAILURE"
             return
@@ -30,7 +30,7 @@ def checkout(Map config) {
             timeout(time: 5, unit: 'MINUTES') {
                 checkout([
                         $class: 'GitSCM', branches: [[name: config.branch]],
-                        userRemoteConfigs: [[url: config.url ,credentialsId:config.credentialsId]]
+                        userRemoteConfigs: [[url: config.repository ,credentialsId:config.credentialsId]]
                 ])
             }
         }
