@@ -2,8 +2,9 @@
 
 def checkout(Map config) {
     try {
+        echo config
         if (config == null) {
-//            config = [:]
+            config = [:]
         }
         if (config.repository == null || config.repository == "") {
             echo "[ERROR] repository URL must be provided!"
