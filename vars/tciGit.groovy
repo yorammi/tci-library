@@ -5,7 +5,8 @@ def checkout(Map config) {
         if (!config) {
             config = [:]
         }
-        if (!config.url) {
+        echo "[DEBUG] config.url=${config.url}"
+        if (!config.url || config.url == "") {
             echo "[ERROR] repository URL must be provided!"
             currentBuild.result = "FAILURE"
             return
