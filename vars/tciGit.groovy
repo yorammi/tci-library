@@ -1,4 +1,4 @@
-def checkout(Map config) {
+def checkout(Map config=null) {
     try {
         echo "[DEBUG] config.repoUrl=${config.repoUrl}"
         if (!config) {
