@@ -1,7 +1,7 @@
-# TCI library - Tikal Jenkins-based CI solution Jenkins shared library
+# TCI library (tci-library) - Tikal Jenkins-based CI solution Jenkins shared library
 ![tci-library](src/resources/images/tci-library.png)
 
-### ***TCI library - Tikal Jenkins-based CI solution***
+### ***TCI - Tikal Jenkins-based CI solution***
 
 Powered by **[Tikal Knowledge](http://www.tikalk.com)** and the community.
 <hr/>
