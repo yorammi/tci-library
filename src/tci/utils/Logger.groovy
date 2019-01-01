@@ -6,7 +6,7 @@ class Logger implements Serializable {
 
     Logger(script) {
         this.script = script
-        debugLogging = (script.params.debugLogging || script.env.TCI_DEBUG_MODE)  ?: false
+        debugLogging = (script.params.debugLogging || "script.env.TCI_DEBUG_MODE" == "true")  ?: false
     }
 
     void info(String message) {
