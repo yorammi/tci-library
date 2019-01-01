@@ -124,7 +124,7 @@ def getChangersList() {
     }
     catch (Exception error)
     {
-        println(error.getMessage())
+        tciLogger.debug(error)
         return null
     }
 }
