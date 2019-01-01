@@ -83,26 +83,43 @@ def getChangesList() {
 def getChangersList() {
     try
     {
+        tciLogger.debug("0")
         List<String> changersString = []
+        tciLogger.debug("1")
         def changeLogSets = currentBuild.changeSets
 
+        tciLogger.debug("2")
         def remoteConfigs = scm.getUserRemoteConfigs()
+        tciLogger.debug("3")
         def scmUrl = remoteConfigs[0].getUrl()
+        tciLogger.debug("4")
         repoUrl = scmUrl.take(scmUrl.size()-4)
+        tciLogger.debug("5")
         scmCommitPrefix = repoUrl+"/commit/"
+        tciLogger.debug("6")
         repoName = repoUrl.drop(repoUrl.lastIndexOf("/")+1)
+        tciLogger.debug("7")
         if(changeLogSets.size()>0)
         {
+            tciLogger.debug("8")
             for (int i = 0; i < changeLogSets.size(); i++) {
+                tciLogger.debug("9")
                 def entries = changeLogSets[i].items
+                tciLogger.debug("10")
                 for (int j = 0; j < entries.size(); j++) {
+                    tciLogger.debug("11")
                     def entry = entries[j]
+                    tciLogger.debug("12")
                     def emailAddress = entry.authorEmail
+                    tciLogger.debug("13")
                     def emailUser = emailAddress.substring(0, emailAddress.lastIndexOf("@"))
+                    tciLogger.debug("14")
                     changersString.add(emailUser)
+                    tciLogger.debug("15")
                 }
             }
         }
+        tciLogger.debug("16")
         return changersString.unique()
     }
     catch (Exception error)
