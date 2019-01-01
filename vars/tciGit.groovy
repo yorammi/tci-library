@@ -83,9 +83,7 @@ def getChangesList() {
 def getChangersList() {
     try
     {
-        tciLogger.debug("0")
         def changersString = ""
-        tciLogger.debug("1")
         def changeLogSets = currentBuild.changeSets
 
         tciLogger.debug("2")
