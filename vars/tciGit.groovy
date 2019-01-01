@@ -43,7 +43,7 @@ def gitCheckout(Map config) {
 def getChangesList() {
     try
     {
-        MAX_MSG_LEN = 100
+        MAX_MSG_LEN = 120
         def changeString = ""
         def changeLogSets = currentBuild.changeSets
 
@@ -66,7 +66,7 @@ def getChangesList() {
 
                     def hash = entry.getCommitId()
                     def hashShort = hash.take(8)
-                    changeString += "\n\t\t${hashShort} - ${truncated_msg} - @${emailUser}"
+                    changeString += "\n\t\t[${hashShort}@${emailUser}] ${truncated_msg}"
                 }
             }
         }
