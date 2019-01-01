@@ -53,29 +53,19 @@ def getChangesList() {
         repoName = repoUrl.drop(repoUrl.lastIndexOf("/")+1)
         if(changeLogSets.size()>0)
         {
-            changeString="> *SCM changes*:"
+            changeString="[SCM changes]"
             for (int i = 0; i < changeLogSets.size(); i++) {
-                changeString+="\n> _Repository (${i+1}):_"
+                changeString+="\n\t[Repository (${i+1})]"
                 def entries = changeLogSets[i].items
                 for (int j = 0; j < entries.size(); j++) {
-                    if(j<5)
-                    {
-                        def entry = entries[j]
-                        truncated_msg = entry.msg.take(MAX_MSG_LEN)
-                        def emailAddress = entry.authorEmail
-                        def slackUser = emailAddress.substring(0, emailAddress.lastIndexOf("@"))
+                    def entry = entries[j]
+                    truncated_msg = entry.msg.take(MAX_MSG_LEN)
+                    def emailAddress = entry.authorEmail
+                    def emailUser = emailAddress.substring(0, emailAddress.lastIndexOf("@"))
 
-                        def hash = entry.getCommitId()
-                        def hashShort = hash.take(8)
-                        changeString += "\n> ${hashShort} - *${truncated_msg}* - @${slackUser}"
-                    }
-                    else
-                    {
-                        if(j==3)
-                        {
-                            changeString+="\n..."
-                        }
-                    }
+                    def hash = entry.getCommitId()
+                    def hashShort = hash.take(8)
+                    changeString += "\n\t\t${hashShort} - ${truncated_msg} - @${emailUser}"
                 }
             }
         }
@@ -87,3 +77,36 @@ def getChangesList() {
         return ""
     }
 }
+
+def getChangersList() {
+    try
+    {
+        List<String> changersString = []
+        def changeLogSets = currentBuild.changeSets
+
+        def remoteConfigs = scm.getUserRemoteConfigs()
+        def scmUrl = remoteConfigs[0].getUrl()
+        repoUrl = scmUrl.take(scmUrl.size()-4)
+        scmCommitPrefix = repoUrl+"/commit/"
+        repoName = repoUrl.drop(repoUrl.lastIndexOf("/")+1)
+        if(changeLogSets.size()>0)
+        {
+            for (int i = 0; i < changeLogSets.size(); i++) {
+                def entries = changeLogSets[i].items
+                for (int j = 0; j < entries.size(); j++) {
+                    def entry = entries[j]
+                    def emailAddress = entry.authorEmail
+                    def emailUser = emailAddress.substring(0, emailAddress.lastIndexOf("@"))
+                    changersString.add(emailUser)
+                }
+            }
+        }
+        return changersString.unique()
+    }
+    catch (Exception error)
+    {
+        println(error.getMessage())
+        return null
+    }
+}
+
