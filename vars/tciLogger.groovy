@@ -5,7 +5,8 @@ void info(String message) {
 }
 
 void debug(String message) {
-    if (params.debugLogging || "${script.env.TCI_DEBUG_MODE}" == "true") {
+    def debugFlag = script.env.TCI_DEBUG_MODE
+    if (params.debugLogging || "${debugFlag}" == "true") {
         tciGeneral.timedEcho(message)
     }
 }
