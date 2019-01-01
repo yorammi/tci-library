@@ -84,7 +84,7 @@ def getChangersList() {
     try
     {
         tciLogger.debug("0")
-        List<String> changersString = []
+        def changersString = []
         tciLogger.debug("1")
         def changeLogSets = currentBuild.changeSets
 
@@ -124,7 +124,7 @@ def getChangersList() {
     }
     catch (Exception error)
     {
-        tciLogger.debug(error)
+        tciLogger.debug("Exception")
         return null
     }
 }
