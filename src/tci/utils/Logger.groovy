@@ -10,12 +10,12 @@ class Logger implements Serializable {
     }
 
     void info(String message) {
-        script.echo message
+        script.tciGeneral.timedEcho(message)
     }
 
     void debug(String message) {
         if (debugLogging) {
-            script.echo message
+            script.tciGeneral.timedEcho(message)
         }
     }
 

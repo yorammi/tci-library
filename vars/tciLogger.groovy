@@ -1,11 +1,11 @@
 #!/usr/bin/groovy
 
 void info(String message) {
-    script.echo message
+    tciGeneral.timedEcho(message)
 }
 
 void debug(String message) {
-    if (debugLogging) {
-        script.echo message
+    if (params.debugLogging || params.TCI_DEBUG_MODE || env.TCI_DEBUG_MODE) {
+        tciGeneral.timedEcho(message)
     }
 }
