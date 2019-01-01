@@ -83,7 +83,7 @@ def getChangesList() {
 def getChangersList() {
     try
     {
-        def changersString = ""
+        List<String> changersString = []
         def changeLogSets = currentBuild.changeSets
 
         def remoteConfigs = scm.getUserRemoteConfigs()
@@ -99,20 +99,16 @@ def getChangersList() {
                     def entry = entries[j]
                     def emailAddress = entry.authorEmail
                     def emailUser = emailAddress.substring(0, emailAddress.lastIndexOf("@"))
-                    if(changersString=="") {
-                        changersString = emailUser
-                    }
-                    else {
-                        changersString += ","+emailUser
-                    }
+                    changersString.add(emailUser)
                 }
             }
         }
-        return changersString
+        return changersString.unique()
     }
     catch (Exception error)
     {
-        return ""
+        println(error.getMessage())
+        return null
     }
 }
 
