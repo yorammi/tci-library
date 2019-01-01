@@ -65,7 +65,7 @@ def getChangesList() {
                     def emailUser = emailAddress.substring(0, emailAddress.lastIndexOf("@"))
 
                     def hash = entry.getCommitId()
-                    def hashShort = hash.take(8)
+                    def hashShort = hash.take(10)
                     changeString += "\n\t\t[${hashShort}@${emailUser}] ${truncated_msg}"
                 }
             }
