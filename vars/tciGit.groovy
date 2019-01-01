@@ -78,6 +78,7 @@ def getChangesList() {
     }
 }
 
+@NonCPS
 def getChangersList() {
     try
     {
