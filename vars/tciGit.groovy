@@ -84,7 +84,7 @@ def getChangersList() {
     try
     {
         tciLogger.debug("0")
-        def changersString = []
+        def changersString = ""
         tciLogger.debug("1")
         def changeLogSets = currentBuild.changeSets
 
@@ -114,18 +114,22 @@ def getChangersList() {
                     tciLogger.debug("13")
                     def emailUser = emailAddress.substring(0, emailAddress.lastIndexOf("@"))
                     tciLogger.debug("14")
-                    changersString.add(emailUser)
+                    if(changersString=="") {
+                        changersString = emailUser
+                    }
+                    else {
+                        changersString += ","+emailUser
+                    }
                     tciLogger.debug("15")
                 }
             }
         }
         tciLogger.debug("16")
-        return changersString.unique()
+        return changersString
     }
     catch (Exception error)
     {
-        tciLogger.debug("Exception")
-        return null
+        return ""
     }
 }
 
