@@ -43,7 +43,7 @@ def gitCheckout(Map config) {
 def getChangesList() {
     try
     {
-        MAX_MSG_LEN = 60
+        MAX_MSG_LEN = 100
         def changeString = ""
         def changeLogSets = currentBuild.changeSets
 
