@@ -1,7 +1,5 @@
 def call(String requirementsFilePath) {
-    File file = new File( env.WORKSPACE + "/" + requirementsFilePath )
-    if( file.exists() && file.isFile()) {
-        sh "pip install -r ${pythonRequirements}"
-    }
+    tciGeneral.deprecatedMessage("tplPythonRequirements","tciPython.installPythonModules")
+    tciPython.installPythonModules(requirementsFilePath)
 }
 
