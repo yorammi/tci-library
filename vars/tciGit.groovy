@@ -39,10 +39,11 @@ def gitCheckout(Map config) {
     }
 }
 
+@NonCPS
 def getChangesList() {
     try
     {
-        MAX_MSG_LEN = 40
+        MAX_MSG_LEN = 60
         def changeString = ""
         def changeLogSets = currentBuild.changeSets
 
