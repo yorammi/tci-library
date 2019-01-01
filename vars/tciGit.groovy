@@ -108,7 +108,6 @@ def getChangersList() {
                 }
             }
         }
-        tciLogger.debug(changersString)
         return changersString
     }
     catch (Exception error)
