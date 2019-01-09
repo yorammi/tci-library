@@ -25,8 +25,10 @@ def call() {
                     script {
                         currentBuild.displayName += " [TYPE] ${params.TYPE} [VERSION] ${params.VERSION}"
                         sh '''
+                            echo "before checkout"
                             tciGit.gitCheckout(repoUrl: "git@github.com:TikalCI/tci-bloody-jenkins.git", dir: 'tci-bloody-jenkins', branch: 'master')
                             tciGit.gitCheckout(repoUrl: "git@github.com:TikalCI/tci-master.git",dir: 'tci-master', branch: 'master')
+                            echo "build customized plugins.txt"
                             cp tci-bloody-jenkins/plugins.txt plguins.txt
                             cat tci-master/src/resources/tci/plugins-${TYPE}.txt >> plugins.txt
                             cat plugins.txt | sort > tci-bloody-jenkins/plugins.txt
