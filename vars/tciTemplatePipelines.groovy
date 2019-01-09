@@ -1,7 +1,7 @@
 #!/usr/bin/groovy
 @Library ("tci-library") _
 
-def oneStepPipeline() {
+def call() {
     pipeline {
         agent { label 'tci-jnlp-node' }
         options {
