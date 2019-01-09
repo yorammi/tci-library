@@ -1,5 +1,3 @@
-//@Library ("tci-library") _
-
 pipeline {
     agent { label 'tci-jnlp-node' }
     options {
