@@ -1,5 +1,4 @@
 #!/usr/bin/groovy
-@Library ("tci-library") _
 
 def call() {
     pipeline {
