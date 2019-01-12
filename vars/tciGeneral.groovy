@@ -72,3 +72,58 @@ def getTestsSummary() {
     return summary
 }
 
+def filterBuildLogErrors() {
+
+    try
+    {
+        ArrayList<String> logText = currentBuild.rawBuild.getLog(200)
+
+        String output = ""
+        Integer count = 0
+        for (String line : logText) {
+            count++
+            if( line.toLowerCase().contains('error') | line.toLowerCase().contains('exception'))
+            {
+                if("${output}" == "")
+                {
+                    output="[Line #${count}] "+line
+                }
+                else
+                {
+                    output+="\n[Line #${count}] "+line
+                }
+            }
+        }
+        return output
+    }
+    catch(error)
+    {
+        echo error.message
+        return ""
+    }
+}
+
+def saveBuildLogFile() {
+
+    try
+    {
+        logName=JOB_NAME+'_'+BUILD_NUMBER+'_JenkinsBuild.log'
+        ArrayList<String> logText = currentBuild.rawBuild.getLog(20000)
+
+        def logFile = new File(WORKSPACE+'/'+logName)
+        logFile.text=''
+        for (String line : logText)
+        {
+            logFile.text+= line+"\n"
+        }
+
+        archive "**/"+logName
+    }
+    catch(error)
+    {}
+}
+
+
+
+
+
