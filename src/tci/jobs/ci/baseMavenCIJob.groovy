@@ -46,7 +46,7 @@ class baseMavenCIJob extends baseJob {
         if(checkout) {
             script.tciGit.gitCheckout(repoUrl: repoUrl, branch:branch, toDir: subDir)
         }
-        script.currentBuild.displayName += " [${script.env.GIT_URL}:${script.env.GIT_LOCAL_BRANCH}]"
+        script.currentBuild.displayName += " [${script.env.GIT_URL}:${script.env.GIT_BRANCH}]"
     }
 
     void setVersion() {
