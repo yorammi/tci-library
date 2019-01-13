@@ -27,10 +27,10 @@ class phase implements Serializable {
             def parallelBlocks = [:]
 
             def counter = 0
-            while (counter < test.parallelBlocks()) {
-                parallelBlocks[parallelBlocks[counter]+':'+counter] = {
-                    script.stage(parallelBlocks[counter]+':'+counter) {
-                        script.build (job: parallelBlocks[counter], wait: true)
+            while (counter < jobs.size()) {
+                parallelBlocks[jobs[counter]+':'+counter] = {
+                    script.stage(jobs[counter]+':'+counter) {
+                        script.build (job: jobs[counter], wait: true)
                     }
                 }
                 counter++
