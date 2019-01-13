@@ -1,6 +1,6 @@
 package tci.multiJob;
 
-import stepsBlock
+import tci.multiJob.stepsBlock
 
 class phase implements Serializable {
 
