@@ -11,7 +11,7 @@ class phase implements Serializable {
         this.script = script
 
         script.echo "before adding block"
-        blocks[0] = new stepsBlock(this)
+        blocks[0] = new stepsBlock()
         script.echo "after adding block"
     }
 
