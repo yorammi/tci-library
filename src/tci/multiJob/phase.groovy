@@ -6,7 +6,6 @@ class phase implements Serializable {
 
     def blocks = [:]
 
-    @NonCPS
     phase(script) {
         this.script = script
 
