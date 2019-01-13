@@ -12,11 +12,8 @@ class phase implements Serializable {
     phase(script) {
         this.script = script
 
-        script.echo "before 1"
         block1 = stepsBlock.newInstance(script)
-        script.echo "before 2"
         block2 = stepsBlock.newInstance(script)
-        script.echo "before 3"
         block3 = stepsBlock.newInstance(script)
     }
 
@@ -25,15 +22,14 @@ class phase implements Serializable {
             def parallelBlocks = [:]
 
             parallelBlocks['1'] = {
-                block1
+                script.echo block1.step1
             }
             parallelBlocks['2'] = {
-                block2
+                script.echo block2.step2
             }
             parallelBlocks['3'] = {
-                block3
+                script.echo block3.step3
             }
-            script.echo "before parallel"
             script.parallel parallelBlocks
         }
     }
