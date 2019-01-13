@@ -22,13 +22,13 @@ class phase implements Serializable {
             def parallelBlocks = [:]
 
             parallelBlocks['1'] = {
-                script.echo block1.step1
+                block1.step1
             }
             parallelBlocks['2'] = {
-                script.echo block2.step2
+                block2.step2
             }
             parallelBlocks['3'] = {
-                script.echo block3.step3
+                block3.step3
             }
             script.parallel parallelBlocks
         }
