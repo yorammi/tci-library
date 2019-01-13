@@ -11,7 +11,7 @@ class phase implements Serializable {
         this.script = script
 
         block = stepsBlock.newInstance(script)
-        block.steps = "echo test1"
+        block.steps = "{\"echo test1\"}"
 
     }
 
