@@ -12,6 +12,7 @@ class phase implements Serializable {
     }
 
     void addJob(Map config) {
+        echo config.jobName
         if (config.jobName == null) {
             throw ("[ERROR] You must provide a jobName!")
         }
