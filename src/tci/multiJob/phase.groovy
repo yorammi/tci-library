@@ -8,9 +8,8 @@ class phase implements Serializable {
     def jobs = []
     boolean failFast = false
 
-    phase(script, boolean failFast=false) {
+    phase(script) {
         this.script = script
-        this.failFast = failFast
     }
 
     void addJob(Map config) {
