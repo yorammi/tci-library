@@ -11,10 +11,6 @@ class phase implements Serializable {
 
     phase(script) {
         this.script = script
-
-        job1 = phaseJob.newInstance(script,"test-tciEnv")
-        jobs << job1
-
     }
 
     void addJob(Map config) {
