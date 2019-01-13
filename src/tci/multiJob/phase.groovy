@@ -5,13 +5,13 @@ import tci.multiJob.stepsBlock
 class phase implements Serializable {
 
     def script
-    def blocks = [:]
+    def blocks = new stepsBlock[3]
 
     phase(script) {
         this.script = script
 
         script.echo "before adding block"
-        blocks.values().add(new stepsBlock())
+        blocks[0] = new stepsBlock()
         script.echo "after adding block"
     }
 
