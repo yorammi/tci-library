@@ -10,16 +10,13 @@ class phase implements Serializable {
     phase(script) {
         this.script = script
 
-        script.echo "before adding block"
         blocks[0] = new stepsBlock()
-        script.echo "after adding block"
     }
 
     void run() {
         script.timestamps() {
             def parallelBlocks = [:]
 
-            script.echo "before blocks loop"
             blocks.each {
                 parallelBlocks[it] = {
                     stage(it) {
