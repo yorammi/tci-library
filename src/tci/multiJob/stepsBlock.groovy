@@ -3,7 +3,7 @@ package tci.multiJob;
 class stepsBlock implements Serializable {
 
     def script
-    def steps = new String[3]
+    String[] steps = [:]
 
     stepsBlock(script) {
         this.script = script
