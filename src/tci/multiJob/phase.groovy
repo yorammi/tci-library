@@ -21,9 +21,6 @@ class phase implements Serializable {
         if (config.jobName == null) {
             throw ("[ERROR] You must provide a jobName!")
         }
-
-        def job = phaseJob.newInstance(script,config.jobName)
-        jobs << job
     }
 
     void run() {
@@ -35,7 +32,7 @@ class phase implements Serializable {
                 def currentIndex = counter
                 parallelBlocks[item.jobName+':'+currentIndex] = {
                     script.stage(item.jobName+':'+currentIndex) {
-                        def currentJob = script.build (job: item.jobName, wait: true)
+                        script.build (job: item.jobName, wait: true)
                     }
                 }
                 counter++
