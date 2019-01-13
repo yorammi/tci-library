@@ -14,9 +14,16 @@ class phase implements Serializable {
 
         job1 = phaseJob.newInstance(script,"test-tciEnv")
         jobs << job1
-        job2 = phaseJob.newInstance(script,"test-tciGit")
-        jobs << job2
 
+    }
+
+    void addJob(Map config) {
+        if (config.jobName == null) {
+            throw ("[ERROR] You must provide a jobName!")
+        }
+
+        phaseJob job = phaseJob.newInstance(script,config.jobName)
+        jobs << job
     }
 
     void run() {
@@ -29,12 +36,6 @@ class phase implements Serializable {
                 }
             }
             }
-//            parallelBlocks[job1.jobName] = {
-//                script.build job: job1.jobName, wait: true
-//            }
-//            parallelBlocks[job2.jobName] = {
-//                script.build job: job2.jobName, wait: true
-//            }
             script.parallel parallelBlocks
         }
     }
