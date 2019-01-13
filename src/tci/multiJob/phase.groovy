@@ -28,7 +28,7 @@ class phase implements Serializable {
 
             def counter = 0
             while (counter < jobs.size()) {
-                currentJobName = jobs[counter]
+                def currentJobName = jobs[counter]
                 parallelBlocks[currentJobName+':'+counter] = {
                     script.stage(currentJobName+':'+counter) {
                         script.build (job: currentJobName, wait: true)
