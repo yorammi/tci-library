@@ -2,6 +2,7 @@ package tci.multiJob;
 
 import tci.multiJob.stepsBlock
 
+@NonCPS
 class phase implements Serializable {
 
     def blocks = [:]
