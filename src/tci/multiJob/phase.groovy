@@ -22,7 +22,7 @@ class phase implements Serializable {
             throw ("[ERROR] You must provide a jobName!")
         }
 
-        phaseJob job = phaseJob.newInstance(script,config.jobName)
+        def job = phaseJob.newInstance(script,config.jobName)
         jobs << job
     }
 
