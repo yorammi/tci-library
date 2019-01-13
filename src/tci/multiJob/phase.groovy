@@ -5,13 +5,16 @@ import tci.multiJob.stepsBlock
 class phase implements Serializable {
 
     def script
-    def block
+    def job1
+    def job2
 
     phase(script) {
         this.script = script
 
-        block = stepsBlock.newInstance(script)
-        block.steps = "{\"echo test1\"}"
+        job1 = phaseJob.newInstance(script)
+        job1.jobName = "test-tciEnv"
+        job2 = phaseJob.newInstance(script)
+        job2.jobName = "test-tciGit"
 
     }
 
@@ -19,8 +22,11 @@ class phase implements Serializable {
         script.timestamps() {
             def parallelBlocks = [:]
 
-            parallelBlocks['block1'] = {
-                script.stage ("test1",block.steps)
+            parallelBlocks[job1.jobName] = {
+                script.build job: job1.jobName, wait: true
+            }
+            parallelBlocks[job2.jobName] = {
+                script.build job: job2.jobName, wait: true
             }
             script.parallel parallelBlocks
         }
