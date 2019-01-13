@@ -5,34 +5,33 @@ import tci.multiJob.stepsBlock
 class phase implements Serializable {
 
     def script
-    def blocks = new stepsBlock[3]
+    def block1
+    def block2
+    def block3
 
     phase(script) {
         this.script = script
 
         script.echo "before 1"
-        blocks[0] = stepsBlock.newInstance()
+        block1 = stepsBlock.newInstance()
         script.echo "before 2"
-        blocks[1] = stepsBlock.newInstance()
+        block2 = stepsBlock.newInstance()
         script.echo "before 3"
-        blocks[2] = stepsBlock.newInstance()
+        block3 = stepsBlock.newInstance()
     }
 
     void run() {
         script.timestamps() {
             def parallelBlocks = [:]
 
-            script.echo "before loop"
-            blocks.each {
-                parallelBlocks[it] = {
-                    stage(it) {
-                        it.each {
-                            steps[itStep] = {
-                                script.echo itStep
-                            }
-                        }
-                    }
-                }
+            parallelBlocks['1'] = {
+                block1
+            }
+            parallelBlocks['2'] = {
+                block2
+            }
+            parallelBlocks['3'] = {
+                block3
             }
             script.echo "before parallel"
             script.parallel parallelBlocks
