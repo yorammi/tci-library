@@ -10,8 +10,11 @@ class phase implements Serializable {
     phase(script) {
         this.script = script
 
+        script.echo "before 1"
         blocks[0] = stepsBlock.newInstance()
+        script.echo "before 2"
         blocks[1] = stepsBlock.newInstance()
+        script.echo "before 3"
         blocks[2] = stepsBlock.newInstance()
     }
 
