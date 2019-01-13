@@ -1,11 +1,11 @@
 package tci.multiJob;
 
-class stepsBlock implements Serializable {
+class phaseJob implements Serializable {
 
     def script
     def jobName
 
-    stepsBlock(script) {
+    phaseJob(script) {
         this.script = script
     }
 
