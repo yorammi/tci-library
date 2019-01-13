@@ -10,7 +10,9 @@ class phase implements Serializable {
     phase(script) {
         this.script = script
 
-        blocks[0] = new stepsBlock()
+        blocks[0] = stepsBlock.newInstance()
+        blocks[1] = stepsBlock.newInstance()
+        blocks[2] = stepsBlock.newInstance()
     }
 
     void run() {

@@ -8,7 +8,9 @@ class stepsBlock implements Serializable {
     stepsBlock(script) {
         this.script = script
 
-        steps[0] = "echo test"
+        steps[0] = "echo test1"
+        steps[1] = "echo test2"
+        steps[2] = "echo test3"
     }
 
 }
