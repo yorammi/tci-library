@@ -19,6 +19,7 @@ class phase implements Serializable {
         script.timestamps() {
             def parallelBlocks = [:]
 
+            script.echo "before loop"
             blocks.each {
                 parallelBlocks[it] = {
                     stage(it) {
@@ -30,6 +31,7 @@ class phase implements Serializable {
                     }
                 }
             }
+            script.echo "before parallel"
             script.parallel parallelBlocks
         }
     }
