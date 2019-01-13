@@ -5,7 +5,7 @@ import tci.multiJob.phaseJob
 class phase implements Serializable {
 
     def script
-    def phaseJob[] jobs = []
+    def jobs = []
     def job1
     def job2
 
