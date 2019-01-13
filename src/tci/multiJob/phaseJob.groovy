@@ -5,8 +5,9 @@ class phaseJob implements Serializable {
     def script
     def jobName
 
-    phaseJob(script) {
+    phaseJob(script,jobName) {
         this.script = script
+        this.jobName = jobName
     }
 
 }

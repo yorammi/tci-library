@@ -11,10 +11,8 @@ class phase implements Serializable {
     phase(script) {
         this.script = script
 
-        job1 = phaseJob.newInstance(script)
-        job1.jobName = "test-tciEnv"
-        job2 = phaseJob.newInstance(script)
-        job2.jobName = "test-tciGit"
+        job1 = phaseJob.newInstance(script,"test-tciEnv")
+        job2 = phaseJob.newInstance(script,"test-tciGit")
 
     }
 
