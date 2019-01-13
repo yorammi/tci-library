@@ -13,11 +13,11 @@ class phase implements Serializable {
         this.script = script
 
         script.echo "before 1"
-        block1 = stepsBlock.newInstance()
+        block1 = stepsBlock.newInstance(script)
         script.echo "before 2"
-        block2 = stepsBlock.newInstance()
+        block2 = stepsBlock.newInstance(script)
         script.echo "before 3"
-        block3 = stepsBlock.newInstance()
+        block3 = stepsBlock.newInstance(script)
     }
 
     void run() {
