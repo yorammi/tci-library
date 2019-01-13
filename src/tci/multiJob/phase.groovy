@@ -35,7 +35,7 @@ class phase implements Serializable {
                 }
                 counter++
             }
-            script.parallel parallelBlocks, failFast: failFast
+            script.parallel parallelBlocks
         }
     }
 
