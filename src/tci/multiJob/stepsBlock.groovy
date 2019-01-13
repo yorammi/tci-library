@@ -2,6 +2,7 @@ package tci.multiJob;
 
 class stepsBlock implements Serializable {
 
+    def script
     def step1
     def step2
     def step3
