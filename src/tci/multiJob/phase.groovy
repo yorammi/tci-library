@@ -4,6 +4,7 @@ import tci.multiJob.stepsBlock
 
 class phase implements Serializable {
 
+    def script
     def blocks = [:]
 
     phase(script) {
