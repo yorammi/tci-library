@@ -17,7 +17,7 @@ class phase implements Serializable {
         script.timestamps() {
             def parallelBlocks = [:]
 
-            script.tciLogger.debug "before blocks loop"
+            script.echo "before blocks loop"
             blocks.each {
                 parallelBlocks[it] = {
                     stage(it) {
