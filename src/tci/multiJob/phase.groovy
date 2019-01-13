@@ -6,11 +6,11 @@ class phase implements Serializable {
 
     def script
     def jobs = []
-    def job1
-    def job2
+    boolean failFast = false
 
-    phase(script) {
+    phase(script, boolean failFast=false) {
         this.script = script
+        this.failFast = failFast
     }
 
     void addJob(Map config) {
@@ -36,7 +36,7 @@ class phase implements Serializable {
                 }
                 counter++
             }
-            script.parallel parallelBlocks
+            script.parallel parallelBlocks, failFast: failFast
         }
     }
 
