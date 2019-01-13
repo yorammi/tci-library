@@ -23,7 +23,7 @@ class phase implements Serializable {
         script.timestamps() {
             def parallelBlocks = [:]
             def counter=1
-            echo jobs
+            script.echo jobs
             jobs.each { item ->
                 def currentIndex = counter
                 parallelBlocks[item.jobName+':'+currentIndex] = {
