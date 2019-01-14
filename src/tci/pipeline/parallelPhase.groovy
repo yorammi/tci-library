@@ -1,7 +1,5 @@
 package tci.pipeline;
 
-import tci.pipeline.parallelPhaseSubJob
-
 class parallelPhase implements Serializable {
 
     class parallelPhaseSubJob implements Serializable {
