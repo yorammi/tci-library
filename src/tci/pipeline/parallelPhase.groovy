@@ -51,21 +51,20 @@ class parallelPhase implements Serializable {
             jobs.each { item ->
                 script.stage(item.jobName) {
                     parallelBlocks[item.jobName] = {
-                        echo "building"
-//                        echo "building ${item.jobName}"
-//                        if(item.propagate) {
-//                            echo "propagate"
-//                        }
-//                        else {
-//                            echo "not propagate"
-//                        }
-//                        if(item.wait) {
-//                            echo "wait"
-//                        }
-//                        else {
-//                            echo "not wait"
-//                        }
-//                       // script.build (job: item.jobName, propagate: item.propagate , wait: item.wait)
+                        echo "building ${item.jobName}"
+                        if(item.propagate) {
+                            echo "propagate"
+                        }
+                        else {
+                            echo "not propagate"
+                        }
+                        if(item.wait) {
+                            echo "wait"
+                        }
+                        else {
+                            echo "not wait"
+                        }
+                       // script.build (job: item.jobName, propagate: item.propagate , wait: item.wait)
                     }
                 }
             }
@@ -77,7 +76,8 @@ class parallelPhase implements Serializable {
                 }
                 catch (error)
                 {
-                    throw ("[ERROR] TCI parallel phase failed!")
+                    tciLogger.info ("[ERROR] TCI parallel phase failed!")
+                    throw error
                 }
         }
     }
