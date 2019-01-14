@@ -31,7 +31,8 @@ class parallelPhase implements Serializable {
             config = [:]
         }
         if (config.job == null) {
-            throw ("[ERROR] you must provive a job name to run!!!")
+            script.tciLogger.info ("[ERROR] you must provive a job name to run!!!")
+            throw Exception
         }
         if (config.propagate == null) {
             config.propagate = false
@@ -51,8 +52,7 @@ class parallelPhase implements Serializable {
             jobs.each { item ->
                 script.stage("Run job: "+item.jobName) {
                     parallelBlocks[item.jobName] = {
-                        script.echo "building ${item.jobName} propagate: ${item.propagate} wait: ${item.wait}"
-                       // script.build (job: item.jobName, propagate: item.propagate , wait: item.wait)
+                       script.build (job: item.jobName, propagate: item.propagate , wait: item.wait)
                     }
                 }
             }
