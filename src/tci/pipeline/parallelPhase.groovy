@@ -52,7 +52,9 @@ class parallelPhase implements Serializable {
             jobs.each { item ->
                 parallelBlocks["Run job: "+item.jobName] = {
                     script.stage("Run job: "+item.jobName) {
-                       script.build (job: item.jobName, propagate: item.propagate , wait: item.wait)
+                        script.tciLogger.info ("Starting job: ${item.jobName}")
+                        script.build (job: item.jobName, propagate: item.propagate , wait: item.wait)
+                        script.tciLogger.info ("Done running job: ${item.jobName}")
                     }
                 }
             }
