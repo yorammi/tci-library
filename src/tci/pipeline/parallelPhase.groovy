@@ -59,7 +59,7 @@ class parallelPhase implements Serializable {
                         script.build (job: item.jobName, propagate: item.propagate , wait: item.wait)
                         def timeStop = new Date()
                         def duration = TimeCategory.minus(timeStop, timeStart)
-                        script.tciLogger.info ("Done running job: ${item.jobName}.duration:"+duration)
+                        script.tciLogger.info ("Done running job: ${item.jobName}. Job duration:"+duration)
                     }
                 }
             }
