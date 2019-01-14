@@ -124,20 +124,13 @@ def saveBuildLogFile() {
 }
 
 @NonCPS
-def tciPhase(Closure body, Map config) {
-    if(config == null) {
-        config = [:]
-    }
-    if( config.name == null)
-    {
-        config.name = "TCI"
-    }
-    tciLogger.info(config.name +" phase started")
+def tciPhase(Closure body) {
+    tciLogger.info("TCI phase started")
     def timeStart = new Date()
     body()
     def timeStop = new Date()
     def duration = TimeCategory.minus(timeStop, timeStart)
-    tciLogger.info(config.name +" phase ended. Phase duration: ${duration}")
+    tciLogger.info("TCI phase ended. Phase duration: ${duration}")
 }
 
 
