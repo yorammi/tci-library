@@ -130,8 +130,7 @@ def tciPhase(String phaseName, Closure body) {
     body()
     def timeStop = new Date()
     def duration = TimeCategory.minus(timeStop, timeStart)
-    tciLogger.info(phaseName+ " phase ended.")
-    tciLogger.info(phaseName+ " phase duration: ${duration}")
+    tciLogger.info(phaseName+ " phase ended." +phaseName+ " phase duration: ${duration}")
 }
 
 
