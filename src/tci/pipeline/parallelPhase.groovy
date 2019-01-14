@@ -2,15 +2,13 @@ package tci.pipeline;
 
 class parallelPhase implements Serializable {
 
-    class parallelPhaseSubJob implements Serializable {
+    class subJob implements Serializable {
 
-        def script
-        def jobName
+        String jobName
         boolean propagate
         boolean wait
 
-        parallelPhaseSubJob(script, String jobName, boolean propagate, boolean wait ) {
-            this.script = script
+        subJob(String jobName, boolean propagate, boolean wait ) {
             this.jobName = jobName
             this.propagate = propagate
             this.wait = wait
@@ -40,7 +38,7 @@ class parallelPhase implements Serializable {
             config.wait = false
         }
 
-        def job = parallelPhaseSubJob.newInstance(script, config.job, config.propagate, config.wait)
+        def job = subJob.newInstance(config.job, config.propagate, config.wait)
         jobs << job
     }
 
