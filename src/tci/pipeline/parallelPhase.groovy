@@ -54,7 +54,7 @@ class parallelPhase implements Serializable {
                 }
             }
 
-            script.tciGeneral.tciPhase {
+            script.tciGeneral.tciPhase ("Parallel") {
                 try {
                     parallelBlocks.failFast = failFast
                     script.parallel parallelBlocks
