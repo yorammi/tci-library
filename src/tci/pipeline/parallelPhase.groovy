@@ -7,12 +7,13 @@ class parallelPhase implements Serializable {
         def script
         def jobName
         boolean propagate
+        boolean wait
 
-        parallelPhaseSubJob(script, String jobName,boolean propagate ) {
+        parallelPhaseSubJob(script, String jobName, boolean propagate, boolean wait ) {
             this.script = script
             this.jobName = jobName
             this.propagate = propagate
-
+            this.wait = wait
         }
     }
 
