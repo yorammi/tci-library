@@ -37,7 +37,7 @@ class parallelPhase implements Serializable {
             config.propagate = false
         }
         if (config.wait == null) {
-            config.wait = false
+            config.wait = true
         }
 
         def job = new subJob(config.job, config.propagate, config.wait)
@@ -51,6 +51,7 @@ class parallelPhase implements Serializable {
             jobs.each { item ->
                 script.stage(item.jobName) {
                     parallelBlocks[item.jobName] = {
+                        echo "building ${item.jobName}, propagate: ${item.propagate} , wait: ${item.wait}"
                         script.build (job: item.jobName, propagate: item.propagate , wait: item.wait)
                     }
                 }
