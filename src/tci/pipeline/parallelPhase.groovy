@@ -39,7 +39,7 @@ class parallelPhase implements Serializable {
             config.wait = false
         }
 
-        def job = parallelPhaseSubJob.newInstance(script, jobName, config.propagate, config.wait)
+        def job = parallelPhaseSubJob.newInstance(script, config.job, config.propagate, config.wait)
         jobs << job
     }
 
