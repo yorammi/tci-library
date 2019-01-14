@@ -35,10 +35,10 @@ class parallelPhase implements Serializable {
             throw Exception
         }
         if (config.propagate == null) {
-            config.propagate = false
+            config.propagate = true
         }
         if (config.wait == null) {
-            config.wait = false
+            config.wait = true
         }
 
         def job = new subJob(config.job, config.propagate, config.wait)
