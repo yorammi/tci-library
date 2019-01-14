@@ -51,7 +51,8 @@ class parallelPhase implements Serializable {
             jobs.each { item ->
                 script.stage(item.jobName) {
                     parallelBlocks[item.jobName] = {
-                        echo "building ${item.jobName}"
+                        echo "building"
+//                        echo "building ${item.jobName}"
 //                        if(item.propagate) {
 //                            echo "propagate"
 //                        }
