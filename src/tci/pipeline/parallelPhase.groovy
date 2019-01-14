@@ -49,7 +49,7 @@ class parallelPhase implements Serializable {
 
             def counter=1
             jobs.each { item ->
-                script.stage(item.jobName) {
+                script.stage("Run job: "+item.jobName) {
                     parallelBlocks[item.jobName] = {
                         echo "building ${item.jobName}"
                         if(item.propagate) {
@@ -76,7 +76,7 @@ class parallelPhase implements Serializable {
                 }
                 catch (error)
                 {
-                    tciLogger.info ("[ERROR] TCI parallel phase failed!")
+                    script.tciLogger.info ("[ERROR] TCI parallel phase failed!")
                     throw error
                 }
         }
