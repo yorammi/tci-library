@@ -16,11 +16,13 @@ class parallelPhase implements Serializable {
     }
 
     def script
+    def name
     def jobs = []
     boolean failFast = false
 
-    parallelPhase(script, boolean failFast = false) {
+    parallelPhase(script, String name = "TCI parallel", boolean failFast = false) {
         this.script = script
+        this.name = name
         this.failFast = failFast
     }
 
@@ -54,7 +56,7 @@ class parallelPhase implements Serializable {
                 }
             }
 
-            script.tciGeneral.tciPhase ("Parallel") {
+            script.tciGeneral.tciPhase (name) {
                 try {
                     parallelBlocks.failFast = failFast
                     script.parallel parallelBlocks
