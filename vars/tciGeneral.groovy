@@ -123,7 +123,6 @@ def saveBuildLogFile() {
     {}
 }
 
-@NonCPS
 def tciPhase(Closure body) {
     tciLogger.info("TCI phase started")
     def timeStart = new Date()

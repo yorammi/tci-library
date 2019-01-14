@@ -43,7 +43,6 @@ class parallelPhase implements Serializable {
     }
 
     void run() {
-        script.timestamps() {
             def parallelBlocks = [:]
 
             def counter=1
@@ -55,7 +54,7 @@ class parallelPhase implements Serializable {
                 }
             }
 
-//            script.tciGeneral.tciPhase {
+            script.tciGeneral.tciPhase {
                 try {
                     parallelBlocks.failFast = failFast
                     script.parallel parallelBlocks
@@ -64,9 +63,7 @@ class parallelPhase implements Serializable {
                 {
                     throw ("[ERROR] TCI parallel phase failed!")
                 }
-            }
- //       }
+        }
     }
-
 }
 
