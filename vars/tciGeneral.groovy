@@ -1,6 +1,7 @@
 #!/usr/bin/groovy
 
 import hudson.tasks.test.AbstractTestResultAction
+import groovy.time.*
 
 def deprecatedMessage(String oldStepName, String newStepName) {
     echo "[WARNING] The step '"+oldStepName+"' is deprecated. please use '"+newStepName+"' instead."
