@@ -25,7 +25,13 @@ class parallelPhase implements Serializable {
         this.failFast = failFast
     }
 
-    void addSubJob(String jobName, Map config) {
+    void addSubJob(Map config) {
+        if (config == null) {
+            config = [:]
+        }
+        if (config.job == null) {
+            throw ("[ERROR] you must provive a job name to run!!!")
+        }
         if (config.propagate == null) {
             config.propagate = false
         }
