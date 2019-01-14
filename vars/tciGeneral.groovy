@@ -124,13 +124,13 @@ def saveBuildLogFile() {
     {}
 }
 
-def tciPhase(Closure body) {
-    tciLogger.info("TCI phase started")
+def tciPhase(String phaseName, Closure body) {
+    tciLogger.info(phaseName+ " phase started")
     def timeStart = new Date()
     body()
     def timeStop = new Date()
     def duration = TimeCategory.minus(timeStop, timeStart)
-    tciLogger.info("TCI phase ended. Phase duration: ${duration}")
+    tciLogger.info(phaseName+ " phase ended.\nPhase duration: ${duration}")
 }
 
 
