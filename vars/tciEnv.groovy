@@ -12,6 +12,7 @@ def initEnv(Map config=null) {
     {
         deleteWorkspace()
     }
+    tciDefaults.initDefaults()
     tciBuildUser.initBuildUserEnvVars()
 }
 
