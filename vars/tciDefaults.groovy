@@ -8,13 +8,10 @@ def initDefaults() {
 
 def isDebugMode() {
     if("${env.TCI_DEBUG_MODE}" != "true" && "${env.TCI_DEBUG_MODE}" != "false") {
-        echo "1"
         initDefaults()
     }
     if("${env.TCI_DEBUG_MODE}" == "true") {
-        echo "2"
         return true
     }
-    echo "3"
     return false
 }
