@@ -14,12 +14,7 @@ def gitCheckout(Map config) {
             config.branch = "master"
         }
         if (!config.credentialsId) {
-            if (env.TCI_MASTER_DEFAULT_GIT_CREDENTIAL) {
-                config.credentialsId = env.TCI_MASTER_DEFAULT_GIT_CREDENTIAL
-            }
-            else {
-                config.credentialsId = "gitsshkey"
-            }
+            config.credentialsId=defaultGitCredential()
         }
         if (!config.dir) {
             config.dir = "."

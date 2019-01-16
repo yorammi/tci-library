@@ -6,15 +6,15 @@ def mavenCmd(Map config) {
     }
 
     if (config.jdk == null) {
-        config.jdk = 'jdk'
+        config.jdk = defaultJdkTool()
     }
 
     if (config.settings == null) {
-        config.settings = 'maven-settings'
+        config.settings = defaultMavenSetting()
     }
 
     if (config.mavenVersion == null) {
-        config.mavenVersion = 'maven'
+        config.mavenVersion = defaultMavenTool()
     }
 
     if (config.dir == null) {
@@ -45,11 +45,15 @@ void mavenCompile(Map config) {
     }
 
     if (config.jdk == null) {
-        config.jdk = 'jdk'
+        config.jdk = defaultJdkTool()
+    }
+
+    if (config.settings == null) {
+        config.settings = defaultMavenSetting()
     }
 
     if (config.mavenVersion == null) {
-        config.mavenVersion = 'maven'
+        config.mavenVersion = defaultMavenTool()
     }
 
     if (config.dir == null) {
@@ -62,7 +66,7 @@ void mavenCompile(Map config) {
 
     def mavenCommand = "${config.cmd} ${config.additionalCmd}"
 
-    mavenCmd(jdk:config.jdk, mavenVersion:config.mavenVersion, dir:config.dir ,cmd:"clean compile -Dmaven.test.skip=true"+config.additionalCmd)
+    mavenCmd(jdk:config.jdk, settings: config.settings, mavenVersion:config.mavenVersion, dir:config.dir ,cmd:"clean compile -Dmaven.test.skip=true"+config.additionalCmd)
 }
 
 void mavenRunUnitTests(Map config) {
@@ -70,12 +74,16 @@ void mavenRunUnitTests(Map config) {
         config = [:]
     }
 
+    if (config.settings == null) {
+        config.settings = defaultMavenSetting()
+    }
+
     if (config.jdk == null) {
-        config.jdk = 'jdk'
+        config.jdk = defaultJdkTool()
     }
 
     if (config.mavenVersion == null) {
-        config.mavenVersion = 'maven'
+        config.mavenVersion = defaultMavenTool()
     }
 
     if (config.dir == null) {
@@ -88,7 +96,7 @@ void mavenRunUnitTests(Map config) {
 
     def mavenCommand = "test -Dmaven.test.failure.ignore=true ${config.additionalCmd}"
 
-    mavenCmd(jdk:config.jdk, mavenVersion:config.mavenVersion, dir:config.dir ,cmd:mavenCommand)
+    mavenCmd(jdk:config.jdk, settings: config.settings, mavenVersion:config.mavenVersion, dir:config.dir ,cmd:mavenCommand)
 }
 
 void mavenPackage(Map config) {
@@ -97,11 +105,15 @@ void mavenPackage(Map config) {
     }
 
     if (config.jdk == null) {
-        config.jdk = 'jdk'
+        config.jdk = defaultJdkTool()
+    }
+
+    if (config.settings == null) {
+        config.settings = defaultMavenSetting()
     }
 
     if (config.mavenVersion == null) {
-        config.mavenVersion = 'maven'
+        config.mavenVersion = defaultMavenTool()
     }
 
     if (config.dir == null) {
@@ -114,7 +126,7 @@ void mavenPackage(Map config) {
 
     def mavenCommand = "package -Dmaven.test.skip=true ${config.additionalCmd}"
 
-    mavenCmd(jdk:config.jdk, mavenVersion:config.mavenVersion, dir:config.dir ,cmd:mavenCommand)
+    mavenCmd(jdk:config.jdk, settings: config.settings, mavenVersion:config.mavenVersion, dir:config.dir ,cmd:mavenCommand)
 }
 
 void mavenDeploy(Map config) {
@@ -123,11 +135,15 @@ void mavenDeploy(Map config) {
     }
 
     if (config.jdk == null) {
-        config.jdk = 'jdk'
+        config.jdk = defaultJdkTool()
+    }
+
+    if (config.settings == null) {
+        config.settings = defaultMavenSetting()
     }
 
     if (config.mavenVersion == null) {
-        config.mavenVersion = 'maven'
+        config.mavenVersion = defaultMavenTool()
     }
 
     if (config.dir == null) {
@@ -140,7 +156,7 @@ void mavenDeploy(Map config) {
 
     def mavenCommand = "deploy -Dmaven.test.skip=true ${config.additionalCmd}"
 
-    mavenCmd(jdk:config.jdk, mavenVersion:config.mavenVersion, dir:config.dir ,cmd:mavenCommand)
+    mavenCmd(jdk:config.jdk, settings: config.settings, mavenVersion:config.mavenVersion, dir:config.dir ,cmd:mavenCommand)
 }
 
 void setVersion(Map config) {
@@ -152,12 +168,16 @@ void setVersion(Map config) {
         config.version = '0.0.0.0'
     }
 
+    if (config.settings == null) {
+        config.settings = defaultMavenSetting()
+    }
+
     if (config.jdk == null) {
-        config.jdk = 'jdk'
+        config.jdk = defaultJdkTool()
     }
 
     if (config.mavenVersion == null) {
-        config.mavenVersion = 'maven'
+        config.mavenVersion = defaultMavenTool()
     }
 
     if (config.dir == null) {
@@ -170,6 +190,6 @@ void setVersion(Map config) {
 
     def mavenCommand = "versions:set -DnewVersion=${config.version} -DgenerateBackupPoms=false ${config.additionalCmd}"
 
-    mavenCmd(jdk:config.jdk, mavenVersion:config.mavenVersion, dir:config.dir ,cmd:mavenCommand)
+    mavenCmd(jdk:config.jdk, settings: config.settings, mavenVersion:config.mavenVersion, dir:config.dir ,cmd:mavenCommand)
 }
 
