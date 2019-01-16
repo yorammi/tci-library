@@ -11,7 +11,7 @@ void info(String message) {
 
 void debug(String message) {
     try {
-        if (params.debugLogging || "${env.TCI_DEBUG_MODE}" == "true") {
+        if (params.debugLogging || tciDefaults.isDebugMode) {
             tciGeneral.timedEcho("[DEBUG] "+message)
         }
     }

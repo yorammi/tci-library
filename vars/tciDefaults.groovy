@@ -3,7 +3,15 @@
 def initDefaults() {
     if("${env.TCI_DEBUG_MODE}" != "true" && "${env.TCI_DEBUG_MODE}" != "false") {
         env.TCI_DEBUG_MODE="false"
-        echo "env.TCI_DEBUG_MODE=${env.TCI_DEBUG_MODE}"
     }
 }
 
+def isDebugMode() {
+    if("${env.TCI_DEBUG_MODE}" != "true" && "${env.TCI_DEBUG_MODE}" != "false") {
+        initDefaults()
+    }
+    if("${env.TCI_DEBUG_MODE}" == "true") {
+        return true
+    }
+    return false
+}
