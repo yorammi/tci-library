@@ -8,6 +8,9 @@ class baseMavenCIJob extends baseJob {
     def repoUrl = ""
     def branch = ""
     def subDir = "."
+    def jdkTool = "jdk"
+    def mavenTool = "maven"
+    def mavensettings = "maven-settings"
     boolean setVersion = false
     def version ="1.0"
     boolean deploy = false
@@ -50,23 +53,23 @@ class baseMavenCIJob extends baseJob {
     }
 
     void setVersion() {
-        script.tciMaven.setVersion(version:version, dir:subDir, additionalCmd:additionalVersionCmd)
+        script.tciMaven.setVersion(version:version, dir:subDir, jdk:jdkTool, mavenVersion:mavenTool, settings:mavensettings, additionalCmd:additionalVersionCmd)
     }
 
     void compile() {
-        script.tciMaven.mavenCompile(dir:subDir, additionalCmd:additionalCompileCmd)
+        script.tciMaven.mavenCompile(dir:subDir, jdk:jdkTool, mavenVersion:mavenTool, settings:mavensettings, additionalCmd:additionalCompileCmd)
     }
 
     void unitTests() {
-        script.tciMaven.mavenRunUnitTests(dir:subDir, additionalCmd:additionalTestsCmd)
+        script.tciMaven.mavenRunUnitTests(dir:subDir, jdk:jdkTool, mavenVersion:mavenTool, settings:mavensettings, additionalCmd:additionalTestsCmd)
     }
 
     void pack() {
         if (deploy) {
-            script.tciMaven.mavenDeploy(dir:subDir, additionalCmd:additionalPackageCmd)
+            script.tciMaven.mavenDeploy(dir:subDir, jdk:jdkTool, mavenVersion:mavenTool, settings:mavensettings, additionalCmd:additionalPackageCmd)
         }
         else {
-            script.tciMaven.mavenPackage(dir:subDir, additionalCmd:additionalDeployCmd)
+            script.tciMaven.mavenPackage(dir:subDir, jdk:jdkTool, mavenVersion:mavenTool, settings:mavensettings, additionalCmd:additionalDeployCmd)
         }
 
     }
