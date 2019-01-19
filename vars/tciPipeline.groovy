@@ -41,7 +41,7 @@ def phase(Map config, Closure body) {
     finally {
         def timeStop = new Date()
         def duration = TimeCategory.minus(timeStop, timeStart)
-        tciLogger.info(config.name+ " TCI phase ended." +phaseName+ " phase duration: ${duration}")
+        tciLogger.info(config.name+ " TCI phase ended." +config.name+ " phase duration: ${duration}")
     }
 }
 
