@@ -2,23 +2,24 @@
 
 import groovy.time.*
 
-def phase(String phaseName, Map config, Closure body) {
-    if (config == null) {
-        config = [:]
-    }
-
-    if (config.failOnError == null) {
-        config.failOnError = true
-    }
-
-    if (config.enable == null) {
-        config.enable = true
-    }
-
-    if(!config.enable) {
-        tciLogger.info(phaseName+ " TCI phase disabled.")
-        return
-    }
+def phase(String phaseName, Closure body) {
+//def phase(String phaseName, Map config, Closure body) {
+//    if (config == null) {
+//        config = [:]
+//    }
+//
+//    if (config.failOnError == null) {
+//        config.failOnError = true
+//    }
+//
+//    if (config.enable == null) {
+//        config.enable = true
+//    }
+//
+//    if(!config.enable) {
+//        tciLogger.info(phaseName+ " TCI phase disabled.")
+//        return
+//    }
 
     tciLogger.info(phaseName+ " TCI phase started")
     def timeStart = new Date()
