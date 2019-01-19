@@ -76,7 +76,7 @@ class parallelPhase implements Serializable {
             counter++
         }
 
-        script.tciPipeline.phase (name) {
+        script.tciPipeline.phase (name:name) {
             parallelBlocks.failFast = failFast
             script.parallel parallelBlocks
         }
