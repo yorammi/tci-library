@@ -2,7 +2,6 @@
 
 import groovy.time.*
 
-def phase(String phaseName, Closure body) {
 def phase(Map config, Closure body) {
     if (config == null) {
         config = [:]
@@ -45,8 +44,4 @@ def phase(Map config, Closure body) {
         tciLogger.info(config.name+ " TCI phase ended." +phaseName+ " phase duration: ${duration}")
     }
 }
-
-
-
-
 
