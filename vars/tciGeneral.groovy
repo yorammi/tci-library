@@ -1,7 +1,6 @@
 #!/usr/bin/groovy
 
 import hudson.tasks.test.AbstractTestResultAction
-import groovy.time.*
 
 @NonCPS
 def timedEcho(String text) {
@@ -120,14 +119,6 @@ def saveBuildLogFile() {
     {}
 }
 
-def tciPhase(String phaseName, Closure body) {
-    tciLogger.info(phaseName+ " phase started")
-    def timeStart = new Date()
-    body()
-    def timeStop = new Date()
-    def duration = TimeCategory.minus(timeStop, timeStart)
-    tciLogger.info(phaseName+ " phase ended." +phaseName+ " phase duration: ${duration}")
-}
 
 
 

@@ -53,39 +53,32 @@ class parallelPhase implements Serializable {
     }
 
     void run() {
-            def parallelBlocks = [:]
+        def parallelBlocks = [:]
 
-            def counter=1
-            jobs.each { item ->
-                def index = counter
-                parallelBlocks["Run job: "+item.jobName +" (${index})"] = {
-                    script.stage("Run job: "+item.jobName) {
-                        def timeStart = new Date()
-                        script.tciLogger.info ("Starting job: ${item.jobName}")
-                        if( item.parameters == null) {
-                            script.build (job: item.jobName, propagate: item.propagate , wait: item.wait)
-                        }
-                        else {
-                            script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait)
-                        }
-                        def timeStop = new Date()
-                        def duration = TimeCategory.minus(timeStop, timeStart)
-                        script.tciLogger.info ("Done running job: ${item.jobName}. Job duration:"+duration)
+        def counter=1
+        jobs.each { item ->
+            def index = counter
+            parallelBlocks["Run job: "+item.jobName +" (${index})"] = {
+                script.stage("Run job: "+item.jobName) {
+                    def timeStart = new Date()
+                    script.tciLogger.info ("Starting job: ${item.jobName}")
+                    if( item.parameters == null) {
+                        script.build (job: item.jobName, propagate: item.propagate , wait: item.wait)
                     }
+                    else {
+                        script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait)
+                    }
+                    def timeStop = new Date()
+                    def duration = TimeCategory.minus(timeStop, timeStart)
+                    script.tciLogger.info ("Done running job: ${item.jobName}. Job duration:"+duration)
                 }
-                counter++
             }
+            counter++
+        }
 
-            script.tciGeneral.tciPhase (name) {
-                try {
-                    parallelBlocks.failFast = failFast
-                    script.parallel parallelBlocks
-                }
-                catch (error)
-                {
-                    script.tciLogger.info ("[ERROR] TCI parallel phase failed!")
-                    throw error
-                }
+        script.tciPipeline.phase (name) {
+            parallelBlocks.failFast = failFast
+            script.parallel parallelBlocks
         }
     }
 }
