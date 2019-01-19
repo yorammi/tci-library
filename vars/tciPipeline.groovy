@@ -28,13 +28,13 @@ def phase(String phaseName, Closure body) {
     }
     catch (error)
     {
-        if(config.failOnError) {
+//        if(config.failOnError) {
             script.tciLogger.info ("[ERROR] TCI phase failed!")
             throw error
-        }
-        else {
-            script.tciLogger.info ("[WARNING] TCI phase failed, but phase set to continue on error.")
-        }
+//        }
+//        else {
+//            script.tciLogger.info ("[WARNING] TCI phase failed, but phase set to continue on error.")
+//        }
     }
     finally {
         def timeStop = new Date()
