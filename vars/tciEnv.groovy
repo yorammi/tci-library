@@ -14,6 +14,10 @@ def initEnv(Map config=null) {
     }
     tciDefaults.initDefaults()
     tciBuildUser.initBuildUserEnvVars()
+    if(tciBuildUser.buildStartedByUser()) {
+        def buildUserDisplayName = tciBuildUser.getBuildUserDisplayName()
+        currentBuild.displayName += " ${buildUserDisplayName}"
+    }
 }
 
 def deleteWorkspace() {
