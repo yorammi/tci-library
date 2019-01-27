@@ -16,7 +16,7 @@ def initEnv(Map config=null) {
     tciBuildUser.initBuildUserEnvVars()
     if(tciBuildUser.buildStartedByUser()) {
         def buildUserDisplayName = tciBuildUser.getBuildUserDisplayName()
-        currentBuild.displayName += " ${buildUserDisplayName}"
+        currentBuild.displayName += " {${buildUserDisplayName}}"
     }
 }
 
