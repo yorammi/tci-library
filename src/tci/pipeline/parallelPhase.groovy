@@ -64,9 +64,9 @@ class parallelPhase implements Serializable {
         jobs.each { item ->
             def index = counter
             parallelBlocks["Run job: "+item.jobName +" (${index})"] = {
-//                script.stage("Run job: "+item.jobName) {
+                script.stage("Run job: "+item.jobName) {
 //            parallelBlocks["Run job #"+${counter}+": "+item.jobName] = {
-                script.stage("Run job #"+${index}+": "+item.jobName) {
+//                script.stage("Run job #"+${index}+": "+item.jobName) {
                     def timeStart = new Date()
                     if( item.parameters != null) {
                         script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait, retry: item.retry)
