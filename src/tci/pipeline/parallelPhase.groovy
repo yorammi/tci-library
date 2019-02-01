@@ -10,12 +10,14 @@ class parallelPhase implements Serializable {
         def parameters
         boolean propagate
         boolean wait
+        int retry
 
-        subJob(String jobName, def parameters, boolean propagate, boolean wait ) {
+        subJob(String jobName, def parameters, boolean propagate, boolean wait, int retry ) {
             this.jobName = jobName
             this.parameters = parameters
             this.propagate = propagate
             this.wait = wait
+            this.retry = retry
         }
     }
 
@@ -47,6 +49,9 @@ class parallelPhase implements Serializable {
         if (config.wait == null) {
             config.wait = true
         }
+        if (config.retry == null) {
+            config.retry = 1
+        }
 
         def job = new subJob(config.job, config.parameters, config.propagate, config.wait)
         jobs << job
@@ -62,11 +67,19 @@ class parallelPhase implements Serializable {
                 script.stage("Run job: "+item.jobName) {
                     def timeStart = new Date()
                     script.tciLogger.info ("Starting job: ${item.jobName}")
-                    if( item.parameters == null) {
-                        script.build (job: item.jobName, propagate: item.propagate , wait: item.wait)
+                    Map config = [:]
+                    config.job = item.jobName
+                    config.propagate = item.propagate
+                    config.wait = item.wait
+                    if( item.parameters != null) {
+                        config.parameters = item.parameters
+                    }
+                    if( item.retry > 1) {
+                        script.retry (item.retry) {
+                            script.build config
+                        }
                     }
                     else {
-                        script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait)
                     }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
