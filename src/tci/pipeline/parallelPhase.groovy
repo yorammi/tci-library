@@ -44,7 +44,7 @@ class parallelPhase implements Serializable {
             config.propagate = true
         }
         if (config.parameters == null) {
-            config.parameters = null
+            config.parameters = [:]
         }
         if (config.wait == null) {
             config.wait = true
