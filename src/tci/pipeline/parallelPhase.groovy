@@ -69,6 +69,7 @@ class parallelPhase implements Serializable {
                     if( item.parameters != null) {
                         if(item.parameters == null) {
                             script.build (job: item.jobName, propagate: item.propagate , wait: item.wait, retry: item.retry)
+                            script.tciLogger.debug("1")
                         }
                         else {
                             script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait, retry: item.retry)
@@ -78,6 +79,7 @@ class parallelPhase implements Serializable {
                         script.retry (item.retry) {
                             if(item.parameters == null) {
                                 script.build (job: item.jobName, propagate: item.propagate , wait: item.wait, retry: item.retry)
+                                script.tciLogger.debug("2")
                            }
                             else {
                                 script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait, retry: item.retry)
