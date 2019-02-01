@@ -53,7 +53,7 @@ class parallelPhase implements Serializable {
             config.retry = 1
         }
 
-        def job = new subJob(config.job, config.parameters, config.propagate, config.wait)
+        def job = new subJob(config.job, config.parameters, config.propagate, config.wait, config.retry)
         jobs << job
     }
 
