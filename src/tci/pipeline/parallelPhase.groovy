@@ -68,7 +68,6 @@ class parallelPhase implements Serializable {
 //            parallelBlocks["Run job #"+${counter}+": "+item.jobName] = {
                 script.stage("Run job #"+${index}+": "+item.jobName) {
                     def timeStart = new Date()
-                    script.tciLogger.info ("Starting job: ${item.jobName}")
                     if( item.parameters != null) {
                         script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait, retry: item.retry)
                     }
@@ -81,13 +80,11 @@ class parallelPhase implements Serializable {
                     }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
-                    script.tciLogger.info ("Done running job: ${item.jobName}. Job duration:"+duration)
                 }
             }
             counter++
         }
 
-        script.tciLogger.debug("[parallelPhase] [run] before block and parallel")
         script.tciPipeline.block (name:name) {
             parallelBlocks.failFast = failFast
             script.parallel parallelBlocks
