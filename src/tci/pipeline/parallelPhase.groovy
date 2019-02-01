@@ -63,7 +63,6 @@ class parallelPhase implements Serializable {
         def counter=1
         jobs.each { item ->
             def index = counter
-            script.tciLogger.debug("[parallelPhase] [run] before block ${counter}")
             parallelBlocks["Run job #"+${index}+": "+item.jobName] = {
                 script.tciLogger.debug("[parallelPhase] [run] before stage ${index}")
                 script.stage("Run job #"+${index}+": "+item.jobName) {
@@ -88,6 +87,7 @@ class parallelPhase implements Serializable {
             counter++
         }
 
+        script.tciLogger.debug("[parallelPhase] [run] before block and parallel")
         script.tciPipeline.block (name:name) {
             parallelBlocks.failFast = failFast
             script.parallel parallelBlocks
