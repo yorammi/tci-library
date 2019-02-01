@@ -7,6 +7,7 @@ def call() {
             timestamps()
             buildDiscarder(logRotator(numToKeepStr: '30'))
             ansiColor('xterm')
+            skipDefaultCheckout()
         }
         stages {
             stage("Step") {
