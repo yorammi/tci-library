@@ -67,16 +67,12 @@ class parallelPhase implements Serializable {
                 script.stage("Run job: "+item.jobName) {
                     def timeStart = new Date()
                     script.tciLogger.info ("Starting job: ${item.jobName}")
-                    Map config = [:]
-                    config.job = item.jobName
-                    config.propagate = item.propagate
-                    config.wait = item.wait
                     if( item.parameters != null) {
-                        config.parameters = item.parameters
+                        script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait, retry: item.retry)
                     }
                     if( item.retry > 1) {
                         script.retry (item.retry) {
-                            script.build config
+                            script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait, retry: item.retry)
                         }
                     }
                     else {
