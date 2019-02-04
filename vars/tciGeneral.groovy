@@ -125,7 +125,7 @@ def getSortedPluginsList () {
         plugin ->
             plugins << println ("${plugin.getShortName()}:${plugin.getVersion()}")
     }
-    return plugins
+    echo plugins
 }
 
 
