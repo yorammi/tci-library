@@ -123,7 +123,8 @@ def getSortedPluginsList () {
     def plugins = []
     Jenkins.instance.pluginManager.plugins.each{
         plugin ->
-            plugins << println ("${plugin.getShortName()}:${plugin.getVersion()}")
+            def plugin = "${plugin.getShortName()}:${plugin.getVersion()}"
+            plugins << plugin
     }
     echo plugins
 }
