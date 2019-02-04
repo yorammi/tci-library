@@ -1,7 +1,6 @@
 #!/usr/bin/groovy
 
 import hudson.tasks.test.AbstractTestResultAction
-import groovy.transform.Sortable
 
 @NonCPS
 def timedEcho(String text) {
@@ -126,7 +125,7 @@ def getSortedPluginsList () {
         plugin ->
             plugins << println ("${plugin.getShortName()}:${plugin.getVersion()}")
     }
-    return plugins..toSorted()
+    return plugins.sort()
 }
 
 
