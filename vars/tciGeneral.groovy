@@ -119,6 +119,15 @@ def saveBuildLogFile() {
     {}
 }
 
+def getSortedPluginsList () {
+    def plugins = []
+    Jenkins.instance.pluginManager.plugins.each{
+        plugin ->
+            plugins << println ("${plugin.getShortName()}:${plugin.getVersion()}")
+    }
+    return plugins..toSorted()
+}
+
 
 
 
