@@ -1,4 +1,5 @@
 #!/usr/bin/groovy
+// Build user functions
 
 def initBuildUserEnvVars() {
     wrap([$class: 'BuildUser']) {
