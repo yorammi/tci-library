@@ -1,6 +1,11 @@
-<h1>tciPython - Python related functions</h1>
+<h2>tciPython - TCI Python related functions</h2>
 
-<h3>tciPython.installPythonModules</h3>
-<h3>tciPython.runPythonScript</h3>
+<h3>tciPython contains the following methods:</h3>
+<ol>
+  <li>runPythonScript</li>
+  <li>installPythonModules</li>
+</ol>
+
+<h3>Detailed methods description</h3>
 
 <h4>Please note that if this is seen as plain text, you should enable 'safe HTML' in the global security configuration page</h4>
