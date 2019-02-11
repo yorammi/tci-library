@@ -1,3 +1,6 @@
-installPythonModules(String requirementsFilePath)
-runPythonScript(String scriptFilePath)
+# tciPython - Python related functions
 
+* tciPython.installPythonModules
+* tciPython.runPythonScript
+
+### TCI global variables
