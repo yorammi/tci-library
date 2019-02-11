@@ -1,8 +1,6 @@
-<html>
-<body>
-<H3>tciPython - Python related functions</h3>
+# tciPython - Python related functions
 
-<h4>tciPython.installPythonModules</h4>
-<h4>tciPython.runPythonScript</h4>
-</body>
-</html>
+* tciPython.installPythonModules
+* tciPython.runPythonScript
+
+### Please note that if this is seen as plain text, you should enable 'safe HTML' in the global security configuration page
