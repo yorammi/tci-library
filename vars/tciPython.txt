@@ -1,7 +1,7 @@
 <h3>TCI <IMG SRC='https://github.com/TikalCI/tci-library/blob/master/resources/images/tci-library.png'/> tciPython contains the following methods:</h3>
 <ul>
-  <li><strong>runPythonScript</strong></li>
-  <li><strong>installPythonModules</strong></li>
+  <li><strong>installPythonModules</strong> - install a list of Python modules from a text file</li>
+  <li><strong>runPythonScript</strong> - run a python script</li>
 </ul>
 <hr>
 <h3>Detailed methods description</h3>
