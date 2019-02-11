@@ -1,4 +1,4 @@
-<h3>tciPython contains the following methods:</h3>
+<h3>TCI <IMG SRC='https://github.com/TikalCI/tci-library/blob/master/resources/images/tci-library.png'/> tciPython contains the following methods:</h3>
 <ul>
   <li><strong>runPythonScript</strong></li>
   <li><strong>installPythonModules</strong></li>
