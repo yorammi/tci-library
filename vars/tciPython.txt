@@ -1,6 +1,5 @@
-# tciPython - Python related functions
+<H3>tciPython - Python related functions</h3>
 
-* tciPython.installPythonModules
-* tciPython.runPythonScript
+<h4>tciPython.installPythonModules</h4>
+<h4>tciPython.runPythonScript</h4>
 
-### TCI global variables
