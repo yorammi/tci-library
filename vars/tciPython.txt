@@ -1,4 +1,3 @@
-<h2>tciPython - TCI Python related functions</h2>
 <h3>tciPython contains the following methods:</h3>
 <ul>
   <li><strong>runPythonScript</strong></li>
