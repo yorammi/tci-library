@@ -209,7 +209,7 @@ class parallelPhase implements Serializable {
         counter=1
         stepsSequences.each { item ->
             def index = counter
-            def title = "['"+name+"' sequence #"+counter+"] "+item.jobName
+            def title = "['"+name+"' sequence #"+counter+"] "+item.sequenceName
             parallelBlocks[title] = {
                 script.stage(title) {
                     def timeStart = new Date()
