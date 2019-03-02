@@ -19,11 +19,11 @@ def block(Map config, Closure body) {
     }
 
     if(!config.enable) {
-        tciLogger.info(config.name+ " TCI block disabled.")
+        tciLogger.info("'" + config.name+ "' TCI block disabled.")
         return
     }
 
-    tciLogger.info(config.name+ " TCI block started")
+    tciLogger.info("'" + config.name+ "' TCI block started")
     def timeStart = new Date()
     try {
         body()
@@ -32,11 +32,11 @@ def block(Map config, Closure body) {
     {
         tciLogger.info ("[ERROR] "+error.message)
         if(config.failOnError) {
-            tciLogger.info ("[ERROR] "+config.name+" TCI block failed!")
+            tciLogger.info ("[ERROR] '"+config.name+"' TCI block failed!")
             throw error
         }
         else {
-            tciLogger.info ("[WARNING] "+config.name+" TCI block failed, but block set to continue on error.")
+            tciLogger.info ("[WARNING] '"+config.name+"' TCI block failed, but block set to continue on error.")
         }
     }
     finally {
