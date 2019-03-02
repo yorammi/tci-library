@@ -44,16 +44,35 @@ class parallelPhase implements Serializable {
         }
     }
 
+    class stepsSequence implements Serializable {
+
+        String sequenceName
+        def sequence
+        boolean propagate
+        boolean wait
+        int retry
+
+        stepsSequence(String sequenceName, def sequence, boolean propagate, int retry ) {
+            this.sequenceName = sequenceName
+            this.sequence = sequence
+            this.propagate = propagate
+            this.retry = retry
+        }
+    }
+
     def script
     def name
     def jobs = []
     def remoteJobs = []
+    def stepsSequences = []
     boolean failFast = false
+    boolean failOnError = false
 
-    parallelPhase(script, String name = "TCI parallel", boolean failFast = false) {
+    parallelPhase(script, String name = "TCI parallel", boolean failFast = false, boolean failOnError = false) {
         this.script = script
         this.name = name
         this.failFast = failFast
+        this.failOnError = failOnError
     }
 
     void addSubJob(Map config) {
@@ -116,14 +135,37 @@ class parallelPhase implements Serializable {
         remoteJobs << remoteJob
     }
 
+    void addStepsSequence(Map config) {
+        if (config == null) {
+            config = [:]
+        }
+        if (config.sequence == null) {
+            script.tciLogger.info ("[ERROR] you must provive a block of steps sequence to run!!!")
+            throw Exception
+        }
+        if (config.name == null) {
+            config.name = "Steps sequence"
+        }
+        if (config.propagate == null) {
+            config.propagate = true
+        }
+        if (config.retry == null) {
+            config.retry = 1
+        }
+
+        def stepsSequence = new stepsSequence(config.name, config.sequence, config.propagate, config.retry)
+        stepsSequences << stepsSequence
+    }
+
     void run() {
         def parallelBlocks = [:]
 
         def counter=1
         jobs.each { item ->
             def index = counter
-            parallelBlocks["Run job #"+counter+": "+item.jobName] = {
-                script.stage("Run job #"+index+": "+item.jobName) {
+            def title = "['"+name+"' job #"+counter+"] "+item.jobName
+            parallelBlocks[title] = {
+                script.stage(title) {
                     def timeStart = new Date()
                     if( item.retry > 1) {
                         script.retry (item.retry) {
@@ -135,16 +177,18 @@ class parallelPhase implements Serializable {
                     }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
-                    script.tciLogger.info(" Parallel job ${item.jobName} ended. Duration: ${duration}")
+                    script.tciLogger.info(" Parallel job '${item.jobName}' ended. Duration: ${duration}")
                 }
             }
             counter++
         }
 
+        counter=1
         remoteJobs.each { item ->
             def index = counter
-            parallelBlocks["Run remote job #"+counter+": "+item.jobName] = {
-                script.stage("Run remote job #"+index+": "+item.jobName) {
+            def title = "['"+name+"' remote job #"+counter+"] "+item.jobName
+            parallelBlocks[title] = {
+                script.stage(title) {
                     def timeStart = new Date()
                     if( item.retry > 1) {
                         script.retry (item.retry) {
@@ -156,13 +200,36 @@ class parallelPhase implements Serializable {
                     }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
-                    script.tciLogger.info(" Parallel remote job ${item.jobName} ended. Duration: ${duration}")
+                    script.tciLogger.info(" Parallel remote job '${item.jobName}' ended. Duration: ${duration}")
                 }
             }
             counter++
         }
 
-        script.tciPipeline.block (name:name) {
+        counter=1
+        stepsSequences.each { item ->
+            def index = counter
+            def title = "['"+name+"' sequence #"+counter+"] "+item.sequenceName
+            parallelBlocks[title] = {
+                script.stage(title) {
+                    def timeStart = new Date()
+                    if( item.retry > 1) {
+                        script.retry (item.retry) {
+                            item.sequence()
+                        }
+                    }
+                    else {
+                        item.sequence()
+                    }
+                    def timeStop = new Date()
+                    def duration = TimeCategory.minus(timeStop, timeStart)
+                    script.tciLogger.info(" Parallel steps-sequence '${item.sequenceName}' ended. Duration: ${duration}")
+                }
+            }
+            counter++
+        }
+
+        script.tciPipeline.block (name:name,failOnError:failOnError) {
             parallelBlocks.failFast = failFast
             script.parallel parallelBlocks
         }
