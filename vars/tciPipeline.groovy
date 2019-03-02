@@ -42,7 +42,7 @@ def block(Map config, Closure body) {
     finally {
         def timeStop = new Date()
         def duration = TimeCategory.minus(timeStop, timeStart)
-        tciLogger.info(config.name+ " TCI block ended. " +config.name+ " block duration: ${duration}")
+        tciLogger.info("'" +config.name+ "' TCI block ended. Duration: ${duration}")
     }
 }
 

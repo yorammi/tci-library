@@ -66,11 +66,13 @@ class parallelPhase implements Serializable {
     def remoteJobs = []
     def stepsSequences = []
     boolean failFast = false
+    boolean failOnError = false
 
-    parallelPhase(script, String name = "TCI parallel", boolean failFast = false) {
+    parallelPhase(script, String name = "TCI parallel", boolean failFast = false, boolean failOnError = false) {
         this.script = script
         this.name = name
         this.failFast = failFast
+        this.failOnError = failOnError
     }
 
     void addSubJob(Map config) {
@@ -224,7 +226,7 @@ class parallelPhase implements Serializable {
             counter++
         }
 
-        script.tciPipeline.block (name:name) {
+        script.tciPipeline.block (name:name,failOnError:failOnError) {
             parallelBlocks.failFast = failFast
             script.parallel parallelBlocks
         }
