@@ -30,6 +30,7 @@ def block(Map config, Closure body) {
     }
     catch (error)
     {
+        tciLogger.info ("[ERROR] "+error.message)
         if(config.failOnError) {
             tciLogger.info ("[ERROR] "+config.name+" TCI block failed!")
             throw error
