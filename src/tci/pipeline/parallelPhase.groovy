@@ -180,6 +180,7 @@ class parallelPhase implements Serializable {
             counter++
         }
 
+        counter=1
         remoteJobs.each { item ->
             def index = counter
             parallelBlocks["[Remote job #"+counter+"] "+item.jobName] = {
@@ -201,6 +202,7 @@ class parallelPhase implements Serializable {
             counter++
         }
 
+        counter=1
         stepsSequences.each { item ->
             def index = counter
             parallelBlocks["[Sequence #"+counter+"] "+item.sequenceName] = {
@@ -216,7 +218,7 @@ class parallelPhase implements Serializable {
                     }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
-                    script.tciLogger.info(" Parallel job ${item.jobName} ended. Duration: ${duration}")
+                    script.tciLogger.info(" Parallel steps-sequence ${item.sequenceName} ended. Duration: ${duration}")
                 }
             }
             counter++
