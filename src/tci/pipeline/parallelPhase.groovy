@@ -174,7 +174,7 @@ class parallelPhase implements Serializable {
                     }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
-                    script.tciLogger.info(" Parallel job ${item.jobName} ended. Duration: ${duration}")
+                    script.tciLogger.info(" Parallel job '${item.jobName}' ended. Duration: ${duration}")
                 }
             }
             counter++
@@ -196,7 +196,7 @@ class parallelPhase implements Serializable {
                     }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
-                    script.tciLogger.info(" Parallel remote job ${item.jobName} ended. Duration: ${duration}")
+                    script.tciLogger.info(" Parallel remote job '${item.jobName}' ended. Duration: ${duration}")
                 }
             }
             counter++
@@ -218,7 +218,7 @@ class parallelPhase implements Serializable {
                     }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
-                    script.tciLogger.info(" Parallel steps-sequence ${item.sequenceName} ended. Duration: ${duration}")
+                    script.tciLogger.info(" Parallel steps-sequence '${item.sequenceName}' ended. Duration: ${duration}")
                 }
             }
             counter++
