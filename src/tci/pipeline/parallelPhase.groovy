@@ -163,8 +163,9 @@ class parallelPhase implements Serializable {
         def counter=1
         jobs.each { item ->
             def index = counter
-            parallelBlocks["[Job #"+counter+"] "+item.jobName] = {
-                script.stage("[Job #"+index+"] "+item.jobName) {
+            def title = "['"+name+"' job #"+counter+"] "+item.jobName
+            parallelBlocks[title] = {
+                script.stage(title) {
                     def timeStart = new Date()
                     if( item.retry > 1) {
                         script.retry (item.retry) {
@@ -185,8 +186,9 @@ class parallelPhase implements Serializable {
         counter=1
         remoteJobs.each { item ->
             def index = counter
-            parallelBlocks["[Remote job #"+counter+"] "+item.jobName] = {
-                script.stage("[Remote job #"+index+"] "+item.jobName) {
+            def title = "['"+name+"' remote job #"+counter+"] "+item.jobName
+            parallelBlocks[title] = {
+                script.stage(title) {
                     def timeStart = new Date()
                     if( item.retry > 1) {
                         script.retry (item.retry) {
@@ -207,8 +209,9 @@ class parallelPhase implements Serializable {
         counter=1
         stepsSequences.each { item ->
             def index = counter
-            parallelBlocks["[Sequence #"+counter+"] "+item.sequenceName] = {
-                script.stage("[Sequence #"+index+"] "+item.sequenceName) {
+            def title = "['"+name+"' sequence #"+counter+"] "+item.jobName
+            parallelBlocks[title] = {
+                script.stage(title) {
                     def timeStart = new Date()
                     if( item.retry > 1) {
                         script.retry (item.retry) {
