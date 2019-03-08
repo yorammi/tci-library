@@ -198,6 +198,25 @@ class parallelPhase implements Serializable {
                     def duration = TimeCategory.minus(timeStop, timeStart)
 //                    item.duration = duration
                     script.tciLogger.info(" Parallel job '${item.jobName}' ended. Duration: ${duration}")
+                    if(item.propagate == true) {
+                        if(item.status == "FAILURE") {
+                            overAllStatus="FAILURE"
+                        }
+                        else {
+                            if(item.status == "UNSTABLE") {
+                                if(item.overAllStatus != "FAILURE") {
+                                    overAllStatus="UNSTABLE"
+                                }
+                            }
+                            else {
+                                if(item.status == "ABORTED") {
+                                    if(item.overAllStatus != "FAILURE" && item.overAllStatus != "UNSTABLE") {
+                                        overAllStatus="ABORTED"
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
             counter++
@@ -264,25 +283,6 @@ class parallelPhase implements Serializable {
                 script.echo '   [Job] '+item.jobName
                 script.echo '   [status] '+item.status
                 script.echo '   [url] '+item.url
-                if(item.propagate == true) {
-                    if(item.status == "FAILURE") {
-                        overAllStatus="FAILURE"
-                    }
-                    else {
-                        if(item.status == "UNSTABLE") {
-                            if(item.overAllStatus != "FAILURE") {
-                                overAllStatus="UNSTABLE"
-                            }
-                        }
-                        else {
-                            if(item.status == "ABORTED") {
-                                if(item.overAllStatus != "FAILURE" && item.overAllStatus != "UNSTABLE") {
-                                    overAllStatus="ABORTED"
-                                }
-                            }
-                        }
-                    }
-                }
 //                echo '[duration] '+item.duration
             }
             script.currentBuild.result = overAllStatus
