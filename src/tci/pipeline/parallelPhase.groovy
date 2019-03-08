@@ -73,6 +73,7 @@ class parallelPhase implements Serializable {
     def stepsSequences = []
     boolean failFast = false
     boolean failOnError = false
+    String overAllStatus = "SUCCESS"
 
     parallelPhase(script, String name = "TCI parallel", boolean failFast = false, boolean failOnError = false) {
         this.script = script
@@ -251,7 +252,6 @@ class parallelPhase implements Serializable {
         }
 
         script.tciPipeline.block (name:name,failOnError:failOnError) {
-            def overAllStatus="SUCCESS"
             parallelBlocks.failFast = failFast
             try {
                 script.parallel parallelBlocks
