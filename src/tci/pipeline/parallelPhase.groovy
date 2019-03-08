@@ -274,6 +274,13 @@ class parallelPhase implements Serializable {
                                 overAllStatus="UNSTABLE"
                             }
                         }
+                        else {
+                            if(item.status == "ABORTED") {
+                                if(item.overAllStatus != "FAILURE" && item.overAllStatus != "UNSTABLE") {
+                                    overAllStatus="ABORTED"
+                                }
+                            }
+                        }
                     }
                 }
 //                echo '[duration] '+item.duration
