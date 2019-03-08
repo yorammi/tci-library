@@ -11,6 +11,8 @@ class parallelPhase implements Serializable {
         boolean propagate
         boolean wait
         int retry
+        String status
+        String url
 
         subJob(String jobName, def parameters, boolean propagate, boolean wait, int retry ) {
             this.jobName = jobName
@@ -169,7 +171,9 @@ class parallelPhase implements Serializable {
                     def timeStart = new Date()
                     if( item.retry > 1) {
                         script.retry (item.retry) {
-                            script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait)
+                            def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: false , wait: item.wait)
+                            item.status = currentRun.getResult()
+                            item.url = currentRun.getRawBuild().getAbsoluteUrl()
                         }
                     }
                     else {
