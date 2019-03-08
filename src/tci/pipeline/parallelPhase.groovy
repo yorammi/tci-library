@@ -170,14 +170,23 @@ class parallelPhase implements Serializable {
                 script.stage(title) {
                     def timeStart = new Date()
                     if( item.retry > 1) {
-                        script.retry (item.retry) {
+                        def retry=1
+                        while (retry < item.retry) {
                             def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: false , wait: item.wait)
                             item.status = currentRun.getResult()
                             item.url = currentRun.getRawBuild().getAbsoluteUrl()
+                            if(item.status=="SUCCESS") {
+                                retry++
+                            }
+                            else {
+                                retry = item.retry
+                            }
                         }
                     }
                     else {
-                        script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait)
+                        def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait)
+                        item.status = currentRun.getResult()
+                        item.url = currentRun.getRawBuild().getAbsoluteUrl()
                     }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
