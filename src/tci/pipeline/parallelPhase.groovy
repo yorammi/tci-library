@@ -14,6 +14,7 @@ class parallelPhase implements Serializable {
         String status
         String url
         def duration
+        String title
 
         subJob(String jobName, def parameters, boolean propagate, boolean wait, int retry ) {
             this.jobName = jobName
@@ -169,6 +170,7 @@ class parallelPhase implements Serializable {
         jobs.each { item ->
             def index = counter
             def title = "['"+name+"' job #"+counter+"] "+item.jobName
+            item.title = title
             parallelBlocks[title] = {
                 script.stage(title) {
                     def timeStart = new Date()
@@ -258,7 +260,8 @@ class parallelPhase implements Serializable {
             }
         }
         jobs.each { item ->
-            script.echo '[Job] '+item.jobName
+            script.echo '[Title] '+item.title
+            script.echo '   [Job] '+item.jobName
             script.echo '   [status] '+item.status
             script.echo '   [url] '+item.url
 //                echo '[duration] '+item.duration
