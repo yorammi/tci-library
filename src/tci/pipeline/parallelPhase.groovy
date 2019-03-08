@@ -256,12 +256,13 @@ class parallelPhase implements Serializable {
             catch (error) {
 
             }
-            jobs.each { item ->
-                script.echo '[Job] '+item.jobName
-                script.echo '   [status] '+item.status
-                script.echo '   [url] '+item.url
-//                echo '[duration] '+item.duration
-            }
+        }
+        jobs.each { item ->
+            script.sh '''
+                echo "[Job] ${item.jobName}"
+                echo "   [status] ${item.status}"
+                echo "   [url] ${item.url}"
+            '''
         }
     }
 }
