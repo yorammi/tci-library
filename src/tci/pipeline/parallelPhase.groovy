@@ -250,8 +250,8 @@ class parallelPhase implements Serializable {
             counter++
         }
 
-        def overAllStatus="SUCCESS"
         script.tciPipeline.block (name:name,failOnError:failOnError) {
+            def overAllStatus="SUCCESS"
             parallelBlocks.failFast = failFast
             try {
                 script.parallel parallelBlocks
