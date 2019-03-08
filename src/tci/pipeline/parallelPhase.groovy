@@ -250,6 +250,7 @@ class parallelPhase implements Serializable {
             counter++
         }
 
+        def overAllStatus="SUCCESS"
         script.tciPipeline.block (name:name,failOnError:failOnError) {
             parallelBlocks.failFast = failFast
             try {
@@ -258,14 +259,27 @@ class parallelPhase implements Serializable {
             catch (error) {
 
             }
-        }
-        jobs.each { item ->
-            script.echo '[Title] '+item.title
-            script.echo '   [Job] '+item.jobName
-            script.echo '   [status] '+item.status
-            script.echo '   [url] '+item.url
+            jobs.each { item ->
+                script.echo '[Title] '+item.title
+                script.echo '   [Job] '+item.jobName
+                script.echo '   [status] '+item.status
+                script.echo '   [url] '+item.url
+                if(item.propagate == true) {
+                    if(item.status == "FAILURE") {
+                        overAllStatus="FAILURE"
+                    }
+                    else {
+                        if(item.status == "UNSTABLE") {
+                            if(item.overAllStatus != "FAILURE") {
+                                overAllStatus="UNSTABLE"
+                            }
+                        }
+                    }
+                }
 //                echo '[duration] '+item.duration
+            }
         }
+        script.currentBuild.result = overAllStatus
     }
 }
 
