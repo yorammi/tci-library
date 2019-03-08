@@ -257,10 +257,10 @@ class parallelPhase implements Serializable {
 
             }
             jobs.each { item ->
-                echo '[Job] '+item.jobName
+                script.echo '[Job] '+item.jobName
+                script.echo '   [status] '+item.status
+                script.echo '   [url] '+item.url
 //                echo '[duration] '+item.duration
-                echo '   [status] '+item.status
-                echo '   [url] '+item.url
             }
         }
     }
