@@ -13,6 +13,7 @@ class parallelPhase implements Serializable {
         int retry
         String status
         String url
+        def duration
 
         subJob(String jobName, def parameters, boolean propagate, boolean wait, int retry ) {
             this.jobName = jobName
@@ -33,6 +34,7 @@ class parallelPhase implements Serializable {
         boolean useJobInfoCache
         int pollInterval
         int retry
+        def duration
 
         subRemoteJob(String jobName, String remoteJenkinsName, def parameters, boolean abortTriggeredJob, boolean useCrumbCache, boolean useJobInfoCache, int pollInterval, int retry ) {
             this.jobName = jobName
@@ -53,6 +55,7 @@ class parallelPhase implements Serializable {
         boolean propagate
         boolean wait
         int retry
+        def duration
 
         stepsSequence(String sequenceName, def sequence, boolean propagate, int retry ) {
             this.sequenceName = sequenceName
@@ -190,6 +193,7 @@ class parallelPhase implements Serializable {
                     }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
+                    item.duration = duration
                     script.tciLogger.info(" Parallel job '${item.jobName}' ended. Duration: ${duration}")
                 }
             }
@@ -213,6 +217,7 @@ class parallelPhase implements Serializable {
                     }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
+                    item.duration = duration
                     script.tciLogger.info(" Parallel remote job '${item.jobName}' ended. Duration: ${duration}")
                 }
             }
@@ -236,6 +241,7 @@ class parallelPhase implements Serializable {
                     }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
+                    item.duration = duration
                     script.tciLogger.info(" Parallel steps-sequence '${item.sequenceName}' ended. Duration: ${duration}")
                 }
             }
@@ -244,7 +250,18 @@ class parallelPhase implements Serializable {
 
         script.tciPipeline.block (name:name,failOnError:failOnError) {
             parallelBlocks.failFast = failFast
-            script.parallel parallelBlocks
+            try {
+                script.parallel parallelBlocks
+            }
+            catch (error) {
+
+            }
+            jobs.each { item ->
+                echo '[Job] '+item.job
+                echo '[duration] '+item.duration
+                echo '[status] '+item.status
+                echo '[url] '+item.url
+            }
         }
     }
 }
