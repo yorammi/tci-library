@@ -278,8 +278,8 @@ class parallelPhase implements Serializable {
                 }
 //                echo '[duration] '+item.duration
             }
+            script.currentBuild.result = overAllStatus
         }
-        script.currentBuild.result = overAllStatus
     }
 }
 
