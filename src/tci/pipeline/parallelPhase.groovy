@@ -193,7 +193,7 @@ class parallelPhase implements Serializable {
                     }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
-                    item.duration = duration
+//                    item.duration = duration
                     script.tciLogger.info(" Parallel job '${item.jobName}' ended. Duration: ${duration}")
                 }
             }
@@ -217,7 +217,7 @@ class parallelPhase implements Serializable {
                     }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
-                    item.duration = duration
+//                    item.duration = duration
                     script.tciLogger.info(" Parallel remote job '${item.jobName}' ended. Duration: ${duration}")
                 }
             }
@@ -258,7 +258,7 @@ class parallelPhase implements Serializable {
             }
             jobs.each { item ->
                 echo '[Job] '+item.job
-                echo '[duration] '+item.duration
+//                echo '[duration] '+item.duration
                 echo '[status] '+item.status
                 echo '[url] '+item.url
             }
