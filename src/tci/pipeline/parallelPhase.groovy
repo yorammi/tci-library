@@ -258,6 +258,7 @@ class parallelPhase implements Serializable {
             parallelBlocks[title] = {
                 script.stage(title) {
                     def timeStart = new Date()
+                    item.status = "SUCCESS"
                     try {
                         if( item.retry > 1) {
                             script.retry (item.retry) {
@@ -269,9 +270,8 @@ class parallelPhase implements Serializable {
                         }
                     }
                     catch (error) {
-
+                        item.status = "FAILURE"
                     }
-                    item.status = currentBuild.result
                     if(item.status == "FAILURE") {
                         overAllStatus="FAILURE"
                     }
