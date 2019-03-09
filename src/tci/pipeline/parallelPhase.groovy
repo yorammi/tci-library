@@ -346,7 +346,8 @@ class parallelPhase implements Serializable {
             }
             description += "'"+name+"' phase status: "+statusColor+overAllStatus+'\033[0m\n'
             script.echo description
-            script.currentBuild.result = overAllStatus
+//            script.currentBuild.result = overAllStatus
+            currentBuild.result = overAllStatus
         }
     }
 }
