@@ -276,7 +276,7 @@ class parallelPhase implements Serializable {
             catch (error) {
 
             }
-            script.currentBuild.description += "<html><body>"
+            script.currentBuild.description = "<html><body>"
             script.currentBuild.description += "<table border='1'>"
             script.currentBuild.description += "<tr span='4'><td><h3>"+name+"</h3></td></tr>"
             script.currentBuild.description += "<tr><th>Stage name</th><th>Stage type</th><th>Status</th><th>Details</th></tr>"
