@@ -308,13 +308,21 @@ class parallelPhase implements Serializable {
 
             description = "\033[1;94m"+name+'\033[0m\n'
             jobs.each { item ->
-                description += '\t'+item.title+' - '+item.status+' - '+item.url+'\n'
+                def currentStatus = item.status
+                if(item.propagate == false) {
+                    currentStatus += " (propagate:false)"
+                }
+                description += '\t'+item.title+' - '+currentStatus+' - '+item.url+'\n'
             }
             remoteJobs.each { item ->
                 description += '\t'+item.title+'\n'
             }
             stepsSequences.each { item ->
-                description += '\t'+item.title+' - '+item.status+'\n'
+                def currentStatus = item.status
+                if(item.propagate == false) {
+                    currentStatus += " (propagate:false)"
+                }
+                description += '\t'+item.title+' - '+currentStatus+'\n'
             }
             String statusColor="\033[1;92m"
             if(overAllStatus=="FAILURE") {
