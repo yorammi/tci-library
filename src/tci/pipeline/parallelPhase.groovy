@@ -36,6 +36,7 @@ class parallelPhase implements Serializable {
         int pollInterval
         int retry
         def duration
+        String title
 
         subRemoteJob(String jobName, String remoteJenkinsName, def parameters, boolean abortTriggeredJob, boolean useCrumbCache, boolean useJobInfoCache, int pollInterval, int retry ) {
             this.jobName = jobName
@@ -57,6 +58,7 @@ class parallelPhase implements Serializable {
         boolean wait
         int retry
         def duration
+        String title
 
         stepsSequence(String sequenceName, def sequence, boolean propagate, int retry ) {
             this.sequenceName = sequenceName
@@ -74,6 +76,7 @@ class parallelPhase implements Serializable {
     boolean failFast = false
     boolean failOnError = false
     String overAllStatus = "SUCCESS"
+    String description = ""
 
     parallelPhase(script, String name = "TCI parallel", boolean failFast = false, boolean failOnError = false) {
         this.script = script
@@ -170,7 +173,7 @@ class parallelPhase implements Serializable {
         def counter=1
         jobs.each { item ->
             def index = counter
-            def title = "['"+name+"' job #"+counter+"] "+item.jobName
+            def title = "[Job #"+counter+"] "+item.jobName
             item.title = title
             parallelBlocks[title] = {
                 script.stage(title) {
@@ -223,7 +226,8 @@ class parallelPhase implements Serializable {
         counter=1
         remoteJobs.each { item ->
             def index = counter
-            def title = "['"+name+"' remote job #"+counter+"] "+item.jobName
+            def title = "[Remote job #"+counter+"] "+item.jobName
+            item.title = title
             parallelBlocks[title] = {
                 script.stage(title) {
                     def timeStart = new Date()
@@ -247,7 +251,8 @@ class parallelPhase implements Serializable {
         counter=1
         stepsSequences.each { item ->
             def index = counter
-            def title = "['"+name+"' sequence #"+counter+"] "+item.sequenceName
+            def title = "[Sequence #"+counter+"] "+item.sequenceName
+            item.title = title
             parallelBlocks[title] = {
                 script.stage(title) {
                     def timeStart = new Date()
@@ -276,16 +281,20 @@ class parallelPhase implements Serializable {
             catch (error) {
 
             }
-            //script.currentBuild.description = "<html><body>"
-            script.currentBuild.description += "<table border='1'>"
-            script.currentBuild.description += "<tr><td colspan='4'><font size=+1>"+name+"</font></td></tr>"
-            script.currentBuild.description += "<tr><th>Stage name</th><th>Stage type</th><th>Status</th><th>Details</th></tr>"
+
+            description = "<table border='1'>"
+            description += "<tr><td colspan='4'><font size=+1>"+name+"</font></td></tr>"
+            description += "<tr><th>Stage name</th><th>Stage type</th><th>Status</th><th>Details</th></tr>"
             jobs.each { item ->
-                script.currentBuild.description += "<tr><td>"+item.title+"</td><td>Job</td><td>"+item.status+"</td><td>"+item.url+"</td></tr>"
+                description += "<tr><td>"+item.title+"</td><td>Job</td><td>"+item.status+"</td><td>"+item.url+"</td></tr>"
             }
-            script.currentBuild.description += "<tr><td colspan='4'>Phase status: <strong>"+overAllStatus+"</strong></td></tr>"
-            script.currentBuild.description += "</table>"
-            //script.currentBuild.description += "</body></html>"
+            remoteJobs.each { item ->
+                description += "<tr><td>"+item.title+"</td><td>Job</td><td>"+item.status+"</td><td>"+item.url+"</td></tr>"
+            }
+            description += "<tr><td colspan='4'>Phase status: <strong>"+overAllStatus+"</strong></td></tr>"
+            description += "</table>"
+            script.currentBuild.description = description
+
             script.currentBuild.result = overAllStatus
         }
     }
