@@ -240,8 +240,7 @@ class parallelPhase implements Serializable {
                         }
                     }
                     else {
-                        def currentRun = script.triggerRemoteJob (remoteJenkinsName: item.remoteJenkinsName, job: item.jobName, parameters: item.parameters, abortTriggeredJob: item.propagate, pollInterval: item.pollInterval, useCrumbCache: temm.useCrumbCache, useJobInfoCache: item.useJobInfoCache ,maxConn: 1)
-                        echo currentRun
+                        script.triggerRemoteJob (remoteJenkinsName: item.remoteJenkinsName, job: item.jobName, parameters: item.parameters, abortTriggeredJob: item.propagate, pollInterval: item.pollInterval, useCrumbCache: temm.useCrumbCache, useJobInfoCache: item.useJobInfoCache ,maxConn: 1)
                     }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
@@ -273,20 +272,18 @@ class parallelPhase implements Serializable {
                     catch (error) {
                         item.status = "FAILURE"
                     }
-                    if(item.status == "FAILURE") {
-                        overAllStatus="FAILURE"
-                    }
-                    else {
-                        if(item.propagate == true) {
-                            if(item.status == "UNSTABLE") {
-                                if(item.overAllStatus != "FAILURE") {
-                                    overAllStatus="UNSTABLE"
+                    if(item.propagate == true) {
+                        if (item.status == "FAILURE") {
+                            overAllStatus = "FAILURE"
+                        } else {
+                            if (item.status == "UNSTABLE") {
+                                if (item.overAllStatus != "FAILURE") {
+                                    overAllStatus = "UNSTABLE"
                                 }
-                            }
-                            else {
-                                if(item.status == "ABORTED") {
-                                    if(item.overAllStatus != "FAILURE" && item.overAllStatus != "UNSTABLE") {
-                                        overAllStatus="ABORTED"
+                            } else {
+                                if (item.status == "ABORTED") {
+                                    if (item.overAllStatus != "FAILURE" && item.overAllStatus != "UNSTABLE") {
+                                        overAllStatus = "ABORTED"
                                     }
                                 }
                             }
