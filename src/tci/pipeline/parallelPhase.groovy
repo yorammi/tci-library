@@ -35,6 +35,8 @@ class parallelPhase implements Serializable {
         boolean useJobInfoCache
         int pollInterval
         int retry
+        String status
+        String url
         def duration
         String title
 
@@ -57,6 +59,8 @@ class parallelPhase implements Serializable {
         boolean propagate
         boolean wait
         int retry
+        String status
+        String url
         def duration
         String title
 
@@ -282,16 +286,19 @@ class parallelPhase implements Serializable {
 
             }
 
-            description = "<table border='1'>"
-            description += "<tr><td colspan='4'><font size=+1>"+name+"</font></td></tr>"
-            description += "<tr><th>Stage name</th><th>Stage type</th><th>Status</th><th>Details</th></tr>"
+            description += name+':'
             jobs.each { item ->
-                description += "<tr><td>"+item.title+"</td><td>Job</td><td>"+item.status+"</td><td>"+item.url+"</td></tr>"
+                description += '   '+item.title+' - '+item.status+' - '+item.url
             }
             remoteJobs.each { item ->
-                description += "<tr><td>"+item.title+"</td><td>Job</td><td>"+item.status+"</td><td>"+item.url+"</td></tr>"
+//                description += '   '+item.title+' - '+item.status+' - '+item.url
+                description += '   '+item.title
             }
-            description += "<tr><td colspan='4'>Phase status: <strong>"+overAllStatus+"</strong></td></tr>"
+            stepsSequences.each { item ->
+//                description += '   '+item.title+' - '+item.status+' - '+item.url
+                description += '   '+item.title
+            }
+            description += "'"+name+"' phase status: <strong>"+overAllStatus+"</strong></td></tr>"
             description += "</table>"
             script.currentBuild.description = description
 
