@@ -264,7 +264,8 @@ class parallelPhase implements Serializable {
                         }
                     }
                     else {
-                        item.sequence()
+                        def currentRun = item.sequence()
+                        echo currentRun.getClass()
                     }
                     item.status = currentBuild.result
                     if(item.status == "FAILURE") {
