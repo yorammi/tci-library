@@ -286,6 +286,7 @@ class parallelPhase implements Serializable {
             }
             script.currentBuild.description += "<tr><td span='4'>Phase status: "+overAllStatus+"</td></tr>"
             script.currentBuild.description += "</table>"
+            script.currentBuild.description += "</body></html>"
             script.currentBuild.result = overAllStatus
         }
     }
