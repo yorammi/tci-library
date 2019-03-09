@@ -276,7 +276,7 @@ class parallelPhase implements Serializable {
             catch (error) {
 
             }
-            script.currentBuild.description += "<html><body>"
+            script.currentBuild.description = "<html><body>"
             script.currentBuild.description += "<h3>"+name+"</h3>"
             script.currentBuild.description += "<p><font size='1'><a href='https://github.com/TikalCI/tci-library'>TCI-library</a> parallelPhase</font>"
             script.currentBuild.description += "<table>"
