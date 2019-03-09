@@ -260,13 +260,19 @@ class parallelPhase implements Serializable {
             parallelBlocks[title] = {
                 script.stage(title) {
                     def timeStart = new Date()
-                    if( item.retry > 1) {
-                        script.retry (item.retry) {
+                    try {
+                        if( item.retry > 1) {
+                            script.retry (item.retry) {
+                                item.sequence()
+                            }
+                        }
+                        else {
                             item.sequence()
                         }
+                        item.status = currentBuild.result
                     }
-                    else {
-                        item.sequence()
+                    catch (error) {
+                        item.status = "FAILURE"
                     }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
