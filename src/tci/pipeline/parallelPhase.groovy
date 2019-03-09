@@ -167,7 +167,7 @@ class parallelPhase implements Serializable {
     void run() {
         def parallelBlocks = [:]
 
-        script.currentBuild.description += "<h3>"+name+"</h3>"
+        script.currentBuild.description = "<h3>"+name+"</h3>"
         script.currentBuild.description += "<p><font size='1'><a href='https://github.com/TikalCI/tci-library'>TCI-library</a> parallelPhase</font>"
         script.currentBuild.description += "<table>"
         script.currentBuild.description += "<tr><th>Stage name</th><th>Stage type</th><th>Status</th><th>Details</th></tr>"
