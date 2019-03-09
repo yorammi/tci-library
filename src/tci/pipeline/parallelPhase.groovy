@@ -276,16 +276,16 @@ class parallelPhase implements Serializable {
             catch (error) {
 
             }
-            script.currentBuild.description = "<html><body>"
+            //script.currentBuild.description = "<html><body>"
             script.currentBuild.description += "<table border='1'>"
-            script.currentBuild.description += "<tr><td colspan='4'><strong>"+name+"</strong></td></tr>"
+            script.currentBuild.description += "<tr><td colspan='4'><font size=+1>"+name+"</font></td></tr>"
             script.currentBuild.description += "<tr><th>Stage name</th><th>Stage type</th><th>Status</th><th>Details</th></tr>"
             jobs.each { item ->
                 script.currentBuild.description += "<tr><td>"+item.title+"</td><td>Job</td><td>"+item.status+"</td><td>"+item.url+"</td></tr>"
             }
-            script.currentBuild.description += "<tr><td colspan='4'>Phase status: "+overAllStatus+"</td></tr>"
+            script.currentBuild.description += "<tr><td colspan='4'>Phase status: <strong>"+overAllStatus+"</strong></td></tr>"
             script.currentBuild.description += "</table>"
-            script.currentBuild.description += "</body></html>"
+            //script.currentBuild.description += "</body></html>"
             script.currentBuild.result = overAllStatus
         }
     }
