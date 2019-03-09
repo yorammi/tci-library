@@ -144,6 +144,9 @@ class parallelPhase implements Serializable {
         if (config.pollInterval == null) {
             config.pollInterval = 30
         }
+        if (config.retry == null) {
+            config.retry = 1
+        }
 
         def remoteJob = new subRemoteJob(config.job, config.remoteJenkinsName, config.parameters, config.abortTriggeredJob, config.useCrumbCache, config.useJobInfoCache, config.pollInterval, config.retry)
         remoteJobs << remoteJob
