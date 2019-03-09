@@ -302,7 +302,7 @@ class parallelPhase implements Serializable {
             }
             stepsSequences.each { item ->
 //                description += '   '+item.title+' - '+item.status+' - '+item.url
-                description += '\t'+item.title+'\n'
+                description += '\t'+item.title+' - '+item.status+'\n'
             }
             String statusColor="\033[1;92m"
             if(overAllStatus=="FAILURE") {
