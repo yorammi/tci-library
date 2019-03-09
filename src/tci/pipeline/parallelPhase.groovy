@@ -201,7 +201,6 @@ class parallelPhase implements Serializable {
                     }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
-//                    item.duration = duration
                     script.tciLogger.info(" Parallel job '${item.jobName}' ended. Duration: ${duration}")
                     if(item.propagate == true) {
                         if(item.status == "FAILURE") {
@@ -245,7 +244,6 @@ class parallelPhase implements Serializable {
                     }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
-//                    item.duration = duration
                     script.tciLogger.info(" Parallel remote job '${item.jobName}' ended. Duration: ${duration}")
                 }
             }
@@ -260,23 +258,34 @@ class parallelPhase implements Serializable {
             parallelBlocks[title] = {
                 script.stage(title) {
                     def timeStart = new Date()
-                    try {
-                        if( item.retry > 1) {
-                            script.retry (item.retry) {
-                                item.sequence()
+                    if( item.retry > 1) {
+                        script.retry (item.retry) {
+                            item.sequence()
+                        }
+                    }
+                    else {
+                        item.sequence()
+                    }
+                    item.status = currentBuild.result
+                    if(item.status == "FAILURE") {
+                        overAllStatus="FAILURE"
+                    }
+                    else {
+                        if(item.status == "UNSTABLE") {
+                            if(item.overAllStatus != "FAILURE") {
+                                overAllStatus="UNSTABLE"
                             }
                         }
                         else {
-                            item.sequence()
+                            if(item.status == "ABORTED") {
+                                if(item.overAllStatus != "FAILURE" && item.overAllStatus != "UNSTABLE") {
+                                    overAllStatus="ABORTED"
+                                }
+                            }
                         }
-                        item.status = currentBuild.result
-                    }
-                    catch (error) {
-                        item.status = "FAILURE"
                     }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
-//                    item.duration = duration
                     script.tciLogger.info(" Parallel steps-sequence '${item.sequenceName}' ended. Duration: ${duration}")
                 }
             }
@@ -297,11 +306,9 @@ class parallelPhase implements Serializable {
                 description += '\t'+item.title+' - '+item.status+' - '+item.url+'\n'
             }
             remoteJobs.each { item ->
-//                description += '   '+item.title+' - '+item.status+' - '+item.url
                 description += '\t'+item.title+'\n'
             }
             stepsSequences.each { item ->
-//                description += '   '+item.title+' - '+item.status+' - '+item.url
                 description += '\t'+item.title+' - '+item.status+'\n'
             }
             String statusColor="\033[1;92m"
