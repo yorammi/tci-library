@@ -240,7 +240,8 @@ class parallelPhase implements Serializable {
                         }
                     }
                     else {
-                        script.triggerRemoteJob (remoteJenkinsName: item.remoteJenkinsName, job: item.jobName, parameters: item.parameters, abortTriggeredJob: item.propagate, pollInterval: item.pollInterval, useCrumbCache: temm.useCrumbCache, useJobInfoCache: item.useJobInfoCache ,maxConn: 1)
+                        def currentRun = script.triggerRemoteJob (remoteJenkinsName: item.remoteJenkinsName, job: item.jobName, parameters: item.parameters, abortTriggeredJob: item.propagate, pollInterval: item.pollInterval, useCrumbCache: temm.useCrumbCache, useJobInfoCache: item.useJobInfoCache ,maxConn: 1)
+                        echo currentRun
                     }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
@@ -276,15 +277,17 @@ class parallelPhase implements Serializable {
                         overAllStatus="FAILURE"
                     }
                     else {
-                        if(item.status == "UNSTABLE") {
-                            if(item.overAllStatus != "FAILURE") {
-                                overAllStatus="UNSTABLE"
+                        if(item.propagate == true) {
+                            if(item.status == "UNSTABLE") {
+                                if(item.overAllStatus != "FAILURE") {
+                                    overAllStatus="UNSTABLE"
+                                }
                             }
-                        }
-                        else {
-                            if(item.status == "ABORTED") {
-                                if(item.overAllStatus != "FAILURE" && item.overAllStatus != "UNSTABLE") {
-                                    overAllStatus="ABORTED"
+                            else {
+                                if(item.status == "ABORTED") {
+                                    if(item.overAllStatus != "FAILURE" && item.overAllStatus != "UNSTABLE") {
+                                        overAllStatus="ABORTED"
+                                    }
                                 }
                             }
                         }
