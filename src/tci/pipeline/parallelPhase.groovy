@@ -286,22 +286,21 @@ class parallelPhase implements Serializable {
 
             }
 
-            description += name+':'
+            description += name+':\n'
             jobs.each { item ->
-                description += '   '+item.title+' - '+item.status+' - '+item.url
+                description += '   '+item.title+' - '+item.status+' - '+item.url+'\n'
             }
             remoteJobs.each { item ->
 //                description += '   '+item.title+' - '+item.status+' - '+item.url
-                description += '   '+item.title
+                description += '   '+item.title+'\n'
             }
             stepsSequences.each { item ->
 //                description += '   '+item.title+' - '+item.status+' - '+item.url
-                description += '   '+item.title
+                description += '   '+item.title+'\n'
             }
-            description += "'"+name+"' phase status: <strong>"+overAllStatus+"</strong></td></tr>"
-            description += "</table>"
+            description += "'"+name+"' phase status: "+overAllStatus+'\n'
             script.currentBuild.description = description
-
+            script.echo description
             script.currentBuild.result = overAllStatus
         }
     }
