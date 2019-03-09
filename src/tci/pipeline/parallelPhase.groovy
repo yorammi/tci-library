@@ -278,7 +278,7 @@ class parallelPhase implements Serializable {
             }
             script.currentBuild.description = "<html><body>"
             script.currentBuild.description += "<table border='1'>"
-            script.currentBuild.description += "<tr><td colspan='4'><h3>"+name+"</h3></td></tr>"
+            script.currentBuild.description += "<tr><td colspan='4'><strong>"+name+"</strong></td></tr>"
             script.currentBuild.description += "<tr><th>Stage name</th><th>Stage type</th><th>Status</th><th>Details</th></tr>"
             jobs.each { item ->
                 script.currentBuild.description += "<tr><td>"+item.title+"</td><td>Job</td><td>"+item.status+"</td><td>"+item.url+"</td></tr>"
