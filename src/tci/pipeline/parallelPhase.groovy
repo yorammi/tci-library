@@ -286,19 +286,36 @@ class parallelPhase implements Serializable {
 
             }
 
-            description += name+':\n'
+            description = "\033[1;94m"+name+'\033[0m\n'
             jobs.each { item ->
-                description += '   '+item.title+' - '+item.status+' - '+item.url+'\n'
+                description += '\t'+item.title+' - '+item.status+' - '+item.url+'\033[0m\n'
             }
             remoteJobs.each { item ->
 //                description += '   '+item.title+' - '+item.status+' - '+item.url
-                description += '   '+item.title+'\n'
+                description += '\t'+item.title+'\033[0m\n'
             }
             stepsSequences.each { item ->
 //                description += '   '+item.title+' - '+item.status+' - '+item.url
-                description += '   '+item.title+'\n'
+                description += '\t'+item.title+'\033[0m\n'
             }
-            description += "'"+name+"' phase status: "+overAllStatus+'\n'
+            String statusColor="\033[1;94m"
+            if(overAllStatus=="FAILURE") {
+                statusColor="\033[1;91m"
+            }
+            else {
+                if(overAllStatus=="UNSTABLE") {
+                    statusColor="\033[1;93m"
+                }
+                else {
+                    if(overAllStatus=="ABORTED") {
+                        statusColor="\033[1;90m"
+                    }
+                    else {
+
+                    }
+                }
+            }
+            description += "'"+name+"' phase status: "+statusColor+overAllStatus+'\033[0m\n'
             script.currentBuild.description = description
             script.echo description
             script.currentBuild.result = overAllStatus
