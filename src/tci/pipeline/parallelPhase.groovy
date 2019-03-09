@@ -277,9 +277,8 @@ class parallelPhase implements Serializable {
 
             }
             script.currentBuild.description += "<html><body>"
-            script.currentBuild.description += "<h3>"+name+"</h3>"
-            script.currentBuild.description += "<p><font size='1'><a href='https://github.com/TikalCI/tci-library'>TCI-library</a> parallelPhase</font>"
-            script.currentBuild.description += "<table>"
+            script.currentBuild.description += "<table border='1'>"
+            script.currentBuild.description += "<tr span='4'><td><h3>\"+name+\"</h3> <font size='1'><a href='https://github.com/TikalCI/tci-library'>TCI-library</a> parallelPhase</font></td></tr>"
             script.currentBuild.description += "<tr><th>Stage name</th><th>Stage type</th><th>Status</th><th>Details</th></tr>"
             jobs.each { item ->
                 script.currentBuild.description += "<tr><td>"+title+"</td><td>Job</td><td>"+item.status+"</td><td>"+item.url+"</td></tr>"
