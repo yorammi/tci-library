@@ -167,11 +167,6 @@ class parallelPhase implements Serializable {
     void run() {
         def parallelBlocks = [:]
 
-        script.currentBuild.description = "<h3>"+name+"</h3>"
-        script.currentBuild.description += "<p><font size='1'><a href='https://github.com/TikalCI/tci-library'>TCI-library</a> parallelPhase</font>"
-        script.currentBuild.description += "<table>"
-        script.currentBuild.description += "<tr><th>Stage name</th><th>Stage type</th><th>Status</th><th>Details</th></tr>"
-
         def counter=1
         jobs.each { item ->
             def index = counter
@@ -187,7 +182,6 @@ class parallelPhase implements Serializable {
                             item.status = currentRun.getResult()
                             item.url = currentRun.getRawBuild().getAbsoluteUrl()
                             retry++
-                            script.currentBuild.description += "<tr><td>"+title+"</td><td>Job</td><td>"+item.status+"</td><td>"+item.url+" (try "+retry+" out of "+item.retry+")</td></tr>"
                             if(item.status=="SUCCESS" || item.status=="ABORTED") {
                                 retry = item.retry
                             }
@@ -197,7 +191,6 @@ class parallelPhase implements Serializable {
                         def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait)
                         item.status = currentRun.getResult()
                         item.url = currentRun.getRawBuild().getAbsoluteUrl()
-                        script.currentBuild.description += "<tr><td>"+title+"</td><td>Job</td><td>"+item.status+"</td><td>"+item.url+"</td></tr>"
                     }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
@@ -283,13 +276,14 @@ class parallelPhase implements Serializable {
             catch (error) {
 
             }
-//            jobs.each { item ->
-//                script.echo '[Title] '+item.title
-//                script.echo '   [Job] '+item.jobName
-//                script.echo '   [status] '+item.status
-//                script.echo '   [url] '+item.url
-////                echo '[duration] '+item.duration
-//            }
+            script.currentBuild.description += "<html><body>"
+            script.currentBuild.description += "<h3>"+name+"</h3>"
+            script.currentBuild.description += "<p><font size='1'><a href='https://github.com/TikalCI/tci-library'>TCI-library</a> parallelPhase</font>"
+            script.currentBuild.description += "<table>"
+            script.currentBuild.description += "<tr><th>Stage name</th><th>Stage type</th><th>Status</th><th>Details</th></tr>"
+            jobs.each { item ->
+                script.currentBuild.description += "<tr><td>"+title+"</td><td>Job</td><td>"+item.status+"</td><td>"+item.url+"</td></tr>"
+            }
             script.currentBuild.description += "<tr><td span='4'>Phase status: "+overAllStatus+"</td></tr>"
             script.currentBuild.description += "</table>"
             script.currentBuild.result = overAllStatus
