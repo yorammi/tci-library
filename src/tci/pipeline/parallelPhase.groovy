@@ -205,10 +205,10 @@ class parallelPhase implements Serializable {
                             def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: false , wait: item.wait)
                             try {
                                 item.status = getBuildResult(currentRun)
-                                item.url = currentRun.getBuildUrl()
+                                item.url = getBuildUrl(currentRun)
                             }
                             catch (error) {
-
+                                echo error.message
                             }
                             retry++
                             if(item.status=="SUCCESS" || item.status=="ABORTED") {
@@ -220,10 +220,10 @@ class parallelPhase implements Serializable {
                         def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait)
                         try {
                             item.status = getBuildResult(currentRun)
-                            item.url = currentRun.getBuildUrl()
+                            item.url = getBuildUrl(currentRun)
                         }
                         catch (error) {
-
+                            echo error.message
                         }
                     }
                     def timeStop = new Date()
