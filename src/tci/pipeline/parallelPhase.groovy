@@ -176,11 +176,13 @@ class parallelPhase implements Serializable {
 
     @NonCPS
     def getBuildResult(def build) {
+        script.echo "getBuildResult"
         return build.getResult()
     }
 
     @NonCPS
     def getBuildUrl(def build) {
+        script.echo "getBuildUrl"
         return build.getRawBuild().getAbsoluteUrl()
     }
 
@@ -318,7 +320,7 @@ class parallelPhase implements Serializable {
                 script.parallel parallelBlocks
             }
             catch (error) {
-                echo "[ERROR] "+error.message
+                script.echo "[ERROR] "+error.message
             }
 
             description = "\033[1;94m"+name+'\033[0m\n'
