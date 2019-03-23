@@ -210,19 +210,29 @@ class parallelPhase implements Serializable {
                     if( item.retry > 1) {
                         def retry=0
                         while (retry < item.retry) {
-                            def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: false , wait: item.wait)
-                            item.status = getBuildResult(currentRun)
-                            item.url = getBuildUrl(currentRun)
-                            retry++
-                            if(item.status=="SUCCESS" || item.status=="ABORTED") {
-                                retry = item.retry
+                            try {
+                                def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: false , wait: item.wait)
+                                item.status = getBuildResult(currentRun)
+                                item.url = getBuildUrl(currentRun)
+                                retry++
+                                if(item.status=="SUCCESS" || item.status=="ABORTED") {
+                                    retry = item.retry
+                                }
+                            }
+                            catch (error) {
+                                script.echo "[ERROR] "+error.message
                             }
                         }
                     }
                     else {
-                        def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait)
-                        item.status = getBuildResult(currentRun)
-                        item.url = getBuildUrl(currentRun)
+                        try {
+                            def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait)
+                            item.status = getBuildResult(currentRun)
+                            item.url = getBuildUrl(currentRun)
+                        }
+                        catch (error) {
+                            script.echo "[ERROR] "+error.message
+                        }
                     }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
