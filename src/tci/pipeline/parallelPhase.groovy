@@ -201,13 +201,8 @@ class parallelPhase implements Serializable {
                         def retry=0
                         while (retry < item.retry) {
                             def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: false , wait: item.wait)
-                            try {
-                                item.status = getBuildResult(currentRun)
-                                item.url = getBuildUrl(currentRun)
-                            }
-                            catch (error) {
-                                echo "\033[1;91m[ERROR]\033[0m "+error.message
-                            }
+                            item.status = getBuildResult(currentRun)
+                            item.url = getBuildUrl(currentRun)
                             retry++
                             if(item.status=="SUCCESS" || item.status=="ABORTED") {
                                 retry = item.retry
@@ -216,13 +211,8 @@ class parallelPhase implements Serializable {
                     }
                     else {
                         def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait)
-                        try {
-                            item.status = getBuildResult(currentRun)
-                            item.url = getBuildUrl(currentRun)
-                        }
-                        catch (error) {
-                            echo "\033[1;91m[ERROR]\033[0m "+error.message
-                        }
+                        item.status = getBuildResult(currentRun)
+                        item.url = getBuildUrl(currentRun)
                     }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
@@ -328,7 +318,7 @@ class parallelPhase implements Serializable {
                 script.parallel parallelBlocks
             }
             catch (error) {
-
+                echo "[ERROR] "+error.message
             }
 
             description = "\033[1;94m"+name+'\033[0m\n'
