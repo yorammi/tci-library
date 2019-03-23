@@ -176,14 +176,13 @@ class parallelPhase implements Serializable {
 
     @NonCPS
     def getBuildResult(def build) {
-        script.echo "getBuildResult"
         return build.getResult()
     }
 
     @NonCPS
     def getBuildUrl(def build) {
-        script.echo "getBuildUrl"
-        return build.getRawBuild().getAbsoluteUrl()
+        return ""
+//        return build.getRawBuild().getAbsoluteUrl()
     }
 
     void run() {
