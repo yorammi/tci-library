@@ -209,8 +209,8 @@ class parallelPhase implements Serializable {
                     }
                     else {
                         def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait)
-                        item.status = currentRun.getResult()
-                        item.url = currentRun.getRawBuild().getAbsoluteUrl()
+                        item.status = getBuildResult(currentRun)
+                        item.url = currentRun.getBuildUrl()
                     }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
