@@ -223,6 +223,7 @@ class parallelPhase implements Serializable {
                             }
                             catch (error) {
                                 item.status = "FAILURE"
+                                retry = item.retry
                             }
                         }
                     }
