@@ -174,6 +174,16 @@ class parallelPhase implements Serializable {
         stepsSequences << stepsSequence
     }
 
+    @NonCPS
+    def getBuildResult(def build) {
+        return build.getResult()
+    }
+
+    @NonCPS
+    def getBuildUrl(def build) {
+        return build.getRawBuild().getAbsoluteUrl()
+    }
+
     void run() {
         def parallelBlocks = [:]
 
@@ -189,8 +199,8 @@ class parallelPhase implements Serializable {
                         def retry=0
                         while (retry < item.retry) {
                             def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: false , wait: item.wait)
-                            item.status = currentRun.getResult()
-                            item.url = currentRun.getRawBuild().getAbsoluteUrl()
+                            item.status = getBuildResult(currentRun)
+                            item.url = currentRun.getBuildUrl()
                             retry++
                             if(item.status=="SUCCESS" || item.status=="ABORTED") {
                                 retry = item.retry
