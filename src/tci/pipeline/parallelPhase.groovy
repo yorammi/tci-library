@@ -176,13 +176,11 @@ class parallelPhase implements Serializable {
 
     @NonCPS
     def getBuildResult(def build) {
-        echo "getBuildResult"
         return build.getResult()
     }
 
     @NonCPS
     def getBuildUrl(def build) {
-        echo "getBuildUrl"
         return build.getRawBuild().getAbsoluteUrl()
     }
 
@@ -208,7 +206,7 @@ class parallelPhase implements Serializable {
                                 item.url = getBuildUrl(currentRun)
                             }
                             catch (error) {
-                                echo error.message
+                                echo "\033[1;91m[ERROR]\033[0m "+error.message
                             }
                             retry++
                             if(item.status=="SUCCESS" || item.status=="ABORTED") {
@@ -223,7 +221,7 @@ class parallelPhase implements Serializable {
                             item.url = getBuildUrl(currentRun)
                         }
                         catch (error) {
-                            echo error.message
+                            echo "\033[1;91m[ERROR]\033[0m "+error.message
                         }
                     }
                     def timeStop = new Date()
