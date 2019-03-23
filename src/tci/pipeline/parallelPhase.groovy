@@ -174,12 +174,12 @@ class parallelPhase implements Serializable {
         stepsSequences << stepsSequence
     }
 
-//    @NonCPS
+    @NonCPS
     def getBuildResult(def build) {
         return build.getResult()
     }
 
-//    @NonCPS
+    @NonCPS
     def getBuildUrl(def build) {
         return build.getRawBuild().getAbsoluteUrl()
     }
@@ -192,6 +192,8 @@ class parallelPhase implements Serializable {
             def index = counter
             def title = "[Job #"+counter+"] "+item.jobName
             item.title = title
+            item.status = "SUCCESS"
+            item.url = ""
             parallelBlocks[title] = {
                 script.stage(title) {
                     def timeStart = new Date()
@@ -199,8 +201,13 @@ class parallelPhase implements Serializable {
                         def retry=0
                         while (retry < item.retry) {
                             def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: false , wait: item.wait)
-                            item.status = getBuildResult(currentRun)
-                            item.url = currentRun.getBuildUrl()
+                            try {
+                                item.status = getBuildResult(currentRun)
+                                item.url = currentRun.getBuildUrl()
+                            }
+                            catch (error) {
+
+                            }
                             retry++
                             if(item.status=="SUCCESS" || item.status=="ABORTED") {
                                 retry = item.retry
@@ -209,8 +216,13 @@ class parallelPhase implements Serializable {
                     }
                     else {
                         def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait)
-                        item.status = getBuildResult(currentRun)
-                        item.url = currentRun.getBuildUrl()
+                        try {
+                            item.status = getBuildResult(currentRun)
+                            item.url = currentRun.getBuildUrl()
+                        }
+                        catch (error) {
+
+                        }
                     }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
