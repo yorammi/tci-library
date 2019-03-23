@@ -210,36 +210,27 @@ class parallelPhase implements Serializable {
                     if( item.retry > 1) {
                         def retry=0
                         while (retry < item.retry) {
-                            def currentRun
                             try {
-                                currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait)
+                                currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: false , wait: item.wait)
+                                item.status = getBuildResult(currentRun)
+                                item.url = getBuildUrl(currentRun)
+                                if(currentRun!=null) {
+                                }
+                                retry++
+                                if(item.status=="SUCCESS" || item.status=="ABORTED") {
+                                    retry = item.retry
+                                }
                             }
                             catch (error) {
                                 item.status = "FAILURE"
-                            }
-                            if(currentRun!=null) {
-                                item.status = getBuildResult(currentRun)
-                                item.url = getBuildUrl(currentRun)
-                            }
-                            retry++
-                            if(item.status=="SUCCESS" || item.status=="ABORTED") {
-                                retry = item.retry
                             }
                         }
                     }
                     else {
                         try {
-                            def currentRun
-                            try {
-                                currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait)
-                            }
-                            catch (error) {
-                                item.status = "FAILURE"
-                            }
-                            if(currentRun!=null) {
-                                item.status = getBuildResult(currentRun)
-                                item.url = getBuildUrl(currentRun)
-                            }
+                            def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: false , wait: item.wait)
+                            item.status = getBuildResult(currentRun)
+                            item.url = getBuildUrl(currentRun)
                         }
                         catch (error) {
                             script.echo error.message
