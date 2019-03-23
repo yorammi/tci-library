@@ -214,15 +214,12 @@ class parallelPhase implements Serializable {
                                 currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: false , wait: item.wait)
                                 item.status = getBuildResult(currentRun)
                                 item.url = getBuildUrl(currentRun)
-                                if(currentRun!=null) {
-                                }
                                 if(item.status=="SUCCESS" || item.status=="ABORTED") {
                                     retry = item.retry
                                 }
                             }
                             catch (error) {
                                 item.status = "FAILURE"
-                                retry = item.retry
                             }
                             retry++
                         }
