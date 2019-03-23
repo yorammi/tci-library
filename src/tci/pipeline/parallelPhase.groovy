@@ -185,16 +185,6 @@ class parallelPhase implements Serializable {
     }
 
     @NonCPS
-    def setBuildResult(def build, def status) {
-        try {
-            return build.setResult(status)
-        }
-        catch (error) {
-            script.echo "[ERROR] [setBuildResult] "+error.message
-        }
-    }
-
-    @NonCPS
     def getBuildUrl(def build) {
         try {
             return build.getAbsoluteUrl()
@@ -226,7 +216,6 @@ class parallelPhase implements Serializable {
                             }
                             catch (error) {
                                 item.status = "FAILURE"
-                                setBuildResult(currentRun,"FAILURE")
                             }
                             if(currentRun!=null) {
                                 item.status = getBuildResult(currentRun)
@@ -246,7 +235,6 @@ class parallelPhase implements Serializable {
                             }
                             catch (error) {
                                 item.status = "FAILURE"
-                                setBuildResult(currentRun,"FAILURE")
                             }
                             if(currentRun!=null) {
                                 item.status = getBuildResult(currentRun)
