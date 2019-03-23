@@ -216,7 +216,6 @@ class parallelPhase implements Serializable {
                                 item.url = getBuildUrl(currentRun)
                                 if(currentRun!=null) {
                                 }
-                                retry++
                                 if(item.status=="SUCCESS" || item.status=="ABORTED") {
                                     retry = item.retry
                                 }
@@ -225,6 +224,7 @@ class parallelPhase implements Serializable {
                                 item.status = "FAILURE"
                                 retry = item.retry
                             }
+                            retry++
                         }
                     }
                     else {
