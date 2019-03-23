@@ -220,18 +220,18 @@ class parallelPhase implements Serializable {
                                 }
                             }
                             catch (error) {
-                                script.echo "[ERROR] "+error.message
+                                script.echo error.message
                             }
                         }
                     }
                     else {
                         try {
-                            def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait)
+                            def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: false , wait: item.wait)
                             item.status = getBuildResult(currentRun)
                             item.url = getBuildUrl(currentRun)
                         }
                         catch (error) {
-                            script.echo "[ERROR] "+error.message
+                            script.echo error.message
                         }
                     }
                     def timeStop = new Date()
