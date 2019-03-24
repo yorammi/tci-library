@@ -32,11 +32,11 @@ def block(Map config, Closure body) {
     {
         tciLogger.info ("[ERROR] "+error.message)
         if(config.failOnError) {
-            tciLogger.info ("[ERROR] '"+config.name+"' TCI block failed!")
+            tciLogger.info ("'"+config.name+"' TCI block failed!")
             throw error
         }
         else {
-            tciLogger.info ("[WARNING] '"+config.name+"' TCI block failed, but block set to continue on error.")
+            tciLogger.info ("'"+config.name+"' TCI block failed, but block set to continue on error.")
         }
     }
     finally {

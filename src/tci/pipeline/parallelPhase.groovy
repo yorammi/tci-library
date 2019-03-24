@@ -257,17 +257,17 @@ class parallelPhase implements Serializable {
                 }
                 description += '\t'+item.title+' - '+currentStatus+'\n'
             }
-            String statusColor="\033[1;92m"
+            String statusColor="\033[0;102m"
             if(overAllStatus=="FAILURE") {
-                statusColor="\033[0;91m"
+                statusColor="\033[0;101m"
             }
             else {
                 if(overAllStatus=="UNSTABLE") {
-                    statusColor="\033[0;93m"
+                    statusColor="\033[0;103m"
                 }
                 else {
                     if(overAllStatus=="ABORTED") {
-                        statusColor="\033[0;90m"
+                        statusColor="\033[0;100m"
                     }
                     else {
 
@@ -277,9 +277,9 @@ class parallelPhase implements Serializable {
             description += "'"+name+"' phase status: "+statusColor+overAllStatus+'\033[0m\n'
             script.echo description
             script.currentBuild.result = overAllStatus
-            if (overAllStatus=="FAILURE" || overAllStatus=="ABORTED") {
-                script.error "\033[1;91m[ERROR]\033[0m phase '${name}' Failed"
-            }
+//            if (overAllStatus=="FAILURE" || overAllStatus=="ABORTED") {
+//                script.echo "\033[1;91m[ERROR]\033[0m phase '${name}' Failed"
+//            }
         }
     }
 }
