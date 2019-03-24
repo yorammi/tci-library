@@ -211,15 +211,15 @@ class parallelPhase implements Serializable {
                         try {
                             script.echo "1"
                             retry(item.retry) {
-                                currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait)
                                 script.echo "2"
+                                currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait)
                                 item.status = getBuildResult(currentRun)
                                 item.url = getBuildUrl(currentRun)
                             }
                             script.echo "3"
                         }
                         catch (error) {
-                            script.echo "4"
+                            script.echo error.message
                             item.status = "FAILURE"
                         }
                     }
