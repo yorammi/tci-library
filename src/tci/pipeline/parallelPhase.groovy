@@ -157,6 +157,7 @@ class parallelPhase implements Serializable {
     }
 
     def runStepsSequence(def item) {
+        def timeStart = new Date()
         if(item.retry < 1) {
             item.retry = 1
         }
@@ -172,9 +173,13 @@ class parallelPhase implements Serializable {
                 item.status = "FAILURE"
             }
         }
+        def timeStop = new Date()
+        def duration = TimeCategory.minus(timeStop, timeStart)
+        script.tciLogger.info(" Parallel steps-sequence '\033[1;94m${item.sequenceName}\033[0m' ended. Duration: \033[1;94m${duration}\033[0m")
     }
 
     def runJob(def item) {
+        def timeStart = new Date()
         if(item.retry < 1) {
             item.retry = 1
         }
@@ -196,6 +201,9 @@ class parallelPhase implements Serializable {
                 item.status = "FAILURE"
             }
         }
+        def timeStop = new Date()
+        def duration = TimeCategory.minus(timeStop, timeStart)
+        script.tciLogger.info(" Parallel job '\033[1;94m${item.jobName}\033[0m' ended. Duration: \033[1;94m${duration}\033[0m")
     }
 
     def setOverallStatusByItem(def item) {
@@ -232,11 +240,7 @@ class parallelPhase implements Serializable {
             item.url = ""
             parallelBlocks[title] = {
                 script.stage(title) {
-                    def timeStart = new Date()
                     runJob(item)
-                    def timeStop = new Date()
-                    def duration = TimeCategory.minus(timeStop, timeStart)
-                    script.tciLogger.info(" Parallel job '\033[1;94m${item.jobName}\033[0m' ended. Duration: \033[1;94m${duration}\033[0m")
                     setOverallStatusByItem(item)
                 }
             }
@@ -250,13 +254,9 @@ class parallelPhase implements Serializable {
             item.title = title
             parallelBlocks[title] = {
                 script.stage(title) {
-                    def timeStart = new Date()
                     item.status = "SUCCESS"
                     runStepsSequence(item)
                     setOverallStatusByItem(item)
-                    def timeStop = new Date()
-                    def duration = TimeCategory.minus(timeStop, timeStart)
-                    script.tciLogger.info(" Parallel steps-sequence '\033[1;94m${item.sequenceName}\033[0m' ended. Duration: \033[1;94m${duration}\033[0m")
                 }
             }
             counter++
