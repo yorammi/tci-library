@@ -242,7 +242,7 @@ class parallelPhase implements Serializable {
             catch (error) {
             }
 
-            description = "\033[0;104m"+name+'\033[0m\n\nRun in parallel:\n'
+            description = "\033[1;94m"+name+'\033[0m\n\nRun in parallel:\n'
             jobs.each { item ->
                 def currentStatus = item.status
                 if(item.propagate == false) {
@@ -257,24 +257,24 @@ class parallelPhase implements Serializable {
                 }
                 description += '\t'+item.title+' - '+currentStatus+'\n'
             }
-            String statusColor="\033[0;102m"
+            String statusColor="\033[1;92m"
             if(overAllStatus=="FAILURE") {
-                statusColor="\033[0;101m"
+                statusColor="\033[1;91m"
             }
             else {
                 if(overAllStatus=="UNSTABLE") {
-                    statusColor="\033[0;103m"
+                    statusColor="\033[1;93m"
                 }
                 else {
                     if(overAllStatus=="ABORTED") {
-                        statusColor="\033[0;100m"
+                        statusColor="\033[1;90m"
                     }
                     else {
 
                     }
                 }
             }
-            description += "\n'\033[0;104m"+name+"\033[0m' phase status: "+statusColor+overAllStatus+'\033[0m\n'
+            description += "\n'\033[1;94m"+name+"\033[0m' phase status: "+statusColor+overAllStatus+'\033[0m\n'
             script.echo description
             script.currentBuild.result = overAllStatus
         }
