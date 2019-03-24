@@ -263,7 +263,7 @@ class parallelPhase implements Serializable {
             }
             else {
                 if(overAllStatus=="UNSTABLE") {
-                    statusColor="\033[1;93m"
+                    statusColor="\033[0;103m"
                 }
                 else {
                     if(overAllStatus=="ABORTED") {
