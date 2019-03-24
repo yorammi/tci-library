@@ -114,44 +114,6 @@ class parallelPhase implements Serializable {
         jobs << job
     }
 
-//    void addRemoteSubJob(Map config) {
-//        if (config == null) {
-//            config = [:]
-//        }
-//        if (config.job == null) {
-//            script.tciLogger.info ("[ERROR] you must provive a job name to run!!!")
-//            throw Exception
-//        }
-//        if (config.remoteJenkinsName == null) {
-//            script.tciLogger.info ("[ERROR] you must provive the remote Jenkins server name (remoteJenkinsName) name to run!!!")
-//            throw Exception
-//        }
-//        if (config.abortTriggeredJob == null) {
-//            config.abortTriggeredJob = true
-//        }
-//        if (config.useCrumbCache == null) {
-//            config.useCrumbCache = true
-//        }
-//        if (config.useJobInfoCache == null) {
-//            config.useJobInfoCache = true
-//        }
-//        if (config.parameters == null) {
-//            config.parameters = null
-//        }
-//        if (config.wait == null) {
-//            config.wait = true
-//        }
-//        if (config.pollInterval == null) {
-//            config.pollInterval = 30
-//        }
-//        if (config.retry == null) {
-//            config.retry = 1
-//        }
-//
-//        def remoteJob = new subRemoteJob(config.job, config.remoteJenkinsName, config.parameters, config.abortTriggeredJob, config.useCrumbCache, config.useJobInfoCache, config.pollInterval, config.retry)
-//        remoteJobs << remoteJob
-//    }
-
     void addStepsSequence(Map config) {
         if (config == null) {
             config = [:]
@@ -191,6 +153,24 @@ class parallelPhase implements Serializable {
         }
         catch (error) {
             script.echo "[ERROR] [getBuildUrl] "+error.message
+        }
+    }
+
+    def runStepsSequence(def item) {
+        if(item.retry < 1) {
+            item.retry = 1
+        }
+        def count=0
+        while (count < item.retry) {
+            try {
+                count++
+                item.sequence()
+                count=item.retry
+            }
+            catch (error) {
+                script.echo error.message
+                item.status = "FAILURE"
+            }
         }
     }
 
@@ -258,53 +238,10 @@ class parallelPhase implements Serializable {
                     def duration = TimeCategory.minus(timeStop, timeStart)
                     script.tciLogger.info(" Parallel job '\033[1;94m${item.jobName}\033[0m' ended. Duration: \033[1;94m${duration}\033[0m")
                     setOverallStatusByItem(item)
-//                    if(item.propagate == true) {
-//                        if(item.status == "FAILURE") {
-//                            overAllStatus="FAILURE"
-//                        }
-//                        else {
-//                            if(item.status == "UNSTABLE") {
-//                                if(item.overAllStatus != "FAILURE") {
-//                                    overAllStatus="UNSTABLE"
-//                                }
-//                            }
-//                            else {
-//                                if(item.status == "ABORTED") {
-//                                    if(item.overAllStatus != "FAILURE" && item.overAllStatus != "UNSTABLE") {
-//                                        overAllStatus="ABORTED"
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
                 }
             }
             counter++
         }
-
-//        counter=1
-//        remoteJobs.each { item ->
-//            def index = counter
-//            def title = "[Remote job #"+counter+"] "+item.jobName
-//            item.title = title
-//            parallelBlocks[title] = {
-//                script.stage(title) {
-//                    def timeStart = new Date()
-//                    if( item.retry > 1) {
-//                        script.retry (item.retry) {
-//                            script.triggerRemoteJob (remoteJenkinsName: item.remoteJenkinsName, job: item.jobName, parameters: item.parameters, abortTriggeredJob: item.propagate, pollInterval: item.pollInterval, useCrumbCache: temm.useCrumbCache, useJobInfoCache: item.useJobInfoCache ,maxConn: 1)
-//                        }
-//                    }
-//                    else {
-//                        script.triggerRemoteJob (remoteJenkinsName: item.remoteJenkinsName, job: item.jobName, parameters: item.parameters, abortTriggeredJob: item.propagate, pollInterval: item.pollInterval, useCrumbCache: temm.useCrumbCache, useJobInfoCache: item.useJobInfoCache ,maxConn: 1)
-//                    }
-//                    def timeStop = new Date()
-//                    def duration = TimeCategory.minus(timeStop, timeStart)
-//                    script.tciLogger.info(" Parallel remote job '${item.jobName}' ended. Duration: ${duration}")
-//                }
-//            }
-//            counter++
-//        }
 
         counter=1
         stepsSequences.each { item ->
@@ -315,36 +252,8 @@ class parallelPhase implements Serializable {
                 script.stage(title) {
                     def timeStart = new Date()
                     item.status = "SUCCESS"
-                    try {
-                        if( item.retry > 1) {
-                            script.retry (item.retry) {
-                                item.sequence()
-                            }
-                        }
-                        else {
-                            item.sequence()
-                        }
-                    }
-                    catch (error) {
-                        item.status = "FAILURE"
-                    }
-                    if(item.propagate == true) {
-                        if (item.status == "FAILURE") {
-                            overAllStatus = "FAILURE"
-                        } else {
-                            if (item.status == "UNSTABLE") {
-                                if (item.overAllStatus != "FAILURE") {
-                                    overAllStatus = "UNSTABLE"
-                                }
-                            } else {
-                                if (item.status == "ABORTED") {
-                                    if (item.overAllStatus != "FAILURE" && item.overAllStatus != "UNSTABLE") {
-                                        overAllStatus = "ABORTED"
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    runStepsSequence(item)
+                    setOverallStatusByItem(item)
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
                     script.tciLogger.info(" Parallel steps-sequence '\033[1;94m${item.sequenceName}\033[0m' ended. Duration: \033[1;94m${duration}\033[0m")
