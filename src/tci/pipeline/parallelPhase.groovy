@@ -25,33 +25,6 @@ class parallelPhase implements Serializable {
         }
     }
 
-//    class subRemoteJob implements Serializable {
-//
-//        String jobName
-//        String remoteJenkinsName
-//        def parameters
-//        boolean abortTriggeredJob
-//        boolean useCrumbCache
-//        boolean useJobInfoCache
-//        int pollInterval
-//        int retry
-//        String status
-//        String url
-//        def duration
-//        String title
-//
-//        subRemoteJob(String jobName, String remoteJenkinsName, def parameters, boolean abortTriggeredJob, boolean useCrumbCache, boolean useJobInfoCache, int pollInterval, int retry ) {
-//            this.jobName = jobName
-//            this.remoteJenkinsName = remoteJenkinsName
-//            this.parameters = parameters
-//            this.abortTriggeredJob = abortTriggeredJob
-//            this.useCrumbCache = useCrumbCache
-//            this.useJobInfoCache = useJobInfoCache
-//            this.pollInterval = pollInterval
-//            this.retry = retry
-//        }
-//    }
-
     class stepsSequence implements Serializable {
 
         String sequenceName
@@ -75,7 +48,6 @@ class parallelPhase implements Serializable {
     def script
     def name
     def jobs = []
-//    def remoteJobs = []
     def stepsSequences = []
     boolean failFast = false
     boolean failOnError = false
@@ -156,28 +128,6 @@ class parallelPhase implements Serializable {
         }
     }
 
-    def runStepsSequence(def item) {
-        def timeStart = new Date()
-        if(item.retry < 1) {
-            item.retry = 1
-        }
-        def count=0
-        while (count < item.retry) {
-            try {
-                count++
-                item.sequence()
-                count=item.retry
-            }
-            catch (error) {
-                script.echo error.message
-                item.status = "FAILURE"
-            }
-        }
-        def timeStop = new Date()
-        def duration = TimeCategory.minus(timeStop, timeStart)
-        script.tciLogger.info(" Parallel steps-sequence '\033[1;94m${item.sequenceName}\033[0m' ended. Duration: \033[1;94m${duration}\033[0m")
-    }
-
     def runJob(def item) {
         def timeStart = new Date()
         if(item.retry < 1) {
@@ -204,6 +154,28 @@ class parallelPhase implements Serializable {
         def timeStop = new Date()
         def duration = TimeCategory.minus(timeStop, timeStart)
         script.tciLogger.info(" Parallel job '\033[1;94m${item.jobName}\033[0m' ended. Duration: \033[1;94m${duration}\033[0m")
+    }
+
+    def runStepsSequence(def item) {
+        def timeStart = new Date()
+        if(item.retry < 1) {
+            item.retry = 1
+        }
+        def count=0
+        while (count < item.retry) {
+            try {
+                count++
+                item.sequence()
+                count=item.retry
+            }
+            catch (error) {
+                script.echo error.message
+                item.status = "FAILURE"
+            }
+        }
+        def timeStop = new Date()
+        def duration = TimeCategory.minus(timeStop, timeStart)
+        script.tciLogger.info(" Parallel steps-sequence '\033[1;94m${item.sequenceName}\033[0m' ended. Duration: \033[1;94m${duration}\033[0m")
     }
 
     def setOverallStatusByItem(def item) {
@@ -287,15 +259,15 @@ class parallelPhase implements Serializable {
             }
             String statusColor="\033[1;92m"
             if(overAllStatus=="FAILURE") {
-                statusColor="\033[1;91m"
+                statusColor="\033[0;91m"
             }
             else {
                 if(overAllStatus=="UNSTABLE") {
-                    statusColor="\033[1;93m"
+                    statusColor="\033[0;93m"
                 }
                 else {
                     if(overAllStatus=="ABORTED") {
-                        statusColor="\033[1;90m"
+                        statusColor="\033[0;90m"
                     }
                     else {
 
