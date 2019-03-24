@@ -208,30 +208,27 @@ class parallelPhase implements Serializable {
                 script.stage(title) {
                     def timeStart = new Date()
                     if( item.retry > 1) {
-                        def retry=0
                         while (retry < item.retry) {
                             try {
-                                currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: false , wait: item.wait)
-                                item.status = getBuildResult(currentRun)
-                                item.url = getBuildUrl(currentRun)
-                                if(item.status=="SUCCESS" || item.status=="ABORTED") {
-                                    retry = item.retry
+                                retry(item.retry) {
+                                    currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait)
+                                    item.status = getBuildResult(currentRun)
+                                    item.url = getBuildUrl(currentRun)
                                 }
                             }
                             catch (error) {
                                 item.status = "FAILURE"
                             }
-                            retry++
                         }
                     }
                     else {
                         try {
-                            def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: false , wait: item.wait)
+                            def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait)
                             item.status = getBuildResult(currentRun)
                             item.url = getBuildUrl(currentRun)
                         }
                         catch (error) {
-                            script.echo error.message
+                            item.status = "FAILURE"
                         }
                     }
                     def timeStop = new Date()
