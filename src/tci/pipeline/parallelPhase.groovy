@@ -218,6 +218,28 @@ class parallelPhase implements Serializable {
         }
     }
 
+    def setOverallStatusByItem(def item) {
+        if(item.propagate == true) {
+            if(item.status == "FAILURE") {
+                overAllStatus="FAILURE"
+            }
+            else {
+                if(item.status == "UNSTABLE") {
+                    if(item.overAllStatus != "FAILURE") {
+                        overAllStatus="UNSTABLE"
+                    }
+                }
+                else {
+                    if(item.status == "ABORTED") {
+                        if(item.overAllStatus != "FAILURE" && item.overAllStatus != "UNSTABLE") {
+                            overAllStatus="ABORTED"
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     void run() {
         def parallelBlocks = [:]
 
@@ -232,49 +254,29 @@ class parallelPhase implements Serializable {
                 script.stage(title) {
                     def timeStart = new Date()
                     runJob(item)
-//                    if(item.retry < 1) {
-//                        item.retry = 1
-//                    }
-//                    def count=0
-//                    while (count < item.retry) {
-//                        try {
-//                            count++
-//                            def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: false , wait: item.wait)
-//                            if(currentRun!=null) {
-//                                item.status = getBuildResult(currentRun)
-//                                item.url = getBuildUrl(currentRun)
-//                            }
-//                            if(item.status=="SUCCESS" || item.status=="ABORTED") {
-//                                count=item.retry
-//                            }
-//                        }
-//                        catch (error) {
-//                            script.echo error.message
-//                            item.status = "FAILURE"
-//                        }
-//                    }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
                     script.tciLogger.info(" Parallel job '\033[1;94m${item.jobName}\033[0m' ended. Duration: \033[1;94m${duration}\033[0m")
-                    if(item.propagate == true) {
-                        if(item.status == "FAILURE") {
-                            overAllStatus="FAILURE"
-                        }
-                        else {
-                            if(item.status == "UNSTABLE") {
-                                if(item.overAllStatus != "FAILURE") {
-                                    overAllStatus="UNSTABLE"
-                                }
-                            }
-                            else {
-                                if(item.status == "ABORTED") {
-                                    if(item.overAllStatus != "FAILURE" && item.overAllStatus != "UNSTABLE") {
-                                        overAllStatus="ABORTED"
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    setOverallStatusByItem(item)
+//                    if(item.propagate == true) {
+//                        if(item.status == "FAILURE") {
+//                            overAllStatus="FAILURE"
+//                        }
+//                        else {
+//                            if(item.status == "UNSTABLE") {
+//                                if(item.overAllStatus != "FAILURE") {
+//                                    overAllStatus="UNSTABLE"
+//                                }
+//                            }
+//                            else {
+//                                if(item.status == "ABORTED") {
+//                                    if(item.overAllStatus != "FAILURE" && item.overAllStatus != "UNSTABLE") {
+//                                        overAllStatus="ABORTED"
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
                 }
             }
             counter++
