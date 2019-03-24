@@ -209,14 +209,12 @@ class parallelPhase implements Serializable {
                     def timeStart = new Date()
                     if( item.retry > 1) {
                         try {
-                            script.echo "1"
-                            retry(item.retry) {
+                            script.retry(item.retry) {
                                 script.echo "2"
                                 currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait)
                                 item.status = getBuildResult(currentRun)
                                 item.url = getBuildUrl(currentRun)
                             }
-                            script.echo "3"
                         }
                         catch (error) {
                             script.echo error.message
@@ -225,12 +223,12 @@ class parallelPhase implements Serializable {
                     }
                     else {
                         try {
-                            script.echo "5"
                             def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: item.propagate , wait: item.wait)
                             item.status = getBuildResult(currentRun)
                             item.url = getBuildUrl(currentRun)
                         }
                         catch (error) {
+                            script.echo error.message
                             item.status = "FAILURE"
                         }
                     }
