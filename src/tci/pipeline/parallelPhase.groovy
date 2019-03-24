@@ -231,7 +231,7 @@ class parallelPhase implements Serializable {
             parallelBlocks[title] = {
                 script.stage(title) {
                     def timeStart = new Date()
-                    runJon(item)
+                    runJob(item)
 //                    if(item.retry < 1) {
 //                        item.retry = 1
 //                    }
