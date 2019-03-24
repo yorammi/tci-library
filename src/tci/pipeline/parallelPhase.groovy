@@ -207,33 +207,26 @@ class parallelPhase implements Serializable {
             parallelBlocks[title] = {
                 script.stage(title) {
                     def timeStart = new Date()
-                    if( item.retry > 1) {
-                        try {
-                            script.retry(item.retry) {
-                                def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: false , wait: item.wait)
-                                if(currentRun!=null) {
-                                    item.status = getBuildResult(currentRun)
-                                    item.url = getBuildUrl(currentRun)
-                                }
-                            }
-                        }
-                        catch (error) {
-                            script.echo error.message
-                            item.status = "FAILURE"
-                        }
+                    if(item.retry < 1) {
+                        item.retry = 1
                     }
-                    else {
+                    def count=0
+                    while (count < item.retry) {
                         try {
                             def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: false , wait: item.wait)
                             if(currentRun!=null) {
                                 item.status = getBuildResult(currentRun)
                                 item.url = getBuildUrl(currentRun)
                             }
+                            if(item.status=="SUCCESS" || item.status=="ABORTED") {
+                                count=item.retry
+                            }
                         }
                         catch (error) {
                             script.echo error.message
                             item.status = "FAILURE"
                         }
+                        count++
                     }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
