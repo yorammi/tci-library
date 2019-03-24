@@ -79,6 +79,7 @@ def setRandomBuildStatus() {
         }
         echo "Setting job status (by random) to be: "+randomStatus
         currentBuild.result = randomStatus
+        return randomStatus
     }
     catch(error)
     {

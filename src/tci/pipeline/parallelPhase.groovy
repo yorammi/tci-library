@@ -278,9 +278,6 @@ class parallelPhase implements Serializable {
                 }
                 description += '\t'+item.title+' - '+currentStatus+' - '+item.url+'\n'
             }
-//            remoteJobs.each { item ->
-//                description += '\t'+item.title+'\n'
-//            }
             stepsSequences.each { item ->
                 def currentStatus = item.status
                 if(item.propagate == false) {
