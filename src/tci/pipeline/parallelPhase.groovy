@@ -50,12 +50,12 @@ class parallelPhase implements Serializable {
     def jobs = []
     def stepsSequences = []
     boolean failFast = false
-    boolean failOnError = false
+    boolean failOnError = true
     boolean showStages = true
     String overAllStatus = "SUCCESS"
     String description = ""
 
-    parallelPhase(script, String name = "TCI parallel", boolean failFast = false, boolean failOnError = false, boolean showStages = true) {
+    parallelPhase(script, String name = "TCI parallel", boolean failFast = false, boolean failOnError = true, boolean showStages = true) {
         this.script = script
         this.name = name
         this.failFast = failFast
