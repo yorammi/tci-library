@@ -213,6 +213,7 @@ class parallelPhase implements Serializable {
                     def count=0
                     while (count < item.retry) {
                         try {
+                            count++
                             def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: false , wait: item.wait)
                             if(currentRun!=null) {
                                 item.status = getBuildResult(currentRun)
@@ -226,7 +227,6 @@ class parallelPhase implements Serializable {
                             script.echo error.message
                             item.status = "FAILURE"
                         }
-                        count++
                     }
                     def timeStop = new Date()
                     def duration = TimeCategory.minus(timeStop, timeStart)
