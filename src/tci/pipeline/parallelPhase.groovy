@@ -51,14 +51,16 @@ class parallelPhase implements Serializable {
     def stepsSequences = []
     boolean failFast = false
     boolean failOnError = false
+    boolean showStages = true
     String overAllStatus = "SUCCESS"
     String description = ""
 
-    parallelPhase(script, String name = "TCI parallel", boolean failFast = false, boolean failOnError = false) {
+    parallelPhase(script, String name = "TCI parallel", boolean failFast = false, boolean failOnError = false, boolean showStages = true) {
         this.script = script
         this.name = name
         this.failFast = failFast
         this.failOnError = failOnError
+        this.showStages = showStages
     }
 
     void addSubJob(Map config) {
@@ -211,10 +213,15 @@ class parallelPhase implements Serializable {
             item.status = "SUCCESS"
             item.url = ""
             parallelBlocks[title] = {
-                script.stage(title) {
-                    runJob(item)
-                    setOverallStatusByItem(item)
+                if(showStages) {
+                    script.stage(title) {
+                        runJob(item)
+                    }
                 }
+                else {
+                    runJob(item)
+                }
+                setOverallStatusByItem(item)
             }
             counter++
         }
@@ -224,11 +231,15 @@ class parallelPhase implements Serializable {
             def index = counter
             def title = "[Sequence #"+counter+"] "+item.sequenceName
             item.title = title
+            item.status = "SUCCESS"
             parallelBlocks[title] = {
-                script.stage(title) {
-                    item.status = "SUCCESS"
+                if(showStages) {
+                    script.stage(title) {
+                        runStepsSequence(item)
+                    }
+                }
+                else {
                     runStepsSequence(item)
-                    setOverallStatusByItem(item)
                 }
             }
             counter++
