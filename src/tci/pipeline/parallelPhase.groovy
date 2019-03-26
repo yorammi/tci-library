@@ -34,7 +34,7 @@ class parallelPhase implements Serializable {
         int retry
         String status
         String url
-        def duration
+        def duration = null
         String title
 
         stepsSequence(String sequenceName, def sequence, boolean propagate, int retry ) {
@@ -162,7 +162,7 @@ class parallelPhase implements Serializable {
                 if(currentRun!=null) {
                     item.status = getBuildResult(currentRun)
                     item.url = getBuildUrl(currentRun)
-                    script.echo "[Name] "+item.jobName+" [Status] "+item.status+" [URL] "+item.url
+                    script.echo item.jobName+" - "+item.status+" - "+item.url
                 }
                 if(item.status=="SUCCESS" || item.status=="ABORTED") {
                     count=item.retry
@@ -175,7 +175,7 @@ class parallelPhase implements Serializable {
         }
         def timeStop = new Date()
         def duration = TimeCategory.minus(timeStop, timeStart)
-        item.duration = duration.toString()
+        item.duration = "${duration}"
         script.echo(" Parallel job '\033[1;94m${item.jobName}\033[0m' ended. Duration: \033[1;94m${duration}\033[0m")
     }
 
@@ -198,6 +198,7 @@ class parallelPhase implements Serializable {
         }
         def timeStop = new Date()
         def duration = TimeCategory.minus(timeStop, timeStart)
+        item.duration = "${duration}"
         script.tciLogger.info(" Parallel steps-sequence '\033[1;94m${item.sequenceName}\033[0m' ended. Duration: \033[1;94m${duration}\033[0m")
     }
 
@@ -280,7 +281,11 @@ class parallelPhase implements Serializable {
                 if(item.propagate == false) {
                     currentStatus += " (propagate:false)"
                 }
-                description += '\t'+item.title+' - '+currentStatus+' - '+item.url+'\n'
+                description += '\t'+item.title+' - '+currentStatus+' - '+item.url
+                if(item.duration!=null) {
+                    description += ' - '+item.duration
+                }
+                description += '\n'
             }
             stepsSequences.each { item ->
                 def currentStatus = '\033[1m'+item.status+'\033[0m'
