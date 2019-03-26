@@ -232,7 +232,7 @@ class parallelPhase implements Serializable {
     void run() {
         def timeStart = new Date()
         if(showPhaseStage) {
-            stage(name) {
+            script.stage(name) {
                 run()
             }
         }
