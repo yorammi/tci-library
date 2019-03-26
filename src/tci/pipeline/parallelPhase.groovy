@@ -13,7 +13,7 @@ class parallelPhase implements Serializable {
         int retry
         String status
         String url
-        def duration
+        def duration = null
         String title
 
         subJob(String jobName, def parameters, boolean propagate, boolean wait, int retry ) {
@@ -162,6 +162,7 @@ class parallelPhase implements Serializable {
                 if(currentRun!=null) {
                     item.status = getBuildResult(currentRun)
                     item.url = getBuildUrl(currentRun)
+                    script.echo "[Name] "+item.jobName+" [Status] "+item.status+" [URL] "+item.url
                 }
                 if(item.status=="SUCCESS" || item.status=="ABORTED") {
                     count=item.retry
@@ -174,7 +175,8 @@ class parallelPhase implements Serializable {
         }
         def timeStop = new Date()
         def duration = TimeCategory.minus(timeStop, timeStart)
-        script.tciLogger.info(" Parallel job '\033[1;94m${item.jobName}\033[0m' ended. Duration: \033[1;94m${duration}\033[0m")
+        item.duration = duration
+        script.echo(" Parallel job '\033[1;94m${item.jobName}\033[0m' ended. Duration: \033[1;94m${duration}\033[0m")
     }
 
     def runStepsSequence(def item) {
@@ -285,7 +287,11 @@ class parallelPhase implements Serializable {
                 if(item.propagate == false) {
                     currentStatus += " (propagate:false)"
                 }
-                description += '\t'+item.title+' - '+currentStatus+'\n'
+                description += '\t'+item.title+' - '+currentStatus
+                if(item.duration!=null) {
+                    description += ' - '+item.duration
+                }
+                description += '\n'
             }
             String statusColor="\033[1;92m"
             if(overAllStatus=="FAILURE") {
