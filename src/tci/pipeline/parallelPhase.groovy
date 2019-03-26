@@ -46,7 +46,7 @@ class parallelPhase implements Serializable {
     }
 
     def script
-    def name
+    def name = "TCI parallel"
     def jobs = []
     def stepsSequences = []
     boolean failFast = false
@@ -61,6 +61,25 @@ class parallelPhase implements Serializable {
         this.failFast = failFast
         this.failOnError = failOnError
         this.showStages = showStages
+    }
+
+    parallelPhase(script, Map config) {
+        this.script = script
+        if (config == null) {
+            config = [:]
+        }
+        if (config.name != null) {
+            this.name = config.name
+        }
+        if (config.failFast != null) {
+            this.failFast = config.failFast
+        }
+        if (config.failOnError != null) {
+            this.failOnError = config.failOnError
+        }
+        if (config.showStages != null) {
+            this.showStages = config.showStages
+        }
     }
 
     void addSubJob(Map config) {
