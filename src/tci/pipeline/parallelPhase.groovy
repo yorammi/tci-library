@@ -233,11 +233,11 @@ class parallelPhase implements Serializable {
         def timeStart = new Date()
         if(showPhaseStage) {
             script.stage(name) {
-                run()
+                runImpl()
             }
         }
         else {
-            run()
+            runImpl()
         }
         def timeStop = new Date()
         def duration = TimeCategory.minus(timeStop, timeStart)
