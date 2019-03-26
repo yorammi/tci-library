@@ -267,7 +267,7 @@ class parallelPhase implements Serializable {
             counter++
         }
 
-        script.tciPipeline.block (name:name,failOnError:failOnError) {
+//        script.tciPipeline.block (name:name,failOnError:failOnError) {
             parallelBlocks.failFast = failFast
             try {
                 script.parallel parallelBlocks
@@ -319,6 +319,6 @@ class parallelPhase implements Serializable {
             script.echo description
             script.currentBuild.result = overAllStatus
         }
-    }
+//    }
 }
 
