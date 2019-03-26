@@ -56,12 +56,13 @@ class parallelPhase implements Serializable {
     String overAllStatus = "SUCCESS"
     String description = ""
 
-    parallelPhase(script, String name = "TCI parallel", boolean failFast = false, boolean failOnError = true, boolean showStages = true) {
+    parallelPhase(script, String name = "TCI parallel", boolean failFast = false, boolean failOnError = true, boolean showStages = true, boolean showPhaseStage = true) {
         this.script = script
         this.name = name
         this.failFast = failFast
         this.failOnError = failOnError
         this.showStages = showStages
+        this.showPhaseStage = showPhaseStage
     }
 
     parallelPhase(script, Map config) {
@@ -80,6 +81,9 @@ class parallelPhase implements Serializable {
         }
         if (config.showStages != null) {
             this.showStages = config.showStages
+        }
+        if (config.showPhaseStage != null) {
+            this.showPhaseStage = config.showPhaseStage
         }
     }
 
