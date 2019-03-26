@@ -230,7 +230,6 @@ class parallelPhase implements Serializable {
     }
 
     void run() {
-        def timeStart = new Date()
         if(showPhaseStage) {
             script.stage(name) {
                 runImpl()
@@ -239,9 +238,6 @@ class parallelPhase implements Serializable {
         else {
             runImpl()
         }
-        def timeStop = new Date()
-        def duration = TimeCategory.minus(timeStop, timeStart)
-        script.tciLogger.info(" Parallel phase '\033[1;94m${name}\033[0m' ended. Duration: \033[1;94m${duration}\033[0m")
     }
 
     void runImpl() {
