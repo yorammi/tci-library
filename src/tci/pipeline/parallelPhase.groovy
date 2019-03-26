@@ -52,11 +52,11 @@ class parallelPhase implements Serializable {
     boolean failFast = false
     boolean failOnError = true
     boolean showStages = true
-    boolean showPhaseStage = true
+    boolean showPhaseStage = false
     String overAllStatus = "SUCCESS"
     String description = ""
 
-    parallelPhase(script, String name = "TCI parallel", boolean failFast = false, boolean failOnError = true, boolean showStages = true, boolean showPhaseStage = true) {
+    parallelPhase(script, String name = "TCI parallel", boolean failFast = false, boolean failOnError = true, boolean showStages = true, boolean showPhaseStage = false) {
         this.script = script
         this.name = name
         this.failFast = failFast
