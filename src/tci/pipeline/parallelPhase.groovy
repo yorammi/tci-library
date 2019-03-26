@@ -274,14 +274,14 @@ class parallelPhase implements Serializable {
 
             description = "\033[1;94m"+name+'\033[0m\n\nRun in parallel:\n'
             jobs.each { item ->
-                def currentStatus = item.status
+                def currentStatus = '\033[1m'+item.status+'\033[0m'
                 if(item.propagate == false) {
                     currentStatus += " (propagate:false)"
                 }
                 description += '\t'+item.title+' - '+currentStatus+' - '+item.url+'\n'
             }
             stepsSequences.each { item ->
-                def currentStatus = item.status
+                def currentStatus = '\033[1m'+item.status+'\033[0m'
                 if(item.propagate == false) {
                     currentStatus += " (propagate:false)"
                 }
