@@ -267,58 +267,56 @@ class parallelPhase implements Serializable {
             counter++
         }
 
-//        script.tciPipeline.block (name:name,failOnError:failOnError) {
-            parallelBlocks.failFast = failFast
-            try {
-                script.parallel parallelBlocks
-            }
-            catch (error) {
-            }
+        parallelBlocks.failFast = failFast
+        try {
+            script.parallel parallelBlocks
+        }
+        catch (error) {
+        }
 
-            description = "\033[1;94m"+name+'\033[0m\n\nRun in parallel:\n'
-            jobs.each { item ->
-                def currentStatus = '\033[1m'+item.status+'\033[0m'
-                if(item.propagate == false) {
-                    currentStatus += " (propagate:false)"
-                }
-                description += '\t'+item.title+' - '+currentStatus+' - '+item.url
-                if(item.duration!=null) {
-                    description += ' - '+item.duration
-                }
-                description += '\n'
+        description = "\033[1;94m"+name+'\033[0m\n\nRun in parallel:\n'
+        jobs.each { item ->
+            def currentStatus = '\033[1m'+item.status+'\033[0m'
+            if(item.propagate == false) {
+                currentStatus += " (propagate:false)"
             }
-            stepsSequences.each { item ->
-                def currentStatus = '\033[1m'+item.status+'\033[0m'
-                if(item.propagate == false) {
-                    currentStatus += " (propagate:false)"
-                }
-                description += '\t'+item.title+' - '+currentStatus
-                if(item.duration!=null) {
-                    description += ' - '+item.duration
-                }
-                description += '\n'
+            description += '\t'+item.title+' - '+currentStatus+' - '+item.url
+            if(item.duration!=null) {
+                description += ' - '+item.duration
             }
-            String statusColor="\033[1;92m"
-            if(overAllStatus=="FAILURE") {
-                statusColor="\033[1;91m"
+            description += '\n'
+        }
+        stepsSequences.each { item ->
+            def currentStatus = '\033[1m'+item.status+'\033[0m'
+            if(item.propagate == false) {
+                currentStatus += " (propagate:false)"
+            }
+            description += '\t'+item.title+' - '+currentStatus
+            if(item.duration!=null) {
+                description += ' - '+item.duration
+            }
+            description += '\n'
+        }
+        String statusColor="\033[1;92m"
+        if(overAllStatus=="FAILURE") {
+            statusColor="\033[1;91m"
+        }
+        else {
+            if(overAllStatus=="UNSTABLE") {
+                statusColor="\033[0;103m"
             }
             else {
-                if(overAllStatus=="UNSTABLE") {
-                    statusColor="\033[0;103m"
+                if(overAllStatus=="ABORTED") {
+                    statusColor="\033[1;90m"
                 }
                 else {
-                    if(overAllStatus=="ABORTED") {
-                        statusColor="\033[1;90m"
-                    }
-                    else {
 
-                    }
                 }
             }
-            description += "\n'\033[1;94m"+name+"\033[0m' phase status: "+statusColor+overAllStatus+'\033[0m\n'
-            script.echo description
-            script.currentBuild.result = overAllStatus
         }
-//    }
+        description += "\n'\033[1;94m"+name+"\033[0m' phase status: "+statusColor+overAllStatus+'\033[0m\n'
+        script.echo description
+        script.currentBuild.result = overAllStatus
+    }
 }
 
