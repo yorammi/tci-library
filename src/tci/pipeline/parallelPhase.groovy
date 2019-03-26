@@ -175,7 +175,7 @@ class parallelPhase implements Serializable {
         }
         def timeStop = new Date()
         def duration = TimeCategory.minus(timeStop, timeStart)
-        item.duration = duration
+        item.duration = duration.toString()
         script.echo(" Parallel job '\033[1;94m${item.jobName}\033[0m' ended. Duration: \033[1;94m${duration}\033[0m")
     }
 
