@@ -171,6 +171,12 @@ class parallelPhase implements Serializable {
                 }
                 if(item.status=="SUCCESS" || item.status=="ABORTED") {
                     count=item.retry
+                    if(item.status=="ABORTED") {
+                        throw new Exception(item.jobName+" "+item.status)
+                    }
+                }
+                else {
+                        throw new Exception(item.jobName+" "+item.status)
                 }
             }
             catch (error) {
