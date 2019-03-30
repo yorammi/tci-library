@@ -206,6 +206,7 @@ class parallelPhase implements Serializable {
                     item.status = "FAILURE"
                 }
             }
+            setOverallStatusByItem(item)
             if(item.status!="SUCCESS") {
                 throw new Exception("[Job] "+item.jobName+" [Status]  "+item.status)
             }
@@ -213,7 +214,6 @@ class parallelPhase implements Serializable {
         catch (error) {
             throw new Exception(error.message)
         }
-        setOverallStatusByItem(item)
         def timeStop = new Date()
         def duration = TimeCategory.minus(timeStop, timeStart)
         item.duration = duration.toString()
