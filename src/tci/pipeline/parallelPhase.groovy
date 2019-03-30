@@ -158,17 +158,20 @@ class parallelPhase implements Serializable {
         if(item.propagate == true) {
             if(item.status == "FAILURE") {
                 overAllStatus="FAILURE"
+                script.echo item.toString()
             }
             else {
                 if(item.status == "UNSTABLE") {
                     if(item.overAllStatus != "FAILURE") {
                         overAllStatus="UNSTABLE"
+                        script.echo item.toString()
                     }
                 }
                 else {
                     if(item.status == "ABORTED") {
                         if(item.overAllStatus != "FAILURE" && item.overAllStatus != "UNSTABLE") {
                             overAllStatus="ABORTED"
+                            script.echo item.toString()
                         }
                     }
                 }
