@@ -154,6 +154,28 @@ class parallelPhase implements Serializable {
         }
     }
 
+    def setOverallStatusByItem(def item) {
+        if(item.propagate == true) {
+            if(item.status == "FAILURE") {
+                overAllStatus="FAILURE"
+            }
+            else {
+                if(item.status == "UNSTABLE") {
+                    if(item.overAllStatus != "FAILURE") {
+                        overAllStatus="UNSTABLE"
+                    }
+                }
+                else {
+                    if(item.status == "ABORTED") {
+                        if(item.overAllStatus != "FAILURE" && item.overAllStatus != "UNSTABLE") {
+                            overAllStatus="ABORTED"
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     def runJob(def item) {
         def timeStart = new Date()
         if(item.retry < 1) {
@@ -188,6 +210,7 @@ class parallelPhase implements Serializable {
         catch (error) {
             throw new Exception(error.message)
         }
+        setOverallStatusByItem(item)
         def timeStop = new Date()
         def duration = TimeCategory.minus(timeStop, timeStart)
         item.duration = duration.toString()
@@ -211,32 +234,11 @@ class parallelPhase implements Serializable {
                 item.status = "FAILURE"
             }
         }
+        setOverallStatusByItem(item)
         def timeStop = new Date()
         def duration = TimeCategory.minus(timeStop, timeStart)
         item.duration = duration.toString()
         script.tciLogger.info(" Parallel steps-sequence '\033[1;94m${item.sequenceName}\033[0m' ended. Duration: \033[1;94m${duration}\033[0m")
-    }
-
-    def setOverallStatusByItem(def item) {
-        if(item.propagate == true) {
-            if(item.status == "FAILURE") {
-                overAllStatus="FAILURE"
-            }
-            else {
-                if(item.status == "UNSTABLE") {
-                    if(item.overAllStatus != "FAILURE") {
-                        overAllStatus="UNSTABLE"
-                    }
-                }
-                else {
-                    if(item.status == "ABORTED") {
-                        if(item.overAllStatus != "FAILURE" && item.overAllStatus != "UNSTABLE") {
-                            overAllStatus="ABORTED"
-                        }
-                    }
-                }
-            }
-        }
     }
 
     void run() {
@@ -269,7 +271,6 @@ class parallelPhase implements Serializable {
                 else {
                     runJob(item)
                 }
-                setOverallStatusByItem(item)
             }
             counter++
         }
