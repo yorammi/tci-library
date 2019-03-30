@@ -160,29 +160,30 @@ class parallelPhase implements Serializable {
             item.retry = 1
         }
         def count=0
-        while (count < item.retry) {
-            try {
-                count++
-                def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: false , wait: item.wait)
-                if(currentRun!=null) {
-                    item.status = getBuildResult(currentRun)
-                    item.url = getBuildUrl(currentRun)
-                    script.echo item.jobName+" - "+item.status+" - "+item.url
-                }
-                if(item.status=="SUCCESS" || item.status=="ABORTED") {
-                    count=item.retry
-                    if(item.status=="ABORTED") {
-                        throw new Exception("[Job] "+item.jobName+" [Status]  "+item.status)
+        try {
+            while (count < item.retry) {
+                try {
+                    count++
+                    def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: false , wait: item.wait)
+                    if(currentRun!=null) {
+                        item.status = getBuildResult(currentRun)
+                        item.url = getBuildUrl(currentRun)
+                        script.echo item.jobName+" - "+item.status+" - "+item.url
+                    }
+                    if(item.status=="SUCCESS" || item.status=="ABORTED") {
+                        count=item.retry
+                    }
+                    else {
                     }
                 }
-                else {
-                        throw new Exception("[Job] "+item.jobName+" [Status]  "+item.status)
+                catch (error) {
+                    script.echo error.message
+                    item.status = "FAILURE"
                 }
             }
-            catch (error) {
-                script.echo error.message
-                item.status = "FAILURE"
-            }
+        }
+        catch (error) {
+            throw new Exception("[Job] "+item.jobName+" [Status]  "+item.status)
         }
         def timeStop = new Date()
         def duration = TimeCategory.minus(timeStop, timeStart)
