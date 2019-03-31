@@ -15,7 +15,6 @@ class parallelPhase implements Serializable {
         String url
         def duration = null
         String title
-        String bashDescription = ""
 
         subJob(String jobName, def parameters, boolean propagate, boolean wait, int retry ) {
             this.jobName = jobName
@@ -55,6 +54,7 @@ class parallelPhase implements Serializable {
     boolean showStages = true
     boolean showPhaseStage = false
     String overAllStatus = "SUCCESS"
+    String bashDescription = ""
     String description = ""
 
     parallelPhase(script, String name = "TCI parallel", boolean failFast = false, boolean failOnError = true, boolean showStages = true, boolean showPhaseStage = false) {
