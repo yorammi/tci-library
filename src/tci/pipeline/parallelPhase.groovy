@@ -191,7 +191,7 @@ class parallelPhase implements Serializable {
                     if(currentRun!=null) {
                         item.status = getBuildResult(currentRun)
                         item.url = getBuildUrl(currentRun)
-                        script.echo item.jobName+" - "+item.status+" - "+item.url
+                        // script.echo item.jobName+" - "+item.status+" - "+item.url
                     }
                     if(item.status=="SUCCESS" || item.status=="ABORTED") {
                         count=item.retry
