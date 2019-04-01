@@ -346,8 +346,8 @@ class parallelPhase implements Serializable {
         script.echo description
         if(failOnError) {
             script.currentBuild.result = overAllStatus
-            if(overAllStatus!="SUCCESS") {
-                script.error ("\n'\033[1;94m"+name+"\033[0m' parallel phase status: "+statusColor+overAllStatus+"\033[0m\n")
+            if(overAllStatus=="FAILURE") {
+                script.error()
             }
         }
     }
