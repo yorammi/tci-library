@@ -341,13 +341,13 @@ class parallelPhase implements Serializable {
                 }
             }
         }
-        description += "\n'\033[1;94m"+name+"\033[0m' phase status: "+statusColor+overAllStatus+"\033[0m\n"
+        description += "\n'\033[1;94m"+name+"\033[0m' parallel phase status: "+statusColor+overAllStatus+"\033[0m\n"
         bashDescription = description
         script.echo description
         if(failOnError) {
             script.currentBuild.result = overAllStatus
             if(overAllStatus!="SUCCESS") {
-                script.error ("\n'\033[1;94m"+name+"\033[0m' phase status: "+statusColor+overAllStatus+"\033[0m\n")
+                script.error ("\n'\033[1;94m"+name+"\033[0m' parallel phase status: "+statusColor+overAllStatus+"\033[0m\n")
             }
         }
     }
