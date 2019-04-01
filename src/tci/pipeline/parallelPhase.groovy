@@ -205,17 +205,16 @@ class parallelPhase implements Serializable {
                 }
             }
             setOverallStatusByItem(item)
-            if(item.status!="SUCCESS") {
-                throw new Exception("[Job] "+item.jobName+" [Status]  "+item.status)
-            }
         }
         catch (error) {
-            throw new Exception(error.message)
         }
         def timeStop = new Date()
         def duration = TimeCategory.minus(timeStop, timeStart)
         item.duration = duration.toString()
         script.echo(" Parallel job '\033[1;94m${item.jobName}\033[0m' ended. Duration: \033[1;94m${duration}\033[0m")
+        if(item.status!="SUCCESS") {
+            throw new Exception("[Job] "+item.jobName+" [Status]  "+item.status)
+        }
     }
 
     def runStepsSequence(def item) {
@@ -348,7 +347,7 @@ class parallelPhase implements Serializable {
         if(failOnError) {
             script.currentBuild.result = overAllStatus
             if(overAllStatus!="SUCCESS") {
-                throw new Exception(name+" exits with status "+overAllStatus)
+                return
             }
         }
     }
