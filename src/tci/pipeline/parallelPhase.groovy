@@ -142,6 +142,7 @@ class parallelPhase implements Serializable {
         }
         catch (error) {
             script.echo "[ERROR] [getBuildResult] "+error.message
+            return "N/A"
         }
     }
 
@@ -152,6 +153,7 @@ class parallelPhase implements Serializable {
         }
         catch (error) {
             script.echo "[ERROR] [getBuildUrl] "+error.message
+            return "N/A"
         }
     }
 
