@@ -211,7 +211,7 @@ class parallelPhase implements Serializable {
         def timeStop = new Date()
         def duration = TimeCategory.minus(timeStop, timeStart)
         item.duration = duration.toString()
-        script.echo(" Parallel job '\033[1;94m${item.jobName}\033[0m' (${item.url}) ended with ${item.status} status. Duration: \033[1;94m${duration}\033[0m")
+        script.echo(" Parallel job '\033[1;94m${item.jobName}\033[0m' (${item.url}) ended with \033[1;94m${item.status}\033[0m status. Duration: \033[1;94m${duration}\033[0m")
         if(item.status!="SUCCESS") {
             throw new Exception()
         }
@@ -238,7 +238,7 @@ class parallelPhase implements Serializable {
         def timeStop = new Date()
         def duration = TimeCategory.minus(timeStop, timeStart)
         item.duration = duration.toString()
-        script.tciLogger.info(" Parallel steps-sequence '\033[1;94m${item.sequenceName}\033[0m' ended with ${item.status} status. Duration: \033[1;94m${duration}\033[0m")
+        script.tciLogger.info(" Parallel steps-sequence '\033[1;94m${item.sequenceName}\033[0m' ended with \033[1;94m${item.status}\033[0m status. Duration: \033[1;94m${duration}\033[0m")
     }
 
     void run() {
