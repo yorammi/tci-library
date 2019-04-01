@@ -213,7 +213,12 @@ class parallelPhase implements Serializable {
         item.duration = duration.toString()
         script.echo(" Parallel job '\033[1;94m${item.jobName}\033[0m' ended. Duration: \033[1;94m${duration}\033[0m")
         if(item.status!="SUCCESS") {
-            throw new Exception("[Job] "+item.jobName+" [Status]  "+item.status)
+            try {
+                script.currentBuild.result=item.status
+            }
+            catch (error) {
+            }
+            // throw new Exception("[Job] "+item.jobName+" [Status]  "+item.status)
         }
     }
 
