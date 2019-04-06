@@ -6,7 +6,7 @@ class parallelPhase implements Serializable {
 
     class subJob implements Serializable {
 
-        String jobName
+        String blockName
         def parameters
         boolean propagate
         boolean wait
@@ -16,8 +16,8 @@ class parallelPhase implements Serializable {
         def duration = null
         String title
 
-        subJob(String jobName, def parameters, boolean propagate, boolean wait, int retry ) {
-            this.jobName = jobName
+        subJob(String blockName, def parameters, boolean propagate, boolean wait, int retry ) {
+            this.blockName = blockName
             this.parameters = parameters
             this.propagate = propagate
             this.wait = wait
@@ -27,7 +27,7 @@ class parallelPhase implements Serializable {
 
     class stepsSequence implements Serializable {
 
-        String sequenceName
+        String blockName
         def sequence
         boolean propagate
         boolean wait
@@ -37,8 +37,8 @@ class parallelPhase implements Serializable {
         def duration = null
         String title
 
-        stepsSequence(String sequenceName, def sequence, boolean propagate, int retry ) {
-            this.sequenceName = sequenceName
+        stepsSequence(String blockName, def sequence, boolean propagate, int retry ) {
+            this.blockName = blockName
             this.sequence = sequence
             this.propagate = propagate
             this.retry = retry
@@ -189,11 +189,10 @@ class parallelPhase implements Serializable {
             while (count < item.retry) {
                 try {
                     count++
-                    def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: false , wait: item.wait)
+                    def currentRun = script.build (job: item.blockName, parameters: item.parameters, propagate: false , wait: item.wait)
                     if(currentRun!=null) {
                         item.status = getBuildResult(currentRun)
                         item.url = getBuildUrl(currentRun)
-                        // script.echo item.jobName+" - "+item.status+" - "+item.url
                     }
                     if(item.status=="SUCCESS" || item.status=="ABORTED") {
                         count=item.retry
@@ -213,7 +212,7 @@ class parallelPhase implements Serializable {
         def timeStop = new Date()
         def duration = TimeCategory.minus(timeStop, timeStart)
         item.duration = duration.toString()
-        script.echo(" Parallel job '\033[1;94m${item.jobName}\033[0m' (${item.url}) ended with \033[1;94m${item.status}\033[0m status. Duration: \033[1;94m${duration}\033[0m")
+        script.echo(" Parallel job '\033[1;94m${item.blockName}\033[0m' (${item.url}) ended with \033[1;94m${item.status}\033[0m status. Duration: \033[1;94m${duration}\033[0m")
         if(item.status!="SUCCESS") {
             throw new Exception()
         }
@@ -240,7 +239,7 @@ class parallelPhase implements Serializable {
         def timeStop = new Date()
         def duration = TimeCategory.minus(timeStop, timeStart)
         item.duration = duration.toString()
-        script.tciLogger.info(" Parallel steps-sequence '\033[1;94m${item.sequenceName}\033[0m' ended with \033[1;94m${item.status}\033[0m status. Duration: \033[1;94m${duration}\033[0m")
+        script.tciLogger.info(" Parallel steps-sequence '\033[1;94m${item.blockName}\033[0m' ended with \033[1;94m${item.status}\033[0m status. Duration: \033[1;94m${duration}\033[0m")
     }
 
     void run() {
@@ -260,7 +259,7 @@ class parallelPhase implements Serializable {
         def counter=1
         jobs.each { item ->
             def index = counter
-            def title = "[Job #"+counter+"] "+item.jobName
+            def title = "[Phase-job #"+counter+"] "+item.blockName
             item.title = title
             item.status = "SUCCESS"
             item.url = ""
@@ -280,7 +279,7 @@ class parallelPhase implements Serializable {
         counter=1
         stepsSequences.each { item ->
             def index = counter
-            def title = "[Sequence #"+counter+"] "+item.sequenceName
+            def title = "[Phase-sequence #"+counter+"] "+item.blockName
             item.title = title
             item.status = "SUCCESS"
             parallelBlocks[title] = {

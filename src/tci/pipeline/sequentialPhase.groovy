@@ -242,8 +242,13 @@ class sequentialPhase implements Serializable {
         def counter=1
         blocks.each { item ->
             def index = counter
-            def title = "[Phase-block #"+counter+"] "+item.blockName
-            item.title = title
+            if(item.class.toString().contains('subJob')) {
+                title = "[Phase-block #"+counter+"] "+item.blockName
+            }
+            else {
+                title = "[Phase-block #"+counter+"] "+item.blockName
+            }
+            def title = item.title
             item.status = "SUCCESS"
             item.url = ""
             if(showStages) {
