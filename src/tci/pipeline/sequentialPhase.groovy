@@ -274,16 +274,19 @@ class sequentialPhase implements Serializable {
 
         description = "\033[1;94m"+name+'\033[0m\n\nRun in sequence:\n'
         blocks.each { item ->
-            def currentStatus = '\033[1m'+item.status+'\033[0m'
-            if(item.propagate == false) {
-                currentStatus += " (propagate:false)"
-            }
+            def currentStatus = 'N/A'
+            if(item.status) {
+                currentStatus = '\033[1m'+item.status+'\033[0m'
+                if(item.propagate == false) {
+                    currentStatus += " (propagate:false)"
+                }
                 if(item.class.toString().contains('subJob')) {
                     description += '\t'+item.title+' - '+currentStatus+' - '+item.url
                 }
                 else {
                     description += '\t'+item.title+' - '+currentStatus
                 }
+            }
             if(item.duration!=null) {
                 description += ' - '+item.duration
             }
