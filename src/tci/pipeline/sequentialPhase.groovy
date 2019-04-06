@@ -2,11 +2,11 @@ package tci.pipeline
 
 import groovy.time.TimeCategory;
 
-class parallelPhase implements Serializable {
+class sequentialPhase implements Serializable {
 
     class subJob implements Serializable {
 
-        String jobName
+        String blockName
         def parameters
         boolean propagate
         boolean wait
@@ -16,8 +16,8 @@ class parallelPhase implements Serializable {
         def duration = null
         String title
 
-        subJob(String jobName, def parameters, boolean propagate, boolean wait, int retry ) {
-            this.jobName = jobName
+        subJob(String blockName, def parameters, boolean propagate, boolean wait, int retry ) {
+            this.blockName = blockName
             this.parameters = parameters
             this.propagate = propagate
             this.wait = wait
@@ -27,7 +27,7 @@ class parallelPhase implements Serializable {
 
     class stepsSequence implements Serializable {
 
-        String sequenceName
+        String blockName
         def sequence
         boolean propagate
         boolean wait
@@ -37,8 +37,8 @@ class parallelPhase implements Serializable {
         def duration = null
         String title
 
-        stepsSequence(String sequenceName, def sequence, boolean propagate, int retry ) {
-            this.sequenceName = sequenceName
+        stepsSequence(String blockName, def sequence, boolean propagate, int retry ) {
+            this.blockName = blockName
             this.sequence = sequence
             this.propagate = propagate
             this.retry = retry
@@ -46,36 +46,21 @@ class parallelPhase implements Serializable {
     }
 
     def script
-    def name = "TCI parallel"
-    def jobs = []
-    def stepsSequences = []
-    boolean failFast = false
+    def name = "TCI sequential"
+    def blocks = []
     boolean failOnError = true
     boolean showStages = true
     boolean showPhaseStage = false
     String overAllStatus = "SUCCESS"
     String description = ""
 
-    parallelPhase(script, String name = "TCI parallel", boolean failFast = false, boolean failOnError = true, boolean showStages = true, boolean showPhaseStage = false) {
-        script.echo "Deprecative constructor"
-        this.script = script
-        this.name = name
-        this.failFast = failFast
-        this.failOnError = failOnError
-        this.showStages = showStages
-        this.showPhaseStage = showPhaseStage
-    }
-
-    parallelPhase(script, Map config) {
+    sequentialPhase(script, Map config) {
         this.script = script
         if (config == null) {
             config = [:]
         }
         if (config.name != null) {
             this.name = config.name
-        }
-        if (config.failFast != null) {
-            this.failFast = config.failFast
         }
         if (config.failOnError != null) {
             this.failOnError = config.failOnError
@@ -110,7 +95,7 @@ class parallelPhase implements Serializable {
         }
 
         def job = new subJob(config.job, config.parameters, config.propagate, config.wait, config.retry)
-        jobs << job
+        blocks << job
     }
 
     void addStepsSequence(Map config) {
@@ -132,7 +117,7 @@ class parallelPhase implements Serializable {
         }
 
         def stepsSequence = new stepsSequence(config.name, config.sequence, config.propagate, config.retry)
-        stepsSequences << stepsSequence
+        blocks << stepsSequence
     }
 
     @NonCPS
@@ -189,11 +174,10 @@ class parallelPhase implements Serializable {
             while (count < item.retry) {
                 try {
                     count++
-                    def currentRun = script.build (job: item.jobName, parameters: item.parameters, propagate: false , wait: item.wait)
+                    def currentRun = script.build (job: item.blockName, parameters: item.parameters, propagate: false , wait: item.wait)
                     if(currentRun!=null) {
                         item.status = getBuildResult(currentRun)
                         item.url = getBuildUrl(currentRun)
-                        // script.echo item.jobName+" - "+item.status+" - "+item.url
                     }
                     if(item.status=="SUCCESS" || item.status=="ABORTED") {
                         count=item.retry
@@ -213,7 +197,7 @@ class parallelPhase implements Serializable {
         def timeStop = new Date()
         def duration = TimeCategory.minus(timeStop, timeStart)
         item.duration = duration.toString()
-        script.echo(" Parallel job '\033[1;94m${item.jobName}\033[0m' (${item.url}) ended with \033[1;94m${item.status}\033[0m status. Duration: \033[1;94m${duration}\033[0m")
+        script.echo(" Sequential job '\033[1;94m${item.blockName}\033[0m' (${item.url}) ended with \033[1;94m${item.status}\033[0m status. Duration: \033[1;94m${duration}\033[0m")
         if(item.status!="SUCCESS") {
             throw new Exception()
         }
@@ -240,7 +224,7 @@ class parallelPhase implements Serializable {
         def timeStop = new Date()
         def duration = TimeCategory.minus(timeStop, timeStart)
         item.duration = duration.toString()
-        script.tciLogger.info(" Parallel steps-sequence '\033[1;94m${item.sequenceName}\033[0m' ended with \033[1;94m${item.status}\033[0m status. Duration: \033[1;94m${duration}\033[0m")
+        script.tciLogger.info(" Sequential steps-sequence '\033[1;94m${item.blockName}\033[0m' ended with \033[1;94m${item.status}\033[0m status. Duration: \033[1;94m${duration}\033[0m")
     }
 
     void run() {
@@ -255,39 +239,26 @@ class parallelPhase implements Serializable {
     }
 
     void runImpl() {
-        def parallelBlocks = [:]
-
         def counter=1
-        jobs.each { item ->
+        blocks.each { item ->
             def index = counter
-            def title = "[Job #"+counter+"] "+item.jobName
+            def title = "[Phase-block #"+counter+"] "+item.blockName
             item.title = title
             item.status = "SUCCESS"
             item.url = ""
-            parallelBlocks[title] = {
-                if(showStages) {
-                    script.stage(title) {
+            if(showStages) {
+                script.stage(title) {
+                    if(item.class.toString().contains('subJob')) {
                         runJob(item)
                     }
-                }
-                else {
-                    runJob(item)
-                }
-            }
-            counter++
-        }
-
-        counter=1
-        stepsSequences.each { item ->
-            def index = counter
-            def title = "[Sequence #"+counter+"] "+item.sequenceName
-            item.title = title
-            item.status = "SUCCESS"
-            parallelBlocks[title] = {
-                if(showStages) {
-                    script.stage(title) {
+                    else {
                         runStepsSequence(item)
                     }
+                }
+            }
+            else {
+                if(item.class.toString().contains('subJob')) {
+                    runJob(item)
                 }
                 else {
                     runStepsSequence(item)
@@ -296,31 +267,18 @@ class parallelPhase implements Serializable {
             counter++
         }
 
-        parallelBlocks.failFast = failFast
-        try {
-            script.parallel parallelBlocks
-        }
-        catch (error) {
-        }
-
-        description = "\033[1;94m"+name+'\033[0m\n\nRun in parallel:\n'
-        jobs.each { item ->
+        description = "\033[1;94m"+name+'\033[0m\n\nRun in sequence:\n'
+        blocks.each { item ->
             def currentStatus = '\033[1m'+item.status+'\033[0m'
             if(item.propagate == false) {
                 currentStatus += " (propagate:false)"
             }
-            description += '\t'+item.title+' - '+currentStatus+' - '+item.url
-            if(item.duration!=null) {
-                description += ' - '+item.duration
-            }
-            description += '\n'
-        }
-        stepsSequences.each { item ->
-            def currentStatus = '\033[1m'+item.status+'\033[0m'
-            if(item.propagate == false) {
-                currentStatus += " (propagate:false)"
-            }
-            description += '\t'+item.title+' - '+currentStatus
+                if(item.class.toString().contains('subJob')) {
+                    description += '\t'+item.title+' - '+currentStatus+' - '+item.url
+                }
+                else {
+                    description += '\t'+item.title+' - '+currentStatus
+                }
             if(item.duration!=null) {
                 description += ' - '+item.duration
             }
@@ -343,12 +301,12 @@ class parallelPhase implements Serializable {
                 }
             }
         }
-        description += "\n'\033[1;94m"+name+"\033[0m' parallel phase status: "+statusColor+overAllStatus+"\033[0m\n"
+        description += "\n'\033[1;94m"+name+"\033[0m' sequential phase status: "+statusColor+overAllStatus+"\033[0m\n"
         script.echo description
         if(failOnError) {
             script.currentBuild.result = overAllStatus
             if(overAllStatus=="FAILURE"|| overAllStatus=="ABORTED") {
-                script.error ("\n'\033[1;94m"+name+"\033[0m' parallel phase status: "+statusColor+overAllStatus+"\033[0m\n")
+                script.error ("\n'\033[1;94m"+name+"\033[0m' sequential phase status: "+statusColor+overAllStatus+"\033[0m\n")
             }
         }
     }
