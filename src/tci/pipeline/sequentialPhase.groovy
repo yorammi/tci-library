@@ -241,6 +241,8 @@ class sequentialPhase implements Serializable {
     void runImpl() {
         def counter=1
         blocks.each { item ->
+            if(overAllStatus=="SUCCESS") {
+                try {
             def index = counter
             if(item.class.toString().contains('subJob')) {
                 item.title = "[Phase-job #"+counter+"] "+item.blockName
@@ -270,6 +272,11 @@ class sequentialPhase implements Serializable {
                 }
             }
             counter++
+                }
+                catch (error) {
+
+                }
+            }
         }
 
         description = "\033[1;94m"+name+'\033[0m\n\nRun in sequence:\n'
