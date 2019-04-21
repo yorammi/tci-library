@@ -304,7 +304,8 @@ class parallelPhase implements Serializable {
 
         description = "\033[1;94m"+name+'\033[0m\n\nRun in parallel:\n'
         jobs.each { item ->
-            def currentStatus = '\033[1m'+item.status+'\033[0m'
+            def currentStatusColor=(item.status=="SUCCESS")?'\033[1m':'\033[1;91m'
+            def currentStatus = currentStatusColor+item.status+'\033[0m'
             if(item.propagate == false) {
                 currentStatus += " (propagate:false)"
             }
@@ -315,7 +316,8 @@ class parallelPhase implements Serializable {
             description += '\n'
         }
         stepsSequences.each { item ->
-            def currentStatus = '\033[1m'+item.status+'\033[0m'
+            def currentStatusColor=(item.status=="SUCCESS")?'\033[1m':'\033[1;91m'
+            def currentStatus = currentStatusColor+item.status+'\033[0m'
             if(item.propagate == false) {
                 currentStatus += " (propagate:false)"
             }
