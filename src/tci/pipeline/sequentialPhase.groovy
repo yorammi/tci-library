@@ -283,7 +283,8 @@ class sequentialPhase implements Serializable {
         blocks.each { item ->
             def currentStatus = 'N/A'
             if(item.status) {
-                currentStatus = '\033[1m'+item.status+'\033[0m'
+                def currentStatusColor=(item.status=="SUCCESS")?'\033[1m':'\033[1;91m'
+                currentStatus = currentStatusColor+item.status+'\033[0m'
                 if(item.propagate == false) {
                     currentStatus += " (propagate:false)"
                 }
