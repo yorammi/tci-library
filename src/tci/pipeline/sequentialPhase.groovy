@@ -256,13 +256,13 @@ class sequentialPhase implements Serializable {
             def index = counter
             if(item.class.toString().contains('subJob')) {
                 item.title = "[Phase-job #"+counter+"] "+item.blockName
-                if(alias != null && alias != "") {
+                if(item.alias != null && item.alias != "") {
                     title = "[Phase-job #"+counter+"] "+item.alias+" <"+item.blockName+">"
                 }
             }
             else {
                 item.title = "[Phase-sequence #"+counter+"] "+item.blockName
-                if(alias != null && alias != "") {
+                if(item.alias != null && item.alias != "") {
                     title = "[Phase-sequence #"+counter+"] "+item.alias+" <"+item.blockName+">"
                 }
             }
