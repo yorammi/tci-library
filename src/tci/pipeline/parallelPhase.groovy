@@ -319,8 +319,8 @@ class parallelPhase implements Serializable {
         catch (error) {
         }
 
-        description = "\033[1;94m"+name+'\033[0m\n\nRun in parallel:\n'
-        def currentFailuesDescription = "\nFailed:\n'"
+        description = "\033[1;94m"+name+'\033[0m\n\nRun in parallel:\033[0m\n'
+        def currentFailuesDescription = "\033[1;94mFailed:\033[0m\n'"
         boolean failedSteps = false
         jobs.each { item ->
             def currentDescription = ""
