@@ -15,13 +15,15 @@ class parallelPhase implements Serializable {
         String url
         def duration = null
         String title
+        String alias
 
-        subJob(String blockName, def parameters, boolean propagate, boolean wait, int retry ) {
+        subJob(String blockName, def parameters, boolean propagate, boolean wait, int retry, String alias ) {
             this.blockName = blockName
             this.parameters = parameters
             this.propagate = propagate
             this.wait = wait
             this.retry = retry
+            this.alias = alias
         }
     }
 
@@ -36,12 +38,14 @@ class parallelPhase implements Serializable {
         String url
         def duration = null
         String title
+        String alias
 
-        stepsSequence(String blockName, def sequence, boolean propagate, int retry ) {
+        stepsSequence(String blockName, def sequence, boolean propagate, int retry, String alias ) {
             this.blockName = blockName
             this.sequence = sequence
             this.propagate = propagate
             this.retry = retry
+            this.alias = alias
         }
     }
 
@@ -108,8 +112,11 @@ class parallelPhase implements Serializable {
         if (config.retry == null) {
             config.retry = 1
         }
+        if (config.alias == null) {
+            config.alias = ""
+        }
 
-        def job = new subJob(config.job, config.parameters, config.propagate, config.wait, config.retry)
+        def job = new subJob(config.job, config.parameters, config.propagate, config.wait, config.retry, config.alias)
         jobs << job
     }
 
@@ -130,8 +137,11 @@ class parallelPhase implements Serializable {
         if (config.retry == null) {
             config.retry = 1
         }
+        if (config.alias == null) {
+            config.alias = ""
+        }
 
-        def stepsSequence = new stepsSequence(config.name, config.sequence, config.propagate, config.retry)
+        def stepsSequence = new stepsSequence(config.name, config.sequence, config.propagate, config.retry, config.alias)
         stepsSequences << stepsSequence
     }
 
@@ -212,7 +222,7 @@ class parallelPhase implements Serializable {
         def timeStop = new Date()
         def duration = TimeCategory.minus(timeStop, timeStart)
         item.duration = duration.toString()
-        script.echo(" Parallel job '\033[1;94m${item.blockName}\033[0m' (${item.url}) ended with \033[1;94m${item.status}\033[0m status. Duration: \033[1;94m${duration}\033[0m")
+        script.echo(" '\033[1;94m${item.title}\033[0m' (${item.url}) ended with \033[1;94m${item.status}\033[0m status. Duration: \033[1;94m${duration}\033[0m")
         if(item.status!="SUCCESS") {
             throw new Exception()
         }
@@ -239,7 +249,7 @@ class parallelPhase implements Serializable {
         def timeStop = new Date()
         def duration = TimeCategory.minus(timeStop, timeStart)
         item.duration = duration.toString()
-        script.tciLogger.info(" Parallel steps-sequence '\033[1;94m${item.blockName}\033[0m' ended with \033[1;94m${item.status}\033[0m status. Duration: \033[1;94m${duration}\033[0m")
+        script.tciLogger.info(" '\033[1;94m${item.title}\033[0m' ended with \033[1;94m${item.status}\033[0m status. Duration: \033[1;94m${duration}\033[0m")
     }
 
     void run() {
@@ -260,6 +270,9 @@ class parallelPhase implements Serializable {
         jobs.each { item ->
             def index = counter
             def title = "[Phase-job #"+counter+"] "+item.blockName
+            if(alias != null && alias != "") {
+                title = "[Phase-job #"+counter+"] "+item.alias+" <"+item.blockName+">"
+            }
             item.title = title
             item.status = "SUCCESS"
             item.url = ""
@@ -280,6 +293,9 @@ class parallelPhase implements Serializable {
         stepsSequences.each { item ->
             def index = counter
             def title = "[Phase-sequence #"+counter+"] "+item.blockName
+            if(alias != null && alias != "") {
+                title = "[Phase-sequence #"+counter+"] "+item.alias+" <"+item.blockName+">"
+            }
             item.title = title
             item.status = "SUCCESS"
             parallelBlocks[title] = {
