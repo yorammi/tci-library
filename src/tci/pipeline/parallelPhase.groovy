@@ -319,29 +319,43 @@ class parallelPhase implements Serializable {
         }
 
         description = "\033[1;94m"+name+'\033[0m\n\nRun in parallel:\n'
+        def currentFailuesDescription = "\033[1;94m"+name+'\033[0m\n\nFailed:\n'"
+        boolean failedSteps = false
         jobs.each { item ->
+            def currentDescription = ""
             def currentStatusColor=(item.status=="SUCCESS")?'\033[1m':'\033[1;91m'
             def currentStatus = currentStatusColor+item.status+'\033[0m'
             if(item.propagate == false) {
                 currentStatus += " (propagate:false)"
             }
-            description += '\t'+item.title+' - '+currentStatus+' - '+item.url
+            currentDescription += '\t'+item.title+' - '+currentStatus+' - '+item.url
             if(item.duration!=null) {
-                description += ' - '+item.duration
+                currentDescription += ' - '+item.duration
             }
-            description += '\n'
+            currentDescription += '\n'
+            description+=currentDescription
+            if(item.status!="SUCCESS") {
+                failedSteps = true
+                currentFailuesDescription+=currentDescription
+            }
         }
         stepsSequences.each { item ->
+            def currentDescription = ""
             def currentStatusColor=(item.status=="SUCCESS")?'\033[1m':'\033[1;91m'
             def currentStatus = currentStatusColor+item.status+'\033[0m'
             if(item.propagate == false) {
                 currentStatus += " (propagate:false)"
             }
-            description += '\t'+item.title+' - '+currentStatus
+            currentDescription += '\t'+item.title+' - '+currentStatus
             if(item.duration!=null) {
-                description += ' - '+item.duration
+                currentDescription += ' - '+item.duration
             }
-            description += '\n'
+            currentDescription += '\n'
+            description+=currentDescription
+            if(item.status!="SUCCESS") {
+                failedSteps = true
+                currentFailuesDescription+=currentDescription
+            }
         }
         String statusColor="\033[1;92m"
         if(overAllStatus=="FAILURE") {
@@ -361,6 +375,9 @@ class parallelPhase implements Serializable {
             }
         }
         description += "\n'\033[1;94m"+name+"\033[0m' parallel phase status: "+statusColor+overAllStatus+"\033[0m\n"
+        if(failedSteps) {
+            description += "\n"+currentFailuesDescription
+        }
         script.echo description
         if(failOnError) {
             script.currentBuild.result = overAllStatus
