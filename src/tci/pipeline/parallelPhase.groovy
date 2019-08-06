@@ -271,7 +271,7 @@ class parallelPhase implements Serializable {
             def index = counter
             def title = "[Phase-job #"+counter+"] "+item.blockName
             if(item.alias != null && item.alias != "") {
-                title = "[Phase-job #"+counter+"] "+item.alias+" <"+item.blockName+">"
+                title = "[Phase-job #"+counter+"] "+item.alias
             }
             item.title = title
             item.status = "SUCCESS"
@@ -294,7 +294,7 @@ class parallelPhase implements Serializable {
             def index = counter
             def title = "[Phase-sequence #"+counter+"] "+item.blockName
             if(item.alias != null && item.alias != "") {
-                title = "[Phase-sequence #"+counter+"] "+item.alias+" <"+item.blockName+">"
+                title = "[Phase-sequence #"+counter+"] "+item.alias
             }
             item.title = title
             item.status = "SUCCESS"
