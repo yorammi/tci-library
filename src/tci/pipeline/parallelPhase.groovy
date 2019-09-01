@@ -159,10 +159,10 @@ class parallelPhase implements Serializable {
     @NonCPS
     def getBuildUrl(def build) {
         try {
-            return build.getAbsoluteUrl()
+            return build.getUrl()
         }
         catch (error) {
-            script.echo "[ERROR] [getBuildUrl] "+error.message
+            script.echo "[ERROR] [getUrl] "+error.message
             return "N/A"
         }
     }
