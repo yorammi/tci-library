@@ -1,5 +1,3 @@
-import com.radcom.rcc.radcomCIJob
-
 def call(Map config) {
     if (config == null) {
         config = [:]
