@@ -16,7 +16,7 @@ def call(Map config) {
     }
 
     pipeline {
-        agent { label 'RCCBaseAgent' }
+        agent { label 'tci-jnlp-node' }
         options {
             timestamps()
             buildDiscarder(logRotator(numToKeepStr: config.numToKeepStr))
