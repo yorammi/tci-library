@@ -35,8 +35,7 @@ def call(Map config) {
             stage ("[Pipeline setup]") {
                 steps {
                     script {
-                            currentBuild.displayName "[STRING] ${STRING} [BOOLEAN] ${BOOLEAN}"
-                        }
+                        currentBuild.displayName "[STRING] ${STRING} [BOOLEAN] ${BOOLEAN}"
                     }
                 }
             }
